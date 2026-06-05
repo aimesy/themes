@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#24211d">
+  <title>AMYC Theme Surface</title>
+  <link rel="stylesheet" href="../src/theme.css">
+  <script src="../src/theme.js" defer></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
+    body {
+      background: var(--paper-2);
+      color: var(--ink);
+      font: 13px/1.45 var(--font-sans);
+    }
+    .status-strip {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      min-height: 34px;
+      padding: 0.24rem 0.85rem;
+      border-bottom: 1px solid var(--chrome-rule);
+      background: var(--chrome);
+      color: var(--chrome-ink);
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .status-strip strong { color: var(--chrome-accent); }
+    .status-strip .grow { flex: 1; }
+    .shell {
+      display: grid;
+      grid-template-columns: 1fr 330px;
+      gap: 0.75rem;
+      padding: 0.75rem;
+    }
+    .panel {
+      min-width: 0;
+      border: 1px solid var(--rule);
+      background: var(--paper);
+    }
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem;
+      padding: 0.55rem 0.65rem;
+      border-bottom: 1px solid var(--rule);
+      background: var(--paper-2);
+      font-family: var(--font-serif);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .segmented {
+      display: inline-flex;
+      gap: 0.15rem;
+      padding: 0.18rem;
+      border: 1px solid var(--rule);
+      border-radius: 999px;
+      background: var(--plain);
+      font: 0.66rem/1 var(--font-mono);
+      text-transform: none;
+    }
+    .segmented span {
+      padding: 0.22rem 0.7rem;
+      border-radius: 999px;
+      color: var(--ink-2);
+    }
+    .segmented .active {
+      background: var(--paper);
+      color: var(--ink);
+      font-weight: 700;
+    }
+    .packet-list { display: grid; }
+    .packet-row {
+      display: grid;
+      grid-template-columns: 24px 72px 150px minmax(0, 1fr) auto;
+      gap: 0.6rem;
+      align-items: start;
+      padding: 0.42rem 0.65rem;
+      border-bottom: 1px solid var(--rule);
+      background: var(--paper);
+      font-family: var(--font-mono);
+    }
+    .packet-code {
+      border: 1px solid var(--rule);
+      padding: 0.08rem 0.35rem;
+      text-align: center;
+      background: var(--plain);
+      color: var(--ink);
+      font-size: 0.66rem;
+      font-weight: 700;
+    }
+    .date-stack {
+      color: var(--ink-2);
+      font-size: 0.66rem;
+      line-height: 1.35;
+    }
+    .packet-title {
+      overflow: hidden;
+      color: var(--ink);
+      font: 700 0.86rem/1.25 var(--font-serif);
+      text-overflow: ellipsis;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .packet-meta {
+      margin-top: 0.1rem;
+      color: var(--ink-2);
+      font-size: 0.6rem;
+    }
+    .badge {
+      padding: 0.15rem 0.42rem;
+      border: 1px solid #ddb8d9;
+      background: #fff7fb;
+      color: #7a2a7a;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+    }
+    .source-paper {
+      grid-column: 3 / -1;
+      display: grid;
+      gap: 0.45rem;
+      padding: 0.55rem 0.65rem;
+      border: 1px solid var(--document-rule);
+      border-left: 3px solid var(--document-accent);
+      background: var(--document-paper);
+      color: var(--document-ink);
+      font-family: var(--font-serif);
+    }
+    .source-paper .source-line {
+      color: var(--document-ink);
+      font-size: 0.92rem;
+      line-height: 1.4;
+      text-transform: uppercase;
+    }
+    .source-paper .source-muted {
+      color: var(--document-ink-2);
+      font-size: 0.8rem;
+      line-height: 1.38;
+    }
+    .doc-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+    }
+    .doc-action {
+      display: inline-flex;
+      min-height: 22px;
+      align-items: center;
+      justify-content: center;
+      padding: 0.18rem 0.45rem;
+      border: 1px solid var(--rule);
+      background: var(--paper);
+      color: var(--link);
+      font: 700 0.62rem/1 var(--font-mono);
+      letter-spacing: 0.04em;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+    .stats {
+      display: grid;
+      gap: 0.45rem;
+      padding: 0.65rem;
+    }
+    .stat {
+      display: grid;
+      gap: 0.1rem;
+      padding: 0.5rem;
+      border: 1px solid var(--rule);
+      background: var(--plain);
+    }
+    .stat b {
+      color: var(--ink);
+      font-size: 1.15rem;
+      font-variant-numeric: tabular-nums;
+    }
+    .stat span {
+      color: var(--ink-3);
+      font: 0.6rem/1 var(--font-mono);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    @media (max-width: 760px) {
+      .shell { grid-template-columns: 1fr; }
+      .packet-row { grid-template-columns: 20px 64px minmax(0, 1fr); }
+      .date-stack, .badge { display: none; }
+      .source-paper { grid-column: 1 / -1; }
+    }
+  </style>
+</head>
+<body>
+  <header class="status-strip" data-contrast-check="chrome">
+    <strong>AMYC.US</strong>
+    <span>Theme Test Surface</span>
+    <span class="grow"></span>
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="Theme spectrum" title="Theme spectrum">
+      <svg class="theme-icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 3a9 9 0 0 0 0 18h1.2a1.9 1.9 0 0 0 1.4-3.2 1.9 1.9 0 0 1 1.4-3.2h1.1A4.9 4.9 0 0 0 21 9.8C21 6 17 3 12 3Z"></path>
+        <circle cx="7.7" cy="10.2" r="1"></circle>
+        <circle cx="10.5" cy="6.9" r="1"></circle>
+        <circle cx="14.7" cy="7.4" r="1"></circle>
+        <circle cx="16.6" cy="11" r="1"></circle>
+      </svg>
+    </button>
+  </header>
+
+  <main class="shell">
+    <section class="panel">
+      <div class="panel-head" data-contrast-check="panel heading">
+        <span>Docket Packets (91)</span>
+        <span class="segmented"><span class="active">Packets</span><span>Table</span></span>
+      </div>
+      <div class="packet-list">
+        <article class="packet-row">
+          <span data-contrast-check="packet expand">+</span>
+          <span class="packet-code" data-contrast-check="packet code">OSC 2</span>
+          <span class="date-stack" data-contrast-check="date stack">start: 2018-03-23<br>end: 2021-10-27</span>
+          <span>
+            <span class="packet-title" data-contrast-check="packet title">Order to show cause re appointment of receiver and preliminary injunction</span>
+            <span class="packet-meta" data-contrast-check="packet meta">6 source rows; 6 ROA; 4 docs; 2 order/ruling rows open inside</span>
+          </span>
+          <span class="badge" data-contrast-check="inferred badge">inferred</span>
+          <div class="source-paper">
+            <div>
+              <span class="packet-code" data-contrast-check="source code">ORD</span>
+              <span class="packet-code" data-contrast-check="source code roa">ROA</span>
+              <span class="badge" data-contrast-check="source badge">order/ruling</span>
+            </div>
+            <div class="source-line" data-contrast-check="document headline">Order to show cause re appointment of receiver and preliminary injunction in aid of receiver; temporary restraining order</div>
+            <div class="source-muted" data-contrast-check="document muted">Real property/housing motion, plaintiff's order to show cause re appointment of receiver and preliminary injunction in aid of receiver.</div>
+            <div class="doc-actions">
+              <a class="doc-action" data-contrast-check="document button" href="#">Open PDF/source</a>
+              <a class="doc-action" data-contrast-check="document button two" href="#">Preview/OCR</a>
+            </div>
+          </div>
+        </article>
+        <article class="packet-row">
+          <span data-contrast-check="packet expand 2">+</span>
+          <span class="packet-code" data-contrast-check="packet code 2">MOT 5</span>
+          <span class="date-stack" data-contrast-check="date stack 2">start: 2018-10-12<br>end: 2018-10-16</span>
+          <span>
+            <span class="packet-title" data-contrast-check="packet title 2">Order re granting motion of Umpqua Bank for order instructing sale</span>
+            <span class="packet-meta" data-contrast-check="packet meta 2">2 source rows; 2 ROA; 2 docs; confidence 72%</span>
+          </span>
+          <span class="badge" data-contrast-check="inferred badge 2">inferred</span>
+        </article>
+      </div>
+    </section>
+
+    <aside class="panel stats">
+      <div class="stat" data-contrast-check="stat one"><b>256,134</b><span>rulings</span></div>
+      <div class="stat" data-contrast-check="stat two"><b>48,451</b><span>documents</span></div>
+      <div class="stat" data-contrast-check="stat three"><b>55,193</b><span>MB</span></div>
+    </aside>
+  </main>
+</body>
+</html>

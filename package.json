@@ -1,0 +1,20 @@
+{
+  "name": "@amyc/themes",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Shared AMYC theme runtime, CSS tokens, and visual tests.",
+  "files": [
+    "src",
+    "fixtures",
+    "tests"
+  ],
+  "scripts": {
+    "install:browsers": "playwright install chromium",
+    "test": "node tests/visual-smoke.mjs",
+    "visual": "node tests/visual-smoke.mjs --write-screenshots"
+  },
+  "devDependencies": {
+    "playwright": "^1.60.0"
+  }
+}
