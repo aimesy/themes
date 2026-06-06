@@ -632,7 +632,6 @@
         <div class="theme-spectrum">
           <div class="theme-spectrum-row">
             <input class="theme-spectrum-input" type="range" min="0" max="${themes.length - 1}" step="1" data-theme-spectrum aria-label="Theme spectrum">
-            <span class="theme-current" data-theme-current></span>
           </div>
           <div class="theme-options" data-theme-options></div>
         </div>

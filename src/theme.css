@@ -338,7 +338,6 @@
 }
 
 .theme-panel-head,
-.theme-spectrum-row,
 .custom-css-summary {
   display: flex;
   align-items: center;
@@ -349,6 +348,11 @@
   font-size: 0.52rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+.theme-spectrum-row {
+  display: flex;
+  min-width: 0;
 }
 
 .theme-control-grid {
@@ -439,19 +443,6 @@
   border-radius: 50%;
   background: var(--accent-2);
   box-shadow: 0 0 0 1px var(--rule);
-}
-
-.theme-current {
-  min-width: 0;
-  overflow: hidden;
-  color: var(--ink);
-  font-family: var(--font-mono);
-  font-size: 0.52rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-overflow: ellipsis;
-  text-transform: uppercase;
-  white-space: nowrap;
 }
 
 .theme-options {
