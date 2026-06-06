@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Shared AMYC theme runtime, CSS tokens, and visual tests.",
+  "description": "Shared AMYC theme runtime, bug reporter, CSS tokens, and visual tests.",
   "files": [
     "src",
     "fixtures",

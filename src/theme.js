@@ -18,6 +18,13 @@
       id: "mist",
       name: "Mist",
       note: "Pastel blue",
+      names: {
+        lightest: "Whiteout",
+        lighter: "Sea Mist",
+        base: "Mist",
+        darker: "Harbor Fog",
+        darkest: "Deep Fog",
+      },
       colors: ["#17323a", "#f5fbfd", "#8fd3c5", "#ffffff"],
       themeColor: "#17323a",
     },
@@ -25,6 +32,13 @@
       id: "lilac",
       name: "Lilac",
       note: "Pastel purple",
+      names: {
+        lightest: "Pale Lilac",
+        lighter: "Wisteria",
+        base: "Lilac",
+        darker: "Mauve",
+        darkest: "Night Plum",
+      },
       colors: ["#28243f", "#f2effa", "#a8d5b5", "#ffffff"],
       themeColor: "#28243f",
     },
@@ -32,6 +46,13 @@
       id: "glacier",
       name: "Glacier",
       note: "Icy cobalt",
+      names: {
+        lightest: "Snowcap",
+        lighter: "Blue Ice",
+        base: "Glacier",
+        darker: "Crevasse",
+        darkest: "Polar Night",
+      },
       colors: ["#16315e", "#f1f7ff", "#8ac7ff", "#ffffff"],
       themeColor: "#16315e",
     },
@@ -39,6 +60,13 @@
       id: "rose",
       name: "Rose",
       note: "Soft rose",
+      names: {
+        lightest: "Blush",
+        lighter: "Rosewater",
+        base: "Rose",
+        darker: "Mauve Rose",
+        darkest: "Dark Rose",
+      },
       colors: ["#3a2831", "#f8eef2", "#e0b15f", "#ffffff"],
       themeColor: "#3a2831",
     },
@@ -46,6 +74,13 @@
       id: "sand",
       name: "Sand",
       note: "Warm sand",
+      names: {
+        lightest: "Sunlit Sand",
+        lighter: "Dune",
+        base: "Sand",
+        darker: "Umber",
+        darkest: "Burnt Umber",
+      },
       colors: ["#24211d", "#f2efe7", "#caa85a", "#fbfaf6"],
       themeColor: "#24211d",
     },
@@ -53,6 +88,13 @@
       id: "tidepool",
       name: "Tidepool",
       note: "Coastal green",
+      names: {
+        lightest: "Seafoam",
+        lighter: "Tideglass",
+        base: "Tidepool",
+        darker: "Kelp",
+        darkest: "Deep Kelp",
+      },
       colors: ["#15302d", "#edf4f2", "#8bc4b1", "#ffffff"],
       themeColor: "#15302d",
     },
@@ -60,6 +102,13 @@
       id: "cypress",
       name: "Cypress",
       note: "Green black",
+      names: {
+        lightest: "Fern",
+        lighter: "Grove",
+        base: "Cypress",
+        darker: "Old Growth",
+        darkest: "Blackwood",
+      },
       colors: ["#070c09", "#111713", "#bfcf79", "#151c17"],
       themeColor: "#070c09",
     },
@@ -67,6 +116,13 @@
       id: "starlight",
       name: "Starlight",
       note: "Black violet",
+      names: {
+        lightest: "Daystar",
+        lighter: "Moonrise",
+        base: "Starlight",
+        darker: "Midnight",
+        darkest: "Black Violet",
+      },
       colors: ["#0b0710", "#17131a", "#d0ad62", "#1c1720"],
       themeColor: "#0b0710",
     },
@@ -405,6 +461,45 @@
     return Math.max(0, themes.findIndex((theme) => theme.id === current));
   }
 
+  function activeTheme() {
+    return themes[selectedIndex()] || themes[0];
+  }
+
+  function lightnessTone(value = currentLightness) {
+    const normalized = normalizeLightness(value);
+    if (normalized >= 31) return "lightest";
+    if (normalized >= 11) return "lighter";
+    if (normalized <= -31) return "darkest";
+    if (normalized <= -11) return "darker";
+    return "base";
+  }
+
+  function signedLightness(value = currentLightness) {
+    const normalized = normalizeLightness(value);
+    return normalized > 0 ? `+${normalized}` : String(normalized);
+  }
+
+  function themeDisplayName(theme = activeTheme(), value = currentLightness) {
+    return theme.names?.[lightnessTone(value)] || theme.name;
+  }
+
+  function updateThemeLabels(theme = activeTheme()) {
+    const displayName = themeDisplayName(theme);
+    const baseName = theme.name || displayName;
+    const fullName = currentLightness && displayName !== baseName
+      ? `${displayName} (${baseName} ${signedLightness()})`
+      : `${displayName}${currentLightness ? ` ${signedLightness()}` : ""}`;
+    root.dataset.themeTone = lightnessTone();
+    document.querySelectorAll("[data-theme-toggle]").forEach((button) => {
+      button.setAttribute("aria-label", `Theme spectrum: ${fullName}`);
+      button.setAttribute("title", `Theme spectrum: ${fullName}`);
+    });
+    document.querySelectorAll("[data-theme-current]").forEach((node) => {
+      node.textContent = displayName;
+      node.setAttribute("title", fullName);
+    });
+  }
+
   function setCustomCss(cssText) {
     let style = document.getElementById("amyc-custom-css");
     if (!cssText.trim()) {
@@ -511,6 +606,7 @@
       document.querySelectorAll("[data-lightness-value]").forEach((node) => {
         node.textContent = "0";
       });
+      updateThemeLabels();
       return;
     }
 
@@ -567,6 +663,7 @@
     document.querySelectorAll("[data-lightness-value]").forEach((node) => {
       node.textContent = currentLightness > 0 ? `+${currentLightness}` : String(currentLightness);
     });
+    updateThemeLabels();
   }
 
   function applyTheme(themeId, persist) {
@@ -580,15 +677,8 @@
     if (persist) {
       writeStorage(themeKey, theme.id);
     }
-    document.querySelectorAll("[data-theme-toggle]").forEach((button) => {
-      button.setAttribute("aria-label", `Theme spectrum: ${theme.name}`);
-      button.setAttribute("title", `Theme spectrum: ${theme.name}`);
-    });
     document.querySelectorAll("[data-theme-spectrum]").forEach((input) => {
       input.value = String(themes.indexOf(theme));
-    });
-    document.querySelectorAll("[data-theme-current]").forEach((node) => {
-      node.textContent = theme.name;
     });
     document.querySelectorAll("[data-theme-choice]").forEach((button) => {
       button.setAttribute("aria-pressed", button.dataset.themeChoice === theme.id ? "true" : "false");

@@ -6,8 +6,12 @@ The package exports:
 
 - `src/theme.js`: compact theme picker, lightness control, custom CSS editor, and shared localStorage keys.
 - `src/theme.css`: shared theme tokens and picker styles.
+- `src/bug-report.js`: shared bug reporter with page element annotations, browser state capture, GitHub issue draft support, optional POST endpoint support, and copy/download fallback.
+- `src/bug-report.css`: bug reporter styles using the same AMYC theme tokens.
 - `fixtures/theme-surface.html`: deterministic fixture for high risk surfaces, including dark shells with light document panels.
-- `tests/visual-smoke.mjs`: contrast and screenshot smoke tests across all eight themes and several lightness stops.
+- `tests/visual-smoke.mjs`: contrast, picker, bug reporter, and screenshot smoke tests across all eight themes and several lightness stops.
+
+The picker keeps the underlying eight theme IDs stable, but the current-theme label uses brightness aware names. For example, dragging Starlight lighter reports Daystar or Moonrise, while dragging it darker reports Midnight or Black Violet.
 
 ## Use
 
@@ -20,6 +24,27 @@ Vendor `src/theme.js` and `src/theme.css` into each static project, then add a c
 ```
 
 The runtime uses the shared keys `amyc-theme`, `amyc-lightness`, and `amyc-custom-css`.
+
+## Bug Reports
+
+Vendor `src/bug-report.js` and `src/bug-report.css` with the theme assets, then add a compact button with `data-bug-report`.
+
+```html
+<link rel="stylesheet" href="bug-report.css">
+<script src="bug-report.js" defer></script>
+<button
+  class="hbtn"
+  type="button"
+  data-bug-report
+  data-bug-report-app="SFSC"
+  data-bug-report-repo="aimesy/sfsc"
+  data-bug-report-labels="bug,site-report"
+>Bug</button>
+```
+
+The reporter lets a user describe the bug, select page elements, add annotation notes, and send or preserve the captured report. The report includes URL, route/hash, viewport, browser metadata, theme state, public AMYC app storage keys, loaded scripts/stylesheets, selected element selectors/rectangles/text snippets, and recent runtime errors.
+
+If `data-bug-report-endpoint` is set, the reporter posts JSON there first. If no endpoint is set, `data-bug-report-repo` opens a GitHub issue draft. If neither is set, the user can copy or download JSON, with `mailto:` as a final fallback.
 
 ## Test
 
