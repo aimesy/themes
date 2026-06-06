@@ -10,20 +10,35 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex: 0 0 auto;
   min-height: 24px;
-  border: 1px solid var(--chrome-rule, var(--rule, #d8d0c3));
-  background: color-mix(in srgb, var(--chrome, #24211d) 88%, var(--chrome-ink, #fff) 12%);
+  padding: 0.12rem 0.42rem;
+  border: 1px solid color-mix(in srgb, var(--chrome-ink, #fff) 38%, transparent);
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--chrome-ink, #fff) 6%, transparent);
   color: var(--chrome-ink, #fff);
+  cursor: pointer;
   font: 700 0.58rem/1 var(--font-mono, ui-monospace, SFMono-Regular, Consolas, monospace);
-  letter-spacing: 0.08em;
-  padding: 0.25rem 0.45rem;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .bug-report-trigger:hover,
 .bug-report-trigger:focus-visible {
   border-color: var(--chrome-accent, var(--accent, #a8751a));
   color: var(--chrome-accent, var(--accent, #a8751a));
+  outline: none;
+}
+
+.bug-report-icon {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .bug-report-shell,
