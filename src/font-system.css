@@ -1,0 +1,626 @@
+@font-face {
+  font-family: "Source Sans 3";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/source-sans-3@latest/latin-400-normal.woff2") format("woff2"),
+       url("https://cdn.jsdelivr.net/fontsource/fonts/source-sans-3@latest/latin-400-normal.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Source Sans 3";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/source-sans-3@latest/latin-700-normal.woff2") format("woff2"),
+       url("https://cdn.jsdelivr.net/fontsource/fonts/source-sans-3@latest/latin-700-normal.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Source Serif 4";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/source-serif-4@latest/latin-400-normal.woff2") format("woff2"),
+       url("https://cdn.jsdelivr.net/fontsource/fonts/source-serif-4@latest/latin-400-normal.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Source Serif 4";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/source-serif-4@latest/latin-700-normal.woff2") format("woff2"),
+       url("https://cdn.jsdelivr.net/fontsource/fonts/source-serif-4@latest/latin-700-normal.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Source Code Pro";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/source-code-pro@latest/latin-400-normal.woff2") format("woff2"),
+       url("https://cdn.jsdelivr.net/fontsource/fonts/source-code-pro@latest/latin-400-normal.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Source Code Pro";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/source-code-pro@latest/latin-700-normal.woff2") format("woff2"),
+       url("https://cdn.jsdelivr.net/fontsource/fonts/source-code-pro@latest/latin-700-normal.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Merriweather";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/merriweather@latest/latin-700-normal.woff2") format("woff2"),
+       url("https://cdn.jsdelivr.net/fontsource/fonts/merriweather@latest/latin-700-normal.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Atkinson Hyperlegible";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/atkinson-hyperlegible@latest/latin-400-normal.woff2") format("woff2"),
+       url("https://cdn.jsdelivr.net/fontsource/fonts/atkinson-hyperlegible@latest/latin-400-normal.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Atkinson Hyperlegible";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/atkinson-hyperlegible@latest/latin-700-normal.woff2") format("woff2"),
+       url("https://cdn.jsdelivr.net/fontsource/fonts/atkinson-hyperlegible@latest/latin-700-normal.woff") format("woff");
+}
+
+@font-face {
+  font-family: "OpenDyslexic";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/opendyslexic@latest/latin-400-normal.woff2") format("woff2"),
+       url("https://cdn.jsdelivr.net/fontsource/fonts/opendyslexic@latest/latin-400-normal.woff") format("woff");
+}
+
+@font-face {
+  font-family: "OpenDyslexic";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/opendyslexic@latest/latin-700-normal.woff2") format("woff2"),
+       url("https://cdn.jsdelivr.net/fontsource/fonts/opendyslexic@latest/latin-700-normal.woff") format("woff");
+}
+
+:root {
+  --amyc-font-adjust: 0px;
+  --amyc-line-extra: 0;
+  --amyc-letter-extra: 0;
+  --amyc-case-title-font: var(--font-serif);
+  --amyc-case-meta-font: var(--font-serif);
+  --amyc-control-font: var(--font-sans);
+  --sfsc-font-adjust: var(--amyc-font-adjust);
+  --sfsc-line-extra: var(--amyc-line-extra);
+  --sfsc-letter-extra: var(--amyc-letter-extra);
+  --sfsc-case-title-font: var(--amyc-case-title-font);
+  --sfsc-case-meta-font: var(--amyc-case-meta-font);
+  --sfsc-control-font: var(--amyc-control-font);
+}
+
+:root[data-font-system="clerk"] {
+  --font-sans: "Source Sans 3", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --font-mono: "Source Code Pro", ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  --amyc-case-title-font: "Merriweather", Georgia, "Times New Roman", serif;
+  --amyc-case-meta-font: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --amyc-control-font: "Source Sans 3", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+:root[data-font-system="hyper"] {
+  --font-sans: "Atkinson Hyperlegible", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-serif: "Atkinson Hyperlegible", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "Atkinson Hyperlegible", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --amyc-case-title-font: "Atkinson Hyperlegible", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --amyc-case-meta-font: "Atkinson Hyperlegible", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --amyc-control-font: "Atkinson Hyperlegible", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+:root[data-font-system="open"] {
+  --font-sans: "OpenDyslexic", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-serif: "OpenDyslexic", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "OpenDyslexic", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --amyc-case-title-font: "OpenDyslexic", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --amyc-case-meta-font: "OpenDyslexic", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --amyc-control-font: "OpenDyslexic", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+:root[data-font-system] body {
+  font-size: calc(13px + var(--amyc-font-adjust));
+  line-height: calc(1.45 + var(--amyc-line-extra));
+  letter-spacing: var(--amyc-letter-extra);
+}
+
+:root[data-font-system] button,
+:root[data-font-system] input,
+:root[data-font-system] select,
+:root[data-font-system] textarea {
+  font-family: inherit;
+}
+
+.theme-panel .custom-css-box {
+  display: none;
+}
+
+.font-toggle,
+.custom-css-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  gap: 0.3rem;
+  min-height: 24px;
+  padding: 0.12rem 0.42rem;
+  border: 1px solid color-mix(in srgb, var(--chrome-ink) 38%, transparent);
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--chrome-ink) 6%, transparent);
+  color: var(--chrome-ink);
+  cursor: pointer;
+  font: 700 0.6rem/1 var(--amyc-control-font);
+  letter-spacing: 0;
+  text-transform: none;
+  white-space: nowrap;
+}
+
+.custom-css-toggle {
+  font-family: var(--font-mono);
+  font-size: 0.56rem;
+}
+
+.font-toggle:hover,
+.font-toggle:focus-visible,
+.font-toggle[aria-expanded="true"],
+.custom-css-toggle:hover,
+.custom-css-toggle:focus-visible,
+.custom-css-toggle[aria-expanded="true"] {
+  border-color: var(--chrome-accent);
+  color: var(--chrome-accent);
+  outline: none;
+}
+
+.font-toggle:focus-visible,
+.custom-css-toggle:focus-visible {
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--chrome-accent) 28%, transparent);
+}
+
+.amyc-display-panel {
+  position: absolute;
+  top: calc(100% + 0.26rem);
+  right: 0.85rem;
+  z-index: 92;
+  display: grid;
+  gap: 0.28rem;
+  width: min(306px, calc(100vw - 1.2rem));
+  padding: 0.34rem;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  background: var(--paper);
+  box-shadow: 0 10px 22px var(--panel-shadow, rgba(0, 0, 0, 0.18));
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  letter-spacing: 0;
+  scrollbar-color: var(--accent-2) var(--paper-2);
+  scrollbar-width: thin;
+  text-transform: none;
+}
+
+.amyc-display-panel[hidden] {
+  display: none;
+}
+
+.amyc-display-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.35rem;
+  color: var(--ink-2);
+  font-family: var(--font-mono);
+  font-size: 0.52rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.amyc-font-grid {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  gap: 0.3rem;
+  align-items: stretch;
+}
+
+.amyc-font-size {
+  display: grid;
+  justify-items: center;
+  align-content: space-between;
+  gap: 0.1rem;
+  min-height: 94px;
+  width: 20px;
+  color: var(--ink-3);
+}
+
+.amyc-font-size-label,
+.amyc-font-size-value {
+  font-family: var(--font-mono);
+  font-size: 0.42rem;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.amyc-font-size-value {
+  color: var(--ink-2);
+  font-size: 0.48rem;
+  font-weight: 700;
+}
+
+.amyc-font-size-wrap {
+  position: relative;
+  display: block;
+  width: 16px;
+  height: 62px;
+}
+
+.amyc-font-size-input {
+  appearance: none;
+  -webkit-appearance: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 62px;
+  height: 18px;
+  margin: 0;
+  background: transparent;
+  accent-color: var(--accent-2);
+  cursor: ns-resize;
+  transform: translate(-50%, -50%) rotate(-90deg);
+}
+
+.amyc-font-main {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.amyc-font-spectrum-row {
+  display: flex;
+  min-width: 0;
+}
+
+.amyc-font-spectrum,
+.amyc-font-adjust {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  height: 16px;
+  margin: 0;
+  background: transparent;
+  accent-color: var(--accent-2);
+  cursor: grab;
+}
+
+.amyc-font-size-input::-webkit-slider-runnable-track,
+.amyc-font-spectrum::-webkit-slider-runnable-track,
+.amyc-font-adjust::-webkit-slider-runnable-track {
+  height: 3px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--rule);
+}
+
+.amyc-font-size-input::-webkit-slider-thumb,
+.amyc-font-spectrum::-webkit-slider-thumb,
+.amyc-font-adjust::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 11px;
+  height: 11px;
+  margin-top: -4px;
+  border: 2px solid var(--paper);
+  border-radius: 50%;
+  background: var(--accent-2);
+  box-shadow: 0 0 0 1px var(--rule);
+}
+
+.amyc-font-size-input::-moz-range-track,
+.amyc-font-spectrum::-moz-range-track,
+.amyc-font-adjust::-moz-range-track {
+  height: 3px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--rule);
+}
+
+.amyc-font-size-input::-moz-range-thumb,
+.amyc-font-spectrum::-moz-range-thumb,
+.amyc-font-adjust::-moz-range-thumb {
+  width: 9px;
+  height: 9px;
+  border: 2px solid var(--paper);
+  border-radius: 50%;
+  background: var(--accent-2);
+  box-shadow: 0 0 0 1px var(--rule);
+}
+
+.amyc-font-options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.22rem;
+}
+
+.amyc-font-choice {
+  display: grid;
+  gap: 0.14rem;
+  min-height: 42px;
+  padding: 0.18rem;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  background: var(--plain);
+  color: var(--ink-2);
+  cursor: pointer;
+  text-align: left;
+}
+
+.amyc-font-choice:hover,
+.amyc-font-choice:focus-visible,
+.amyc-font-choice[aria-pressed="true"] {
+  border-color: var(--accent-2);
+  background: var(--plain-soft);
+  outline: none;
+}
+
+.amyc-font-choice b {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--ink);
+  font-size: 0.78rem;
+  line-height: 1.1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.amyc-font-choice span {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--ink-3);
+  font-family: var(--font-mono);
+  font-size: 0.48rem;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.amyc-font-choice[data-font-choice="clerk"] b {
+  font-family: "Merriweather", Georgia, "Times New Roman", serif;
+}
+
+.amyc-font-choice[data-font-choice="hyper"] b {
+  font-family: "Atkinson Hyperlegible", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.amyc-font-choice[data-font-choice="open"] b {
+  font-family: "OpenDyslexic", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.amyc-font-sliders {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.36rem;
+  padding-top: 0.1rem;
+}
+
+.amyc-font-slider {
+  display: grid;
+  gap: 0.16rem;
+  color: var(--ink-2);
+  font-family: var(--font-mono);
+  font-size: 0.56rem;
+  text-transform: uppercase;
+}
+
+.amyc-custom-css-panel {
+  width: min(420px, calc(100vw - 1.2rem));
+}
+
+.amyc-custom-css-panel textarea {
+  width: 100%;
+  min-height: 160px;
+  resize: vertical;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  background: var(--plain);
+  color: var(--ink);
+  font: 0.68rem/1.35 var(--font-mono);
+  padding: 0.45rem;
+  scrollbar-color: var(--accent-2) var(--paper-2);
+  scrollbar-width: thin;
+}
+
+.amyc-custom-css-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.amyc-custom-css-status {
+  color: var(--ink-3);
+  font-family: var(--font-mono);
+  font-size: 0.56rem;
+  text-transform: uppercase;
+}
+
+.display-controls {
+  position: relative;
+}
+
+.mode-picker-box > .display-controls .theme-panel,
+.mode-picker-box > .display-controls .amyc-display-panel {
+  top: calc(100% + 0.42rem);
+  right: 50%;
+  transform: translateX(50%);
+  text-align: left;
+}
+
+.amyc-case-title,
+.cs-detail-head .cs-casetitle,
+.modal h2 {
+  font-family: var(--amyc-case-title-font);
+  font-size: calc(1.05rem + var(--amyc-font-adjust));
+  letter-spacing: var(--amyc-letter-extra);
+}
+
+.amyc-case-meta,
+.cs-detail-head .cs-headmeta {
+  font-family: var(--amyc-case-meta-font);
+  font-size: calc(0.78rem + var(--amyc-font-adjust));
+  line-height: calc(1.38 + var(--amyc-line-extra));
+  letter-spacing: var(--amyc-letter-extra);
+}
+
+.cs-detail-head .cs-casenum,
+.cs-kicker,
+.cs-entity-meta,
+.cs-search,
+.cs-scope-btn,
+.cs-tab,
+.cs-component-toggle,
+.cs-action-btn,
+.cs-cite,
+.cs-badge,
+.mono,
+.col-case,
+.col-id,
+.modal .meta,
+.share-btn,
+.pdf-btn {
+  letter-spacing: var(--amyc-letter-extra);
+}
+
+.cs-packet-code {
+  font-size: calc(0.66rem + var(--amyc-font-adjust));
+  line-height: calc(1.2 + var(--amyc-line-extra));
+}
+
+.cs-packet-range,
+.cs-overview-packet-date,
+.cs-packet-row {
+  font-size: calc(0.66rem + var(--amyc-font-adjust));
+  line-height: calc(1.3 + var(--amyc-line-extra));
+}
+
+.cs-packet-title,
+.cs-overview-packet-title,
+.packet-title {
+  font-family: var(--font-serif);
+  font-size: calc(0.875rem + var(--amyc-font-adjust));
+  line-height: calc(1.18 + var(--amyc-line-extra));
+  letter-spacing: var(--amyc-letter-extra);
+  text-transform: none;
+}
+
+.cs-packet-meta,
+.cs-overview-packet-meta,
+.cs-table-subtle,
+.cs-section-note,
+.packet-meta {
+  color: var(--ink-2);
+  font-size: calc(0.66rem + var(--amyc-font-adjust));
+  line-height: calc(1.28 + var(--amyc-line-extra));
+  letter-spacing: var(--amyc-letter-extra);
+}
+
+.cs-packet-order-preview,
+.cs-packet-member-title,
+.cs-packet-member-body,
+.cs-packet-desc,
+.cs-record-table td.cs-long,
+.cs-roa-main,
+.source-paper,
+.modal .ruling,
+td.col-title,
+td.col-text {
+  font-family: var(--font-serif);
+  font-size: calc(0.82rem + var(--amyc-font-adjust));
+  line-height: calc(1.32 + var(--amyc-line-extra));
+  letter-spacing: var(--amyc-letter-extra);
+  text-transform: none;
+}
+
+.modal .motion {
+  font-family: var(--font-serif);
+  font-size: calc(0.85rem + var(--amyc-font-adjust));
+  line-height: calc(1.32 + var(--amyc-line-extra));
+  letter-spacing: var(--amyc-letter-extra);
+}
+
+.cs-action-btn,
+.cs-cite {
+  min-height: 24px;
+  padding: 0.22rem 0.42rem;
+  font-size: calc(0.64rem + var(--amyc-font-adjust));
+}
+
+.cs-overview-packet-row {
+  padding-block: 0.38rem;
+}
+
+.cs-packet-summary {
+  padding-block: 0.46rem;
+}
+
+:root[data-font-system="open"] .cs-overview-grid {
+  grid-template-columns: 1fr;
+}
+
+:root[data-font-system="open"] .cs-overview-grid > .cs-pane:first-child {
+  border-right: 0;
+}
+
+:root[data-font-system="open"] .cs-packet-summary,
+:root[data-font-system="open"] .cs-overview-packet-row {
+  grid-template-columns: 18px 58px minmax(0, 1fr) auto;
+  gap: 0.5rem;
+  padding-block: 0.55rem;
+}
+
+:root[data-font-system="open"] .cs-packet-range,
+:root[data-font-system="open"] .cs-overview-packet-date {
+  display: none;
+}
+
+:root[data-font-system="open"] .cs-packet-order-preview {
+  grid-column: 1 / -1;
+  font-size: calc(0.88rem + var(--amyc-font-adjust));
+  line-height: calc(1.45 + var(--amyc-line-extra));
+}
+
+:root[data-font-system="open"] .cs-packet-member summary {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.22rem;
+}
+
+:root[data-font-system="open"] table {
+  font-size: calc(0.7rem + var(--amyc-font-adjust));
+}
+
+:root[data-font-system="open"] th,
+:root[data-font-system="open"] td {
+  padding-block: 0.34rem;
+}

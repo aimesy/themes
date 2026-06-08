@@ -1,0 +1,1166 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AMYC Case Viewer Font Systems</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Lexend:wght@400;500;600;700&family=Libre+Baskerville:wght@400;700&family=Libre+Franklin:wght@400;500;600;700&family=Literata:opsz,wght@7..72,400;7..72,500;7..72,600;7..72,700&family=Merriweather:wght@400;700&family=Public+Sans:wght@400;500;600;700&family=Roboto+Mono:wght@400;500;600;700&family=Source+Code+Pro:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../src/theme.css">
+  <style>
+    @font-face {
+      font-family: "OpenDyslexic";
+      font-style: normal;
+      font-display: swap;
+      font-weight: 400;
+      src: url("https://cdn.jsdelivr.net/fontsource/fonts/opendyslexic@latest/latin-400-normal.woff2") format("woff2"),
+           url("https://cdn.jsdelivr.net/fontsource/fonts/opendyslexic@latest/latin-400-normal.woff") format("woff");
+    }
+    @font-face {
+      font-family: "OpenDyslexic";
+      font-style: normal;
+      font-display: swap;
+      font-weight: 700;
+      src: url("https://cdn.jsdelivr.net/fontsource/fonts/opendyslexic@latest/latin-700-normal.woff2") format("woff2"),
+           url("https://cdn.jsdelivr.net/fontsource/fonts/opendyslexic@latest/latin-700-normal.woff") format("woff");
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { color-scheme: light; }
+    body {
+      margin: 0;
+      background: var(--paper-2);
+      color: var(--ink);
+      font: 14px/1.45 var(--font-sans);
+    }
+    .font-lab {
+      min-height: 100vh;
+    }
+    .lab-header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 1rem;
+      align-items: end;
+      padding: 1rem;
+      border-bottom: 1px solid var(--chrome-rule);
+      background: var(--chrome);
+      color: var(--chrome-ink);
+      font-family: var(--font-id, var(--font-mono));
+    }
+    .lab-header .kicker {
+      margin: 0 0 0.35rem;
+      color: var(--chrome-accent);
+      font-size: 0.66rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .lab-header h1 {
+      margin: 0;
+      font-family: var(--font-title, var(--font-serif));
+      font-size: clamp(1.55rem, 4vw, 2.45rem);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+    .lab-header p {
+      max-width: 860px;
+      margin: 0.45rem 0 0;
+      color: color-mix(in srgb, var(--chrome-ink) 78%, var(--chrome));
+      font-family: var(--font-ui, var(--font-sans));
+      font-size: 0.92rem;
+      line-height: 1.45;
+    }
+    .lab-header .meta {
+      color: color-mix(in srgb, var(--chrome-ink) 78%, var(--chrome));
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-align: right;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .proposal-grid {
+      display: grid;
+      gap: 1rem;
+      padding: 1rem;
+    }
+    .proposal {
+      --font-ui: var(--font-sans);
+      --font-title: var(--font-serif);
+      --font-document: var(--font-serif);
+      --font-id: var(--font-mono);
+      --font-number: var(--font-sans);
+      --font-label: var(--font-sans);
+      --font-case-title: var(--font-title);
+      --font-case-meta: var(--font-document);
+      border: 1px solid var(--rule);
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--font-ui);
+    }
+    .proposal[data-system="plex"] {
+      --font-ui: "IBM Plex Sans", var(--font-sans);
+      --font-title: "IBM Plex Serif", var(--font-serif);
+      --font-document: "IBM Plex Serif", var(--font-serif);
+      --font-id: "IBM Plex Mono", var(--font-mono);
+      --font-number: "IBM Plex Sans", var(--font-sans);
+      --font-label: "IBM Plex Sans", var(--font-sans);
+    }
+    .proposal[data-system="source"] {
+      --font-ui: "Source Sans 3", var(--font-sans);
+      --font-title: "Source Serif 4", var(--font-serif);
+      --font-document: "Source Serif 4", var(--font-serif);
+      --font-id: "Source Code Pro", var(--font-mono);
+      --font-number: "Source Serif 4", var(--font-serif);
+      --font-label: "Source Sans 3", var(--font-sans);
+      --font-case-title: "Merriweather", var(--font-serif);
+      --font-case-meta: "Source Serif 4", var(--font-serif);
+    }
+    .proposal[data-system="public"] {
+      --font-ui: "Public Sans", var(--font-sans);
+      --font-title: "Merriweather", var(--font-serif);
+      --font-document: "Merriweather", var(--font-serif);
+      --font-id: "Roboto Mono", var(--font-mono);
+      --font-number: "Source Serif 4", var(--font-serif);
+      --font-label: "Public Sans", var(--font-sans);
+    }
+    .proposal[data-system="archive"] {
+      --font-ui: "Libre Franklin", var(--font-sans);
+      --font-title: "Literata", var(--font-serif);
+      --font-document: "Literata", var(--font-serif);
+      --font-id: "JetBrains Mono", var(--font-mono);
+      --font-number: "Literata", var(--font-serif);
+      --font-label: "Libre Franklin", var(--font-sans);
+    }
+    .proposal[data-system="access"] {
+      --font-ui: "Atkinson Hyperlegible", var(--font-sans);
+      --font-title: "Libre Baskerville", var(--font-serif);
+      --font-document: "Literata", var(--font-serif);
+      --font-id: "JetBrains Mono", var(--font-mono);
+      --font-number: "Source Sans 3", var(--font-sans);
+      --font-label: "Atkinson Hyperlegible", var(--font-sans);
+    }
+    .proposal[data-system="lexend"] {
+      --font-ui: "Lexend", var(--font-sans);
+      --font-title: "Source Serif 4", var(--font-serif);
+      --font-document: "Source Serif 4", var(--font-serif);
+      --font-id: "Source Code Pro", var(--font-mono);
+      --font-number: "Lexend", var(--font-sans);
+      --font-label: "Lexend", var(--font-sans);
+    }
+    .proposal[data-system="opendyslexic"] {
+      --font-ui: "OpenDyslexic", var(--font-sans);
+      --font-title: "OpenDyslexic", var(--font-sans);
+      --font-document: "OpenDyslexic", var(--font-sans);
+      --font-id: "OpenDyslexic", var(--font-sans);
+      --font-number: "OpenDyslexic", var(--font-sans);
+      --font-label: "OpenDyslexic", var(--font-sans);
+      --font-case-title: "OpenDyslexic", var(--font-sans);
+      --font-case-meta: "OpenDyslexic", var(--font-sans);
+    }
+    .proposal-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(300px, auto);
+      gap: 1rem;
+      padding: 0.72rem 0.85rem;
+      border-bottom: 1px solid var(--rule);
+      background: var(--paper-2);
+    }
+    .proposal-title {
+      margin: 0;
+      font-family: var(--font-title);
+      font-size: 1.18rem;
+      line-height: 1.12;
+      letter-spacing: 0;
+    }
+    .proposal-use {
+      margin: 0.22rem 0 0;
+      color: var(--ink-2);
+      font-size: 0.82rem;
+      line-height: 1.38;
+    }
+    .proposal-basis {
+      margin: 0.4rem 0 0;
+      color: var(--ink-3);
+      font-family: var(--font-id);
+      font-size: 0.6rem;
+      line-height: 1.35;
+      text-transform: uppercase;
+    }
+    .proposal-basis a {
+      color: var(--link);
+      text-decoration-thickness: 1px;
+      text-underline-offset: 2px;
+    }
+    .font-map {
+      display: grid;
+      gap: 0.22rem;
+      color: var(--ink-2);
+      font-family: var(--font-id);
+      font-size: 0.6rem;
+      line-height: 1.25;
+      text-transform: uppercase;
+    }
+    .font-map span {
+      display: flex;
+      gap: 0.45rem;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--rule-2);
+    }
+    .font-map b {
+      color: var(--ink);
+      font-family: var(--font-label);
+      font-size: 0.64rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+    .viewer-shell {
+      padding: 0.85rem;
+    }
+    .case-viewer {
+      border: 1px solid var(--rule);
+      background: var(--plain);
+      min-width: 0;
+    }
+    .viewer-top {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      position: relative;
+      min-height: 34px;
+      padding: 0.34rem 0.58rem;
+      border-bottom: 1px solid var(--chrome-rule);
+      background: var(--chrome);
+      color: var(--chrome-ink);
+      font-family: var(--font-id);
+      font-size: 0.58rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .viewer-top strong {
+      color: var(--chrome-accent);
+    }
+    .viewer-top .push {
+      margin-left: auto;
+      color: color-mix(in srgb, var(--chrome-ink) 72%, var(--chrome));
+      white-space: nowrap;
+    }
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.28rem;
+      margin-left: 0.05rem;
+    }
+    .top-icon {
+      display: inline-grid;
+      place-items: center;
+      min-width: 1.7rem;
+      height: 1.45rem;
+      border: 1px solid color-mix(in srgb, var(--chrome-ink) 28%, var(--chrome));
+      background: color-mix(in srgb, var(--chrome) 92%, var(--chrome-ink));
+      color: var(--chrome-ink);
+      font-family: var(--font-label);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0;
+      line-height: 1;
+      text-transform: none;
+    }
+    .top-icon svg {
+      width: 0.86rem;
+      height: 0.86rem;
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 1.8;
+    }
+    .top-icon.active {
+      border-color: var(--chrome-accent);
+      background: color-mix(in srgb, var(--chrome-accent) 16%, var(--chrome));
+      color: var(--chrome-accent);
+    }
+    .code-icon {
+      font-family: var(--font-id);
+      font-size: 0.56rem;
+      font-weight: 700;
+    }
+    .font-menu {
+      display: none;
+      position: absolute;
+      top: calc(100% + 0.45rem);
+      right: 0.55rem;
+      z-index: 5;
+      gap: 0.28rem;
+      width: min(306px, calc(100vw - 1.2rem));
+      padding: 0.34rem;
+      border: 1px solid var(--rule);
+      border-radius: 3px;
+      background: var(--paper);
+      color: var(--ink);
+      box-shadow: 0 12px 30px color-mix(in srgb, var(--chrome) 28%, transparent);
+      font-family: var(--font-ui);
+      letter-spacing: 0;
+      text-transform: none;
+    }
+    .proposal[data-system="source"] .font-menu {
+      display: grid;
+    }
+    .font-menu-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 0.6rem;
+      align-items: center;
+      padding: 0.55rem 0.62rem;
+      border-bottom: 1px solid var(--rule);
+      background: var(--paper-2);
+    }
+    .font-menu-title {
+      margin: 0;
+      font-family: var(--font-label);
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+    .font-menu-note {
+      color: var(--ink-3);
+      font-family: var(--font-id);
+      font-size: 0.58rem;
+      text-transform: uppercase;
+    }
+    .font-control-grid {
+      display: grid;
+      grid-template-columns: 22px minmax(0, 1fr);
+      gap: 0.3rem;
+      align-items: stretch;
+    }
+    .font-size-control {
+      display: grid;
+      justify-items: center;
+      align-content: space-between;
+      gap: 0.1rem;
+      min-height: 94px;
+      width: 20px;
+      color: var(--ink-3);
+    }
+    .font-size-label,
+    .font-size-value {
+      font-family: var(--font-id);
+      font-size: 0.42rem;
+      letter-spacing: 0.04em;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+    .font-size-value {
+      color: var(--ink-2);
+      font-size: 0.48rem;
+      font-weight: 700;
+    }
+    .font-size-slider-wrap {
+      position: relative;
+      display: block;
+      width: 16px;
+      height: 62px;
+    }
+    .font-size-input {
+      appearance: none;
+      -webkit-appearance: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 62px;
+      height: 18px;
+      margin: 0;
+      background: transparent;
+      accent-color: var(--accent);
+      cursor: ns-resize;
+      transform: translate(-50%, -50%) rotate(-90deg);
+    }
+    .font-spectrum {
+      display: grid;
+      gap: 0.2rem;
+      min-width: 0;
+    }
+    .font-spectrum-row {
+      display: flex;
+      min-width: 0;
+    }
+    .font-spectrum-input,
+    .font-adjust-input {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 100%;
+      height: 16px;
+      margin: 0;
+      background: transparent;
+      accent-color: var(--accent);
+      cursor: grab;
+    }
+    .font-size-input::-webkit-slider-runnable-track,
+    .font-spectrum-input::-webkit-slider-runnable-track,
+    .font-adjust-input::-webkit-slider-runnable-track {
+      height: 3px;
+      border: 0;
+      border-radius: 999px;
+      background: var(--rule);
+    }
+    .font-size-input::-webkit-slider-thumb,
+    .font-spectrum-input::-webkit-slider-thumb,
+    .font-adjust-input::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 11px;
+      height: 11px;
+      margin-top: -4px;
+      border: 2px solid var(--paper);
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 1px var(--rule);
+    }
+    .font-options {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.22rem;
+    }
+    .font-option {
+      min-width: 0;
+      border: 1px solid var(--rule);
+      background: var(--plain);
+      padding: 0.18rem;
+      text-align: left;
+    }
+    .font-option.active {
+      border-color: var(--accent);
+      background: var(--plain-soft);
+    }
+    .font-option b {
+      display: block;
+      color: var(--ink);
+      font-family: var(--font-title);
+      font-size: 0.78rem;
+      line-height: 1.1;
+    }
+    .font-option span {
+      display: block;
+      margin-top: 0.16rem;
+      color: var(--ink-3);
+      font-family: var(--font-id);
+      font-size: 0.48rem;
+      line-height: 1.2;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .font-sliders {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.36rem;
+      padding-top: 0.1rem;
+    }
+    .font-slider {
+      display: grid;
+      gap: 0.16rem;
+      color: var(--ink-2);
+      font-family: var(--font-id);
+      font-size: 0.56rem;
+      text-transform: uppercase;
+    }
+    .case-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 0.85rem;
+      padding: 0.8rem 0.75rem;
+      border-bottom: 1px solid var(--rule);
+      background: var(--paper);
+    }
+    .case-title {
+      margin: 0;
+      color: var(--ink);
+      font-family: var(--font-case-title, var(--font-title));
+      font-size: 1.18rem;
+      font-weight: 700;
+      line-height: 1.16;
+      letter-spacing: 0;
+    }
+    .case-subtitle {
+      margin: 0.25rem 0 0;
+      color: var(--ink-2);
+      font-family: var(--font-case-meta, var(--font-ui));
+      font-size: 0.82rem;
+      line-height: 1.35;
+    }
+    .case-subtitle .id {
+      font-family: inherit;
+      font-variant-numeric: tabular-nums lining-nums;
+      font-feature-settings: "tnum" 1, "lnum" 1;
+    }
+    .case-actions {
+      display: flex;
+      align-items: start;
+      gap: 0.35rem;
+      white-space: nowrap;
+    }
+    .seg {
+      border: 1px solid var(--rule);
+      background: var(--plain);
+      color: var(--ink-2);
+      padding: 0.28rem 0.55rem;
+      font-family: var(--font-label);
+      font-size: 0.66rem;
+      font-weight: 700;
+    }
+    .seg.active {
+      border-color: var(--ink);
+      background: var(--ink);
+      color: var(--plain);
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.35rem;
+      padding: 0.7rem 0.75rem;
+      border-bottom: 1px solid var(--rule);
+      background: var(--plain);
+    }
+    .stat {
+      min-width: 0;
+      padding: 0.48rem;
+      border: 1px solid var(--rule);
+      background: var(--paper);
+      text-align: right;
+      font-family: var(--font-number);
+      font-variant-numeric: tabular-nums lining-nums;
+      font-feature-settings: "tnum" 1, "lnum" 1;
+    }
+    .stat b {
+      display: block;
+      overflow: hidden;
+      color: var(--ink);
+      font-size: 1.14rem;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: 0.01em;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .stat span {
+      display: block;
+      margin-top: 0.22rem;
+      color: var(--ink-3);
+      font-family: var(--font-label);
+      font-size: 0.55rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .viewer-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+      padding: 0.55rem 0.75rem;
+      border-bottom: 1px solid var(--rule);
+      background: var(--paper-2);
+    }
+    .viewer-tab {
+      border: 1px solid var(--rule);
+      background: var(--plain);
+      color: var(--ink-2);
+      padding: 0.24rem 0.5rem;
+      font-family: var(--font-label);
+      font-size: 0.65rem;
+      font-weight: 700;
+    }
+    .viewer-tab.active {
+      border-color: var(--chrome);
+      background: var(--chrome);
+      color: var(--chrome-ink);
+    }
+    .viewer-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 315px;
+      gap: 0.75rem;
+      padding: 0.75rem;
+    }
+    .panel {
+      min-width: 0;
+      border: 1px solid var(--rule);
+      background: var(--plain);
+    }
+    .panel-head {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.44rem 0.55rem;
+      border-bottom: 1px solid var(--rule);
+      background: var(--chrome);
+      color: var(--chrome-ink);
+      font-family: var(--font-id);
+      font-size: 0.62rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .panel-head strong {
+      color: var(--chrome-accent);
+    }
+    .packet-row {
+      display: grid;
+      grid-template-columns: 48px 92px minmax(0, 1fr) auto;
+      gap: 0.42rem;
+      align-items: start;
+      padding: 0.34rem 0.46rem;
+      border-bottom: 1px solid var(--rule-2);
+      background: var(--plain);
+    }
+    .packet-row:nth-child(even) {
+      background: var(--paper);
+    }
+    .packet-code {
+      border: 1px solid var(--rule);
+      background: var(--plain);
+      color: var(--ink);
+      padding: 0.13rem 0.35rem;
+      text-align: center;
+      font-family: var(--font-id);
+      font-size: 0.66rem;
+      font-weight: 700;
+    }
+    .date-stack {
+      color: var(--ink-2);
+      font-family: var(--font-id);
+      font-size: 0.66rem;
+      line-height: 1.3;
+      white-space: nowrap;
+    }
+    .packet-title {
+      overflow: hidden;
+      color: var(--ink);
+      font-family: var(--font-title);
+      font-size: 0.875rem;
+      font-weight: 700;
+      line-height: 1.18;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .packet-meta {
+      margin-top: 0.12rem;
+      color: var(--ink-2);
+      font-size: 0.66rem;
+      line-height: 1.25;
+    }
+    .pill {
+      align-self: center;
+      border: 1px solid color-mix(in srgb, var(--accent) 38%, var(--rule));
+      background: color-mix(in srgb, var(--accent) 8%, var(--plain));
+      color: var(--accent);
+      padding: 0.18rem 0.42rem;
+      font-family: var(--font-label);
+      font-size: 0.66rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .source-paper {
+      grid-column: 3 / -1;
+      display: grid;
+      align-items: start;
+      grid-template-columns: minmax(0, 1fr) max-content;
+      gap: 0.28rem 0.45rem;
+      padding: 0.36rem 0.46rem;
+      border: 1px solid var(--document-rule, var(--rule));
+      border-left: 2px solid var(--document-accent, var(--accent));
+      background: var(--document-paper, var(--page-paper));
+      color: var(--document-ink, var(--ink));
+      font-family: var(--font-document);
+    }
+    .source-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.22rem;
+      grid-column: 1;
+      grid-row: 1;
+      min-width: 0;
+    }
+    .source-tags span {
+      border: 1px solid var(--rule);
+      background: var(--plain);
+      color: var(--ink);
+      padding: 0.08rem 0.28rem;
+      font-family: var(--font-label);
+      font-size: 0.6rem;
+      font-weight: 700;
+    }
+    .source-line {
+      margin: 0;
+      color: var(--document-ink, var(--ink));
+      font-family: var(--font-document);
+      font-size: 0.82rem;
+      line-height: 1.32;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      grid-column: 1 / -1;
+      grid-row: 2;
+    }
+    .doc-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.24rem;
+      grid-column: 2;
+      grid-row: 1;
+      justify-content: end;
+      white-space: nowrap;
+    }
+    .doc-actions span {
+      border: 1px solid var(--rule);
+      background: var(--paper);
+      color: var(--link);
+      min-height: 1.5rem;
+      padding: 0.22rem 0.42rem;
+      font-family: var(--font-label);
+      font-size: 0.64rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .side-stack {
+      display: grid;
+      gap: 0.75rem;
+      align-content: start;
+      min-width: 0;
+    }
+    .search-line {
+      padding: 0.42rem 0.55rem;
+      border-bottom: 1px solid var(--rule);
+      background: var(--paper);
+      color: var(--ink-3);
+      font-size: 0.72rem;
+    }
+    .mini-result {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 0.4rem;
+      padding: 0.42rem 0.55rem;
+      border-bottom: 1px solid var(--rule-2);
+    }
+    .mini-result-title {
+      overflow: hidden;
+      color: var(--ink);
+      font-family: var(--font-title);
+      font-size: 0.78rem;
+      font-weight: 700;
+      line-height: 1.25;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .mini-result-meta {
+      margin-top: 0.12rem;
+      color: var(--ink-3);
+      font-size: 0.58rem;
+      line-height: 1.35;
+    }
+    .view {
+      align-self: center;
+      border: 1px solid var(--rule);
+      background: var(--plain);
+      color: var(--link);
+      padding: 0.2rem 0.34rem;
+      font-family: var(--font-label);
+      font-size: 0.6rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .party-mini {
+      padding: 0.55rem;
+      background: var(--page-paper);
+    }
+    .party-columns {
+      display: grid;
+      grid-template-columns: 1fr 24px 1fr;
+      gap: 0.42rem;
+      align-items: start;
+    }
+    .party-columns > div {
+      min-width: 0;
+    }
+    .party-label {
+      color: var(--ink-3);
+      font-family: var(--font-label);
+      font-size: 0.52rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+    .actor {
+      min-width: 0;
+      margin-top: 0.34rem;
+      border: 1px solid color-mix(in srgb, var(--accent) 52%, var(--rule));
+      background: color-mix(in srgb, var(--accent) 6%, var(--plain));
+      padding: 0.34rem;
+      min-height: 38px;
+    }
+    .actor b {
+      display: block;
+      overflow: hidden;
+      color: var(--ink);
+      font-family: var(--font-label);
+      font-size: 0.58rem;
+      line-height: 1.15;
+      text-overflow: ellipsis;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .actor span {
+      display: block;
+      margin-top: 0.1rem;
+      color: var(--ink-3);
+      font-family: var(--font-id);
+      font-size: 0.5rem;
+    }
+    .versus {
+      margin-top: 2.2rem;
+      color: var(--ink-3);
+      font-family: var(--font-id);
+      text-align: center;
+    }
+    .document-table {
+      display: grid;
+      grid-template-columns: 82px 58px minmax(0, 1fr) 76px;
+      font-size: 0.68rem;
+    }
+    .document-table > div {
+      min-width: 0;
+      padding: 0.32rem 0.4rem;
+      border-bottom: 1px solid var(--rule-2);
+    }
+    .document-table .th {
+      color: var(--ink-3);
+      font-family: var(--font-label);
+      font-size: 0.56rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .document-title {
+      overflow: hidden;
+      color: var(--ink);
+      font-family: var(--font-title);
+      font-weight: 700;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .id {
+      font-family: var(--font-id);
+      font-variant-numeric: tabular-nums slashed-zero;
+      font-feature-settings: "tnum" 1, "zero" 1;
+      letter-spacing: 0;
+    }
+    .num {
+      font-family: var(--font-number);
+      font-variant-numeric: tabular-nums lining-nums;
+      font-feature-settings: "tnum" 1, "lnum" 1;
+      letter-spacing: 0.01em;
+    }
+    @media (max-width: 1050px) {
+      .proposal-head,
+      .lab-header { grid-template-columns: 1fr; }
+      .lab-header .meta { text-align: left; }
+      .viewer-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 700px) {
+      .proposal-grid { padding: 0.5rem; }
+      .viewer-shell { padding: 0.5rem; }
+      .case-head { grid-template-columns: 1fr; }
+      .case-actions { white-space: normal; }
+      .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .packet-row { grid-template-columns: 42px minmax(0, 1fr) auto; }
+      .date-stack { display: none; }
+      .source-paper { grid-column: 1 / -1; }
+      .source-paper { grid-template-columns: 1fr; }
+      .doc-actions { justify-content: start; }
+      .document-table { grid-template-columns: 68px 48px minmax(0, 1fr); }
+      .document-table .hide-mobile,
+      .document-table .court { display: none; }
+    }
+    .proposal[data-system="opendyslexic"] .font-menu {
+      display: none;
+    }
+    .proposal[data-system="opendyslexic"] .viewer-grid {
+      grid-template-columns: 1fr;
+    }
+    .proposal[data-system="opendyslexic"] .packet-row {
+      grid-template-columns: 56px minmax(0, 1fr) auto;
+      gap: 0.5rem;
+      padding: 0.5rem 0.58rem;
+    }
+    .proposal[data-system="opendyslexic"] .date-stack {
+      display: none;
+    }
+    .proposal[data-system="opendyslexic"] .source-paper {
+      grid-column: 1 / -1;
+      grid-template-columns: 1fr;
+      padding: 0.5rem 0.58rem;
+    }
+    .proposal[data-system="opendyslexic"] .doc-actions {
+      grid-column: 1;
+      grid-row: 3;
+      justify-content: start;
+      white-space: normal;
+    }
+    .proposal[data-system="opendyslexic"] .source-line {
+      -webkit-line-clamp: 3;
+    }
+  </style>
+</head>
+<body data-theme="sand">
+  <main class="font-lab">
+    <header class="lab-header">
+      <div>
+        <p class="kicker">Typography finalists</p>
+        <h1>SFSC case viewer specimens</h1>
+        <p>Focused comparison between the Spectrum Clerk system and a full OpenDyslexic accessibility mode. Counts use a numeric role; case numbers, dates, and document codes use an identifier role. No party diagram behavior or real SFSC layout logic is being changed here.</p>
+      </div>
+      <div class="meta">Preview only<br>not production</div>
+    </header>
+    <section class="proposal-grid" id="proposalGrid"></section>
+  </main>
+
+  <template id="caseViewerTemplate">
+    <div class="case-viewer">
+      <div class="viewer-top">
+        <strong>SFSC</strong>
+        <span>Case Viewer</span>
+        <span class="push">Ref DCDD6F9</span>
+        <div class="top-actions" aria-label="Display controls">
+          <span class="top-icon" title="Theme spectrum">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 3a9 9 0 0 0 0 18h1.2a1.9 1.9 0 0 0 1.4-3.2 1.9 1.9 0 0 1 1.4-3.2h1.1A4.9 4.9 0 0 0 21 9.8C21 6 17 3 12 3Z"></path>
+              <circle cx="7.7" cy="10.2" r="1"></circle>
+              <circle cx="10.5" cy="6.9" r="1"></circle>
+              <circle cx="14.7" cy="7.4" r="1"></circle>
+              <circle cx="16.6" cy="11" r="1"></circle>
+            </svg>
+          </span>
+          <span class="top-icon active" title="Font settings">Aa</span>
+          <span class="top-icon code-icon" title="Custom CSS">&lt;/&gt;</span>
+        </div>
+        <div class="font-menu" aria-label="Font settings preview">
+          <div class="font-menu-head">
+            <p class="font-menu-title">Reader Display</p>
+            <span class="font-menu-note">case viewer</span>
+          </div>
+          <div class="font-control-grid">
+            <div class="font-size-control">
+              <span class="font-size-label">A+</span>
+              <span class="font-size-slider-wrap">
+                <input class="font-size-input" type="range" min="-2" max="4" step="1" value="1" aria-label="Font size">
+              </span>
+              <span class="font-size-value">+1</span>
+            </div>
+            <div class="font-spectrum">
+              <div class="font-spectrum-row">
+                <input class="font-spectrum-input" type="range" min="0" max="2" step="1" value="0" aria-label="Font spectrum">
+              </div>
+              <div class="font-options">
+                <div class="font-option active">
+                  <b>Clerk</b>
+                  <span>Default</span>
+                </div>
+                <div class="font-option">
+                  <b>Hyper</b>
+                  <span>Legible</span>
+                </div>
+                <div class="font-option">
+                  <b>Open</b>
+                  <span>Dyslexic</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="font-sliders">
+            <label class="font-slider"><span>Line</span><input class="font-adjust-input" type="range" min="0" max="4" step="1" value="1"></label>
+            <label class="font-slider"><span>Space</span><input class="font-adjust-input" type="range" min="0" max="4" step="1" value="0"></label>
+          </div>
+        </div>
+      </div>
+      <div class="case-head">
+        <div>
+          <h3 class="case-title">Umpqua Bank, a State Chartered Bank v. Xelan Prop 1, LLC et al</h3>
+          <p class="case-subtitle"><span class="id">CGC18564941</span> / Civil Unlimited / Filed <span class="id">2018-03-13</span> / San Francisco Superior Court</p>
+        </div>
+        <div class="case-actions" aria-label="View mode">
+          <span class="seg">Dossier</span>
+          <span class="seg active">Table</span>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="stat"><b class="num">1,270</b><span>docket entries</span></div>
+        <div class="stat"><b class="num">1,053</b><span>documents</span></div>
+        <div class="stat"><b class="num">91</b><span>packets</span></div>
+        <div class="stat"><b class="num">14</b><span>links</span></div>
+      </div>
+      <nav class="viewer-tabs" aria-label="Case tabs">
+        <span class="viewer-tab active">Packets</span>
+        <span class="viewer-tab">ROA</span>
+        <span class="viewer-tab">Documents</span>
+        <span class="viewer-tab">People</span>
+        <span class="viewer-tab">Deadlines</span>
+        <span class="viewer-tab">Search</span>
+      </nav>
+      <div class="viewer-grid">
+        <section class="panel">
+          <div class="panel-head"><strong>Docket Packets</strong><span><span class="num">91</span> inferred groups</span></div>
+          <div class="packet-row">
+            <div class="packet-code">OSC 2</div>
+            <div class="date-stack">start: <span class="id">2018-03-23</span><br>end: <span class="id">2021-10-27</span></div>
+            <div>
+              <div class="packet-title">Order to show cause re: appointment of receiver and preliminary injunction</div>
+              <div class="packet-meta"><span class="num">6</span> source rows ; <span class="num">6</span> ROA ; <span class="num">4</span> docs ; confidence <span class="num">72%</span></div>
+            </div>
+            <span class="pill">inferred</span>
+            <div class="source-paper">
+              <div class="source-tags"><span>ORD</span><span class="id">2018-03-23</span><span>ROA</span><span>order/ruling</span></div>
+              <p class="source-line">Order to show cause re: appointment of receiver and preliminary injunction in aid of receiver; and temporary restraining order.</p>
+              <div class="doc-actions"><span>Open PDF/source</span><span>Preview/OCR</span></div>
+            </div>
+          </div>
+          <div class="packet-row">
+            <div class="packet-code">MOT 5</div>
+            <div class="date-stack">start: <span class="id">2018-10-12</span><br>end: <span class="id">2018-10-16</span></div>
+            <div>
+              <div class="packet-title">Order re: granting motion of Umpqua Bank for order</div>
+              <div class="packet-meta"><span class="num">2</span> source rows ; <span class="num">2</span> ROA ; <span class="num">3</span> docs ; confidence <span class="num">72%</span></div>
+            </div>
+            <span class="pill">packet</span>
+            <div class="source-paper">
+              <div class="source-tags"><span>ORD</span><span class="id">2018-10-12</span><span>ROA</span><span>order/ruling</span></div>
+              <p class="source-line">Order re: granting motion of Umpqua Bank for order: instructing and authorizing receiver to sell real property assets of receivership estate.</p>
+              <div class="doc-actions"><span>Open PDF/source</span><span>Preview/OCR</span></div>
+            </div>
+          </div>
+          <div class="packet-row">
+            <div class="packet-code">JDG 6</div>
+            <div class="date-stack">start: <span class="id">2018-10-23</span><br>end: <span class="id">2018-10-23</span></div>
+            <div>
+              <div class="packet-title">Motion to set aside default/default judgment/leave to defend filed by defendants</div>
+              <div class="packet-meta"><span class="num">3</span> source rows ; <span class="num">3</span> ROA ; <span class="num">2</span> docs ; transaction text</div>
+            </div>
+            <span class="pill">packet</span>
+          </div>
+        </section>
+
+        <aside class="side-stack">
+          <section class="panel">
+            <div class="panel-head"><strong>Case Search</strong><span>same backend target</span></div>
+            <div class="search-line">search document text, dockets, parties, orders</div>
+            <div class="mini-result">
+              <div>
+                <div class="mini-result-title">Notice of entry of order/notice of ruling</div>
+                <div class="mini-result-meta"><span class="id">2018-10-16</span> / <span class="num">1</span> document / packet match</div>
+              </div>
+              <span class="view">view</span>
+            </div>
+            <div class="mini-result">
+              <div>
+                <div class="mini-result-title">Order and stipulation re release of appeal bond</div>
+                <div class="mini-result-meta"><span class="id">2020-02-14</span> / <span class="num">326</span> related entries</div>
+              </div>
+              <span class="view">view</span>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head"><strong>Documents</strong><span>sorted after dates</span></div>
+            <div class="document-table">
+              <div class="th">date</div><div class="th">code</div><div class="th">file name</div><div class="th hide-mobile">pages</div>
+              <div class="id">2018-03-13</div><div class="id">006</div><div class="document-title">006 MOT receiver application</div><div class="court num">42</div>
+              <div class="id">2018-03-23</div><div class="id">007</div><div class="document-title">007 ORD temporary restraining order</div><div class="court num">18</div>
+              <div class="id">2018-10-12</div><div class="id">021</div><div class="document-title">021 ORD sale procedure order</div><div class="court num">9</div>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head"><strong>Party Representation</strong><span><span class="num">17</span> litigants / <span class="num">13</span> counsel</span></div>
+            <div class="party-mini">
+              <div class="party-columns">
+                <div>
+                  <div class="party-label">Claimant</div>
+                  <div class="actor"><b>Umpqua Bank, a State Chartered Bank</b><span>plaintiff; respondent</span></div>
+                  <div class="actor"><b>Patton Sullivan Brodehl LLP</b><span><span class="num">1</span> counsel</span></div>
+                </div>
+                <div class="versus">v.</div>
+                <div>
+                  <div class="party-label">Respondent</div>
+                  <div class="actor"><b>City and County of San Francisco</b><span>real party in interest</span></div>
+                  <div class="actor"><b>People of the State of California</b><span>defendant</span></div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </aside>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    const systems = [
+      {
+        id: "source",
+        name: "1. Spectrum Clerk / Public Numbers",
+        use: "Cleaner and more academic, now with Public Record's softer Source Serif 4 counts while retaining Source Code Pro for the small header and code lettering.",
+        basis: 'Professional basis: <a href="https://spectrum.adobe.com/page/typography/">Adobe Spectrum typography</a>, using Adobe Source families as deployable substitutes.',
+        roles: [
+          ["Interface", "Source Sans 3"],
+          ["Case title", "Merriweather"],
+          ["Other titles", "Source Serif 4"],
+          ["Case meta", "Source Serif 4"],
+          ["Documents", "Source Serif 4"],
+          ["Numbers", "Source Serif 4"],
+          ["IDs", "Source Code Pro"],
+          ["Labels", "Source Sans 3"]
+        ]
+      },
+      {
+        id: "opendyslexic",
+        name: "2. OpenDyslexic Reader",
+        use: "Stronger dyslexia-specific option. Every typography role is OpenDyslexic here, including titles, identifiers, counts, labels, and document text.",
+        basis: 'Professional basis: <a href="https://opendyslexic.org/content/font/index.html">OpenDyslexic</a>, distributed under the SIL Open Font License; preview loaded through <a href="https://fontsource.org/fonts/opendyslexic/cdn">Fontsource CDN</a>.',
+        roles: [
+          ["Interface", "OpenDyslexic"],
+          ["Titles", "OpenDyslexic"],
+          ["Documents", "OpenDyslexic"],
+          ["Numbers", "OpenDyslexic"],
+          ["IDs", "OpenDyslexic"],
+          ["Labels", "OpenDyslexic"]
+        ]
+      }
+    ];
+
+    const grid = document.querySelector("#proposalGrid");
+    const template = document.querySelector("#caseViewerTemplate");
+
+    systems.forEach((system) => {
+      const article = document.createElement("article");
+      article.className = "proposal";
+      article.dataset.system = system.id;
+
+      const roleLines = system.roles
+        .map(([label, value]) => `<span><b>${label}</b>${value}</span>`)
+        .join("");
+
+      article.innerHTML = `
+        <header class="proposal-head">
+          <div>
+            <h2 class="proposal-title">${system.name}</h2>
+            <p class="proposal-use">${system.use}</p>
+            <p class="proposal-basis">${system.basis}</p>
+          </div>
+          <div class="font-map" aria-label="Font roles">${roleLines}</div>
+        </header>
+        <div class="viewer-shell"></div>
+      `;
+
+      article.querySelector(".viewer-shell").appendChild(template.content.cloneNode(true));
+      grid.appendChild(article);
+    });
+  </script>
+</body>
+</html>
