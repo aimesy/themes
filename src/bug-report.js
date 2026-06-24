@@ -7,6 +7,7 @@
     errors: [],
     active: null,
   };
+  const syncViewersKey = "amyc-sync-viewers";
   window.AmycBugReport = runtime;
 
   function ready(fn) {
@@ -35,6 +36,34 @@
     }
   }
 
+  function viewerId() {
+    const configured =
+      root.dataset.amycViewer ||
+      root.dataset.viewer ||
+      document.body?.dataset.amycViewer ||
+      document.body?.dataset.viewer ||
+      document.querySelector("[data-amyc-viewer]")?.getAttribute("data-amyc-viewer") ||
+      document.querySelector("[data-viewer-id]")?.getAttribute("data-viewer-id") ||
+      location.pathname ||
+      "default";
+    const normalized = String(configured).trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+    return normalized || "default";
+  }
+
+  function scopedStorageKey(key) {
+    return `amyc-viewer:${viewerId()}:${key}`;
+  }
+
+  function syncAcrossViewers() {
+    return readStorage(syncViewersKey) !== "0";
+  }
+
+  function readPref(key) {
+    if (syncAcrossViewers()) return readStorage(key);
+    const scoped = readStorage(scopedStorageKey(key));
+    return scoped == null ? readStorage(key) : scoped;
+  }
+
   function allStorageKeys() {
     try {
       return Array.from({ length: window.localStorage.length }, (_, index) => window.localStorage.key(index)).filter(Boolean);
@@ -50,7 +79,7 @@
       if (!/^(amyc|sfsc|tentatives|cividx)[.:_-]/i.test(key) && !/^amyc-/i.test(key)) continue;
       if (/token|secret|password|credential|key/i.test(key)) {
         values[key] = "[redacted key]";
-      } else if (key === "amyc-custom-css") {
+      } else if (/(^|:)amyc-custom-css$/i.test(key)) {
         values[key] = readStorage(key)?.trim() ? "[present]" : "";
       } else {
         values[key] = clip(readStorage(key), 500);
@@ -201,9 +230,11 @@
       theme: {
         theme: root.dataset.theme || "",
         tone: root.dataset.themeTone || "",
-        storedTheme: readStorage("amyc-theme") || "",
-        lightness: readStorage("amyc-lightness") || "",
-        customCss: !!readStorage("amyc-custom-css")?.trim(),
+        storedTheme: readPref("amyc-theme") || "",
+        lightness: readPref("amyc-lightness") || "",
+        customCss: !!readPref("amyc-custom-css")?.trim(),
+        syncViewers: syncAcrossViewers(),
+        viewerId: viewerId(),
       },
       storage,
       assets: {

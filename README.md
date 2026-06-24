@@ -4,7 +4,7 @@ Shared theme runtime and visual test harness for AMYC projects.
 
 The package exports:
 
-- `src/theme.js`: compact theme picker, lightness control, custom CSS editor, and shared localStorage keys.
+- `src/theme.js`: compact theme picker, lightness control, reset control, custom CSS editor, and shared or viewer-scoped localStorage keys.
 - `src/theme.css`: shared theme tokens and picker styles.
 - `src/bug-report.js`: shared bug reporter with page element annotations, browser state capture, GitHub issue draft support, optional POST endpoint support, and copy/download fallback.
 - `src/bug-report.css`: bug reporter styles using the same AMYC theme tokens.
@@ -23,7 +23,9 @@ Vendor `src/theme.js` and `src/theme.css` into each static project, then add a c
 <button class="theme-toggle" type="button" data-theme-toggle aria-label="Theme spectrum" title="Theme spectrum"></button>
 ```
 
-The runtime uses the shared keys `amyc-theme`, `amyc-lightness`, and `amyc-custom-css`.
+The runtime uses shared keys by default: `amyc-theme`, `amyc-lightness`, `amyc-font-system`, `amyc-font-size`, `amyc-font-line`, `amyc-font-space`, and `amyc-custom-css`. Those keys persist display settings across every AMYC viewer on the same origin, including different repos served from that origin. The picker also includes a `Sync viewers` toggle. Turning it off stores settings under `amyc-viewer:<viewer-id>:...` so one viewer can keep its own theme and font settings.
+
+Viewer ids come from `data-amyc-viewer`, `data-viewer`, or `data-viewer-id` when present, then fall back to the page path.
 
 ## Bug Reports
 

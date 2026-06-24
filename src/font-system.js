@@ -7,6 +7,10 @@
   const lineKey = "amyc-font-line";
   const spaceKey = "amyc-font-space";
   const customCssKey = "amyc-custom-css";
+  const syncViewersKey = "amyc-sync-viewers";
+  const storageEventName = "amyc:display-persistence-change";
+  const defaultPrefs = { font: "clerk", size: 1, line: 1, space: 0 };
+  let currentPrefs = { ...defaultPrefs };
   const legacyKeys = {
     font: "sfsc-font-system",
     size: "sfsc-font-size",
@@ -25,8 +29,65 @@
     try { window.localStorage.setItem(key, value); } catch {}
   }
 
-  function removeStorage(key) {
-    try { window.localStorage.removeItem(key); } catch {}
+  function viewerId() {
+    const configured =
+      root.dataset.amycViewer ||
+      root.dataset.viewer ||
+      document.body?.dataset.amycViewer ||
+      document.body?.dataset.viewer ||
+      document.querySelector("[data-amyc-viewer]")?.getAttribute("data-amyc-viewer") ||
+      document.querySelector("[data-viewer-id]")?.getAttribute("data-viewer-id") ||
+      location.pathname ||
+      "default";
+    const normalized = String(configured).trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+    return normalized || "default";
+  }
+
+  function scopedStorageKey(key) {
+    return `amyc-viewer:${viewerId()}:${key}`;
+  }
+
+  function syncAcrossViewers() {
+    return readStorage(syncViewersKey) !== "0";
+  }
+
+  function activeStorageKey(key) {
+    return syncAcrossViewers() ? key : scopedStorageKey(key);
+  }
+
+  function readPref(key) {
+    if (syncAcrossViewers()) return readStorage(key);
+    const scoped = readStorage(scopedStorageKey(key));
+    return scoped == null ? readStorage(key) : scoped;
+  }
+
+  function writePref(key, value) {
+    writeStorage(activeStorageKey(key), value);
+  }
+
+  function updatePersistenceControls() {
+    const synced = syncAcrossViewers();
+    document.querySelectorAll("[data-amyc-sync-viewers]").forEach((input) => {
+      input.checked = synced;
+      input.setAttribute("aria-checked", synced ? "true" : "false");
+    });
+  }
+
+  function persistCurrentPrefs() {
+    writePref(fontKey, currentPrefs.font);
+    writePref(sizeKey, String(currentPrefs.size));
+    writePref(lineKey, String(currentPrefs.line));
+    writePref(spaceKey, String(currentPrefs.space));
+    writePref(customCssKey, document.getElementById("amyc-custom-css")?.textContent || "");
+  }
+
+  function setSyncAcrossViewers(enabled, source = "font") {
+    writeStorage(syncViewersKey, enabled ? "1" : "0");
+    persistCurrentPrefs();
+    updatePersistenceControls();
+    window.dispatchEvent(new CustomEvent(storageEventName, {
+      detail: { synced: enabled, source },
+    }));
   }
 
   function migrateLegacy() {
@@ -48,7 +109,7 @@
   }
 
   function normalizeFont(value) {
-    return fonts.includes(value) ? value : "clerk";
+    return fonts.includes(value) ? value : defaultPrefs.font;
   }
 
   function ensureCustomCssStyle() {
@@ -74,15 +135,46 @@
 
   function readPrefs() {
     return {
-      font: normalizeFont(readStorage(fontKey)),
-      size: clampNumber(readStorage(sizeKey), -2, 4, 1),
-      line: clampNumber(readStorage(lineKey), 0, 4, 1),
-      space: clampNumber(readStorage(spaceKey), 0, 4, 0),
+      font: normalizeFont(readPref(fontKey)),
+      size: clampNumber(readPref(sizeKey), -2, 4, defaultPrefs.size),
+      line: clampNumber(readPref(lineKey), 0, 4, defaultPrefs.line),
+      space: clampNumber(readPref(spaceKey), 0, 4, defaultPrefs.space),
     };
+  }
+
+  function resetFontPrefs() {
+    writePref(fontKey, defaultPrefs.font);
+    writePref(sizeKey, String(defaultPrefs.size));
+    writePref(lineKey, String(defaultPrefs.line));
+    writePref(spaceKey, String(defaultPrefs.space));
+    applyFontPrefs();
+  }
+
+  function snapRangeToMarkers(input) {
+    const points = String(input.dataset.snapPoints || "")
+      .split(",")
+      .map((point) => Number(point.trim()))
+      .filter((point) => Number.isFinite(point));
+    const threshold = Number(input.dataset.snapThreshold || 0);
+    const value = Number(input.value);
+    if (!points.length || !Number.isFinite(threshold) || !Number.isFinite(value)) return false;
+    let nearest = points[0];
+    let distance = Math.abs(value - nearest);
+    for (const point of points.slice(1)) {
+      const nextDistance = Math.abs(value - point);
+      if (nextDistance < distance) {
+        nearest = point;
+        distance = nextDistance;
+      }
+    }
+    if (distance > threshold) return false;
+    input.value = String(nearest);
+    return nearest !== value;
   }
 
   function applyFontPrefs() {
     const prefs = readPrefs();
+    currentPrefs = prefs;
     root.dataset.fontSystem = prefs.font;
     root.style.setProperty("--amyc-font-adjust", `${prefs.size * 0.035}rem`);
     root.style.setProperty("--amyc-line-extra", String(prefs.line * 0.045));
@@ -105,6 +197,7 @@
       button.setAttribute("aria-label", `Font settings: ${names[prefs.font]}`);
       button.setAttribute("title", `Font settings: ${names[prefs.font]}`);
     });
+    updatePersistenceControls();
   }
 
   function closePanels(except) {
@@ -128,14 +221,20 @@
         <div class="amyc-font-grid">
           <div class="amyc-font-size">
             <span class="amyc-font-size-label">A+</span>
-            <span class="amyc-font-size-wrap">
-              <input class="amyc-font-size-input" type="range" min="-2" max="4" step="1" data-amyc-font-size aria-label="Font size">
+            <span class="amyc-font-size-wrap amyc-snap-track is-vertical" style="--snap-default: 50%;">
+              <span class="amyc-snap amyc-snap-min" aria-hidden="true"></span>
+              <span class="amyc-snap amyc-snap-default" aria-hidden="true"></span>
+              <span class="amyc-snap amyc-snap-max" aria-hidden="true"></span>
+              <input class="amyc-font-size-input" type="range" min="-2" max="4" step="1" data-amyc-font-size data-snap-points="-2,1,4" data-snap-threshold="1" aria-label="Font size">
             </span>
             <span class="amyc-font-size-value" data-amyc-font-size-value></span>
           </div>
           <div class="amyc-font-main">
-            <div class="amyc-font-spectrum-row">
-              <input class="amyc-font-spectrum" type="range" min="0" max="${fonts.length - 1}" step="1" data-amyc-font-spectrum aria-label="Font spectrum">
+            <div class="amyc-font-spectrum-row amyc-snap-track" style="--snap-default: ${(fonts.indexOf(defaultPrefs.font) / (fonts.length - 1)) * 100}%;">
+              <span class="amyc-snap amyc-snap-min" aria-hidden="true"></span>
+              <span class="amyc-snap amyc-snap-default" aria-hidden="true"></span>
+              <span class="amyc-snap amyc-snap-max" aria-hidden="true"></span>
+              <input class="amyc-font-spectrum" type="range" min="0" max="${fonts.length - 1}" step="1" data-amyc-font-spectrum data-snap-points="0,${fonts.indexOf(defaultPrefs.font)},${fonts.length - 1}" aria-label="Font spectrum">
             </div>
             <div class="amyc-font-options">
               ${fonts.map((font) => `
@@ -147,8 +246,15 @@
           </div>
         </div>
         <div class="amyc-font-sliders">
-          <label class="amyc-font-slider"><span>Line</span><input class="amyc-font-adjust" type="range" min="0" max="4" step="1" data-amyc-font-line></label>
-          <label class="amyc-font-slider"><span>Space</span><input class="amyc-font-adjust" type="range" min="0" max="4" step="1" data-amyc-font-space></label>
+          <label class="amyc-font-slider"><span>Line</span><span class="amyc-inline-snap-track amyc-snap-track" style="--snap-default: 25%;"><span class="amyc-snap amyc-snap-min" aria-hidden="true"></span><span class="amyc-snap amyc-snap-default" aria-hidden="true"></span><span class="amyc-snap amyc-snap-max" aria-hidden="true"></span><input class="amyc-font-adjust" type="range" min="0" max="4" step="1" data-amyc-font-line data-snap-points="0,1,4" data-snap-threshold="1"></span></label>
+          <label class="amyc-font-slider"><span>Space</span><span class="amyc-inline-snap-track amyc-snap-track" style="--snap-default: 0%;"><span class="amyc-snap amyc-snap-min" aria-hidden="true"></span><span class="amyc-snap amyc-snap-default" aria-hidden="true"></span><span class="amyc-snap amyc-snap-max" aria-hidden="true"></span><input class="amyc-font-adjust" type="range" min="0" max="4" step="1" data-amyc-font-space data-snap-points="0,4" data-snap-threshold="1"></span></label>
+        </div>
+        <div class="amyc-font-actions">
+          <button class="hbtn" type="button" data-amyc-font-reset>Reset font</button>
+          <label class="theme-persistence-toggle">
+            <input type="checkbox" data-amyc-sync-viewers>
+            <span>Sync viewers</span>
+          </label>
         </div>
       </div>
     `;
@@ -207,10 +313,26 @@
   function bindDisplayControls() {
     findDisplayHosts().forEach(installDisplayControls);
     applyFontPrefs();
-    applyCustomCss(readStorage(customCssKey) || "");
+    applyCustomCss(readPref(customCssKey) || "");
   }
 
   function bindEvents() {
+    function storeFontInput(target) {
+      if (target.matches("[data-amyc-font-spectrum]")) {
+        writePref(fontKey, fonts[Number(target.value)] || defaultPrefs.font);
+      } else if (target.matches("[data-amyc-font-size]")) {
+        writePref(sizeKey, target.value);
+      } else if (target.matches("[data-amyc-font-line]")) {
+        writePref(lineKey, target.value);
+      } else if (target.matches("[data-amyc-font-space]")) {
+        writePref(spaceKey, target.value);
+      } else {
+        return false;
+      }
+      applyFontPrefs();
+      return true;
+    }
+
     document.addEventListener("click", (event) => {
       const fontToggle = event.target.closest("[data-font-toggle]");
       const cssToggle = event.target.closest("[data-custom-css-toggle]");
@@ -235,51 +357,61 @@
     document.addEventListener("input", (event) => {
       const target = event.target;
       if (!(target instanceof HTMLInputElement)) return;
-      if (target.matches("[data-amyc-font-spectrum]")) {
-        writeStorage(fontKey, fonts[Number(target.value)] || "clerk");
-        applyFontPrefs();
-      } else if (target.matches("[data-amyc-font-size]")) {
-        writeStorage(sizeKey, target.value);
-        applyFontPrefs();
-      } else if (target.matches("[data-amyc-font-line]")) {
-        writeStorage(lineKey, target.value);
-        applyFontPrefs();
-      } else if (target.matches("[data-amyc-font-space]")) {
-        writeStorage(spaceKey, target.value);
-        applyFontPrefs();
+      storeFontInput(target);
+    });
+
+    document.addEventListener("change", (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLInputElement)) return;
+      if (target.matches("[data-amyc-sync-viewers]")) {
+        setSyncAcrossViewers(target.checked, "font");
+        return;
+      }
+      if (snapRangeToMarkers(target)) {
+        storeFontInput(target);
       }
     });
 
     document.addEventListener("click", (event) => {
       const choice = event.target.closest("[data-font-choice]");
       if (choice) {
-        writeStorage(fontKey, choice.dataset.fontChoice || "clerk");
+        writePref(fontKey, choice.dataset.fontChoice || defaultPrefs.font);
         applyFontPrefs();
+        return;
+      }
+      if (event.target.closest("[data-amyc-font-reset]")) {
+        resetFontPrefs();
         return;
       }
       if (event.target.closest("[data-amyc-css-apply]")) {
         const panel = event.target.closest(".amyc-custom-css-panel");
         const input = panel?.querySelector("[data-amyc-custom-css]");
         const value = input ? input.value : "";
-        writeStorage(customCssKey, value);
+        writePref(customCssKey, value);
         applyCustomCss(value);
         return;
       }
       if (event.target.closest("[data-amyc-css-reset]")) {
-        removeStorage(customCssKey);
+        writePref(customCssKey, "");
         applyCustomCss("");
       }
+    });
+
+    window.addEventListener(storageEventName, (event) => {
+      if (event.detail?.source === "font") return;
+      persistCurrentPrefs();
+      updatePersistenceControls();
     });
   }
 
   function init() {
     migrateLegacy();
-    if (!readStorage(fontKey)) writeStorage(fontKey, "clerk");
-    if (!readStorage(sizeKey)) writeStorage(sizeKey, "1");
-    if (!readStorage(lineKey)) writeStorage(lineKey, "1");
-    if (!readStorage(spaceKey)) writeStorage(spaceKey, "0");
+    if (!readPref(fontKey)) writePref(fontKey, defaultPrefs.font);
+    if (!readPref(sizeKey)) writePref(sizeKey, String(defaultPrefs.size));
+    if (!readPref(lineKey)) writePref(lineKey, String(defaultPrefs.line));
+    if (!readPref(spaceKey)) writePref(spaceKey, String(defaultPrefs.space));
     applyFontPrefs();
-    applyCustomCss(readStorage(customCssKey) || "");
+    applyCustomCss(readPref(customCssKey) || "");
     bindEvents();
     bindDisplayControls();
   }

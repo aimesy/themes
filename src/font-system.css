@@ -296,8 +296,67 @@
 }
 
 .amyc-font-spectrum-row {
+  position: relative;
   display: flex;
   min-width: 0;
+}
+
+.amyc-snap-track {
+  position: relative;
+}
+
+.amyc-snap-track > input {
+  position: relative;
+  z-index: 1;
+}
+
+.amyc-snap {
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+  background: color-mix(in srgb, var(--ink-3) 58%, transparent);
+}
+
+.amyc-snap-track:not(.is-vertical) .amyc-snap {
+  top: 1px;
+  width: 1px;
+  height: 7px;
+  transform: translateX(-50%);
+}
+
+.amyc-snap-track:not(.is-vertical) .amyc-snap-min {
+  left: 0;
+}
+
+.amyc-snap-track:not(.is-vertical) .amyc-snap-default {
+  left: var(--snap-default, 50%);
+  height: 10px;
+  background: var(--accent-2);
+}
+
+.amyc-snap-track:not(.is-vertical) .amyc-snap-max {
+  left: 100%;
+}
+
+.amyc-snap-track.is-vertical .amyc-snap {
+  left: 50%;
+  width: 8px;
+  height: 1px;
+  transform: translateX(-50%);
+}
+
+.amyc-snap-track.is-vertical .amyc-snap-min {
+  bottom: 0;
+}
+
+.amyc-snap-track.is-vertical .amyc-snap-default {
+  bottom: var(--snap-default, 50%);
+  width: 11px;
+  background: var(--accent-2);
+}
+
+.amyc-snap-track.is-vertical .amyc-snap-max {
+  top: 0;
 }
 
 .amyc-font-spectrum,
@@ -432,6 +491,64 @@
   font-family: var(--font-mono);
   font-size: 0.56rem;
   text-transform: uppercase;
+}
+
+.amyc-inline-snap-track {
+  display: flex;
+  min-width: 0;
+}
+
+.amyc-font-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.35rem;
+  padding-top: 0.24rem;
+  border-top: 1px solid var(--rule-2);
+}
+
+.amyc-display-panel .hbtn {
+  min-height: 23px;
+  padding: 0.16rem 0.4rem;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  background: var(--plain);
+  color: var(--ink-2);
+  cursor: pointer;
+  font: 700 0.52rem/1 var(--font-mono);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.amyc-display-panel .hbtn:hover,
+.amyc-display-panel .hbtn:focus-visible {
+  border-color: var(--accent-2);
+  color: var(--accent);
+  outline: none;
+}
+
+.theme-persistence-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: end;
+  gap: 0.24rem;
+  min-width: 0;
+  color: var(--ink-3);
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 0.52rem;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.theme-persistence-toggle input {
+  width: 0.82rem;
+  height: 0.82rem;
+  margin: 0;
+  accent-color: var(--accent-2);
 }
 
 .amyc-custom-css-panel {

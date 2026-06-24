@@ -2,6 +2,10 @@
   const themeKey = "amyc-theme";
   const lightnessKey = "amyc-lightness";
   const customCssKey = "amyc-custom-css";
+  const syncViewersKey = "amyc-sync-viewers";
+  const storageEventName = "amyc:display-persistence-change";
+  const defaultThemeId = "sand";
+  const defaultLightness = 0;
   const root = document.documentElement;
   const metaTheme = document.querySelector('meta[name="theme-color"]');
   const adjustableTokens = [
@@ -436,18 +440,73 @@
     }
   }
 
-  function removeStorage(key) {
-    try {
-      window.localStorage.removeItem(key);
-    } catch {
-      // No-op.
-    }
+  function viewerId() {
+    const configured =
+      root.dataset.amycViewer ||
+      root.dataset.viewer ||
+      document.body?.dataset.amycViewer ||
+      document.body?.dataset.viewer ||
+      document.querySelector("[data-amyc-viewer]")?.getAttribute("data-amyc-viewer") ||
+      document.querySelector("[data-viewer-id]")?.getAttribute("data-viewer-id") ||
+      location.pathname ||
+      "default";
+    const normalized = String(configured).trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+    return normalized || "default";
+  }
+
+  function scopedStorageKey(key) {
+    return `amyc-viewer:${viewerId()}:${key}`;
+  }
+
+  function syncAcrossViewers() {
+    return readStorage(syncViewersKey) !== "0";
+  }
+
+  function activeStorageKey(key) {
+    return syncAcrossViewers() ? key : scopedStorageKey(key);
+  }
+
+  function readPref(key) {
+    if (syncAcrossViewers()) return readStorage(key);
+    const scoped = readStorage(scopedStorageKey(key));
+    return scoped == null ? readStorage(key) : scoped;
+  }
+
+  function writePref(key, value) {
+    writeStorage(activeStorageKey(key), value);
+  }
+
+  function updatePersistenceControls() {
+    const synced = syncAcrossViewers();
+    document.querySelectorAll("[data-amyc-sync-viewers]").forEach((input) => {
+      input.checked = synced;
+      input.setAttribute("aria-checked", synced ? "true" : "false");
+    });
+  }
+
+  function currentCustomCss() {
+    return document.getElementById("amyc-custom-css")?.textContent || "";
+  }
+
+  function persistCurrentPrefs() {
+    writePref(themeKey, root.dataset.theme || defaultThemeId);
+    writePref(lightnessKey, String(currentLightness));
+    writePref(customCssKey, currentCustomCss());
+  }
+
+  function setSyncAcrossViewers(enabled, source = "theme") {
+    writeStorage(syncViewersKey, enabled ? "1" : "0");
+    persistCurrentPrefs();
+    updatePersistenceControls();
+    window.dispatchEvent(new CustomEvent(storageEventName, {
+      detail: { synced: enabled, source },
+    }));
   }
 
   function normalizeTheme(value) {
     if (value === "dark") return "starlight";
-    if (value === "light" || value === "docket") return "sand";
-    return themes.some((theme) => theme.id === value) ? value : "sand";
+    if (value === "light" || value === "docket") return defaultThemeId;
+    return themes.some((theme) => theme.id === value) ? value : defaultThemeId;
   }
 
   function normalizeLightness(value) {
@@ -457,8 +516,12 @@
   }
 
   function selectedIndex() {
-    const current = normalizeTheme(root.dataset.theme || readStorage(themeKey));
+    const current = normalizeTheme(root.dataset.theme || readPref(themeKey));
     return Math.max(0, themes.findIndex((theme) => theme.id === current));
+  }
+
+  function defaultThemeIndex() {
+    return Math.max(0, themes.findIndex((theme) => theme.id === defaultThemeId));
   }
 
   function activeTheme() {
@@ -481,6 +544,28 @@
 
   function themeDisplayName(theme = activeTheme(), value = currentLightness) {
     return theme.names?.[lightnessTone(value)] || theme.name;
+  }
+
+  function snapRangeToMarkers(input) {
+    const points = String(input.dataset.snapPoints || "")
+      .split(",")
+      .map((point) => Number(point.trim()))
+      .filter((point) => Number.isFinite(point));
+    const threshold = Number(input.dataset.snapThreshold || 0);
+    const value = Number(input.value);
+    if (!points.length || !Number.isFinite(threshold) || !Number.isFinite(value)) return false;
+    let nearest = points[0];
+    let distance = Math.abs(value - nearest);
+    for (const point of points.slice(1)) {
+      const nextDistance = Math.abs(value - point);
+      if (nextDistance < distance) {
+        nearest = point;
+        distance = nextDistance;
+      }
+    }
+    if (distance > threshold) return false;
+    input.value = String(nearest);
+    return nearest !== value;
   }
 
   function updateThemeLabels(theme = activeTheme()) {
@@ -512,6 +597,13 @@
       document.head.appendChild(style);
     }
     style.textContent = cssText;
+  }
+
+  function resetThemePrefs() {
+    currentLightness = defaultLightness;
+    writePref(themeKey, defaultThemeId);
+    writePref(lightnessKey, String(defaultLightness));
+    applyTheme(defaultThemeId, false);
   }
 
   function parseColor(value) {
@@ -595,7 +687,7 @@
   function applyLightness(value, persist) {
     currentLightness = normalizeLightness(value);
     if (persist) {
-      writeStorage(lightnessKey, String(currentLightness));
+      writePref(lightnessKey, String(currentLightness));
     }
 
     clearAdjustedTokens();
@@ -675,7 +767,7 @@
       metaTheme.setAttribute("content", theme.themeColor);
     }
     if (persist) {
-      writeStorage(themeKey, theme.id);
+      writePref(themeKey, theme.id);
     }
     document.querySelectorAll("[data-theme-spectrum]").forEach((input) => {
       input.value = String(themes.indexOf(theme));
@@ -713,18 +805,31 @@
       <div class="theme-control-grid">
         <div class="lightness-control">
           <span class="lightness-label">Light</span>
-          <span class="lightness-slider-wrap">
-            <input class="lightness-input" type="range" min="-40" max="40" step="1" data-theme-lightness aria-label="Theme lightness">
+          <span class="lightness-slider-wrap amyc-snap-track is-vertical" style="--snap-default: 50%;">
+            <span class="amyc-snap amyc-snap-min" aria-hidden="true"></span>
+            <span class="amyc-snap amyc-snap-default" aria-hidden="true"></span>
+            <span class="amyc-snap amyc-snap-max" aria-hidden="true"></span>
+            <input class="lightness-input" type="range" min="-40" max="40" step="1" data-theme-lightness data-snap-points="-40,0,40" data-snap-threshold="1" aria-label="Theme lightness">
           </span>
           <span class="lightness-value" data-lightness-value>0</span>
           <span class="lightness-label">Dark</span>
         </div>
         <div class="theme-spectrum">
-          <div class="theme-spectrum-row">
-            <input class="theme-spectrum-input" type="range" min="0" max="${themes.length - 1}" step="1" data-theme-spectrum aria-label="Theme spectrum">
+          <div class="theme-spectrum-row amyc-snap-track" style="--snap-default: ${(defaultThemeIndex() / (themes.length - 1)) * 100}%;">
+            <span class="amyc-snap amyc-snap-min" aria-hidden="true"></span>
+            <span class="amyc-snap amyc-snap-default" aria-hidden="true"></span>
+            <span class="amyc-snap amyc-snap-max" aria-hidden="true"></span>
+            <input class="theme-spectrum-input" type="range" min="0" max="${themes.length - 1}" step="1" data-theme-spectrum data-snap-points="0,${defaultThemeIndex()},${themes.length - 1}" aria-label="Theme spectrum">
           </div>
           <div class="theme-options" data-theme-options></div>
         </div>
+      </div>
+      <div class="theme-actions">
+        <button class="hbtn" type="button" data-theme-reset>Reset theme</button>
+        <label class="theme-persistence-toggle">
+          <input type="checkbox" data-amyc-sync-viewers>
+          <span>Sync viewers</span>
+        </label>
       </div>
       <details class="custom-css-box" data-custom-css-box>
         <summary class="custom-css-summary">
@@ -767,6 +872,7 @@
     const spectrum = panel.querySelector("[data-theme-spectrum]");
     const lightness = panel.querySelector("[data-theme-lightness]");
     spectrum.addEventListener("input", () => {
+      snapRangeToMarkers(spectrum);
       const theme = themes[Number(spectrum.value)] || themes[0];
       applyTheme(theme.id, true);
       const active = panel.querySelector(`[data-theme-choice="${theme.id}"]`);
@@ -777,22 +883,33 @@
     lightness.addEventListener("input", () => {
       applyLightness(lightness.value, true);
     });
+    lightness.addEventListener("change", () => {
+      if (snapRangeToMarkers(lightness)) {
+        applyLightness(lightness.value, true);
+      }
+    });
+    panel.querySelector("[data-theme-reset]").addEventListener("click", () => {
+      resetThemePrefs();
+    });
+    panel.querySelector("[data-amyc-sync-viewers]").addEventListener("change", (event) => {
+      setSyncAcrossViewers(event.target.checked, "theme");
+    });
 
     const cssInput = panel.querySelector("[data-custom-css]");
     const cssStatus = panel.querySelector("[data-custom-css-status]");
-    cssInput.value = readStorage(customCssKey) || "";
+    cssInput.value = readPref(customCssKey) || "";
     panel.querySelector("[data-custom-css-box]").open = !!cssInput.value.trim();
     panel.querySelector("[data-custom-css-apply]").addEventListener("click", () => {
       const value = cssInput.value;
       setCustomCss(value);
-      writeStorage(customCssKey, value);
+      writePref(customCssKey, value);
       applyTheme(root.dataset.theme, false);
       cssStatus.textContent = value.trim() ? "Custom CSS applied" : "Custom CSS cleared";
     });
     panel.querySelector("[data-custom-css-reset]").addEventListener("click", () => {
       cssInput.value = "";
       setCustomCss("");
-      removeStorage(customCssKey);
+      writePref(customCssKey, "");
       applyTheme(root.dataset.theme, false);
       cssStatus.textContent = "Custom CSS cleared";
     });
@@ -801,9 +918,9 @@
     return panel;
   }
 
-  const storedTheme = normalizeTheme(readStorage(themeKey));
-  currentLightness = normalizeLightness(readStorage(lightnessKey));
-  const storedCss = readStorage(customCssKey) || "";
+  const storedTheme = normalizeTheme(readPref(themeKey));
+  currentLightness = normalizeLightness(readPref(lightnessKey));
+  const storedCss = readPref(customCssKey) || "";
   applyTheme(storedTheme, false);
   setCustomCss(storedCss);
 
@@ -850,5 +967,12 @@
     });
   });
 
+  window.addEventListener(storageEventName, (event) => {
+    if (event.detail?.source === "theme") return;
+    persistCurrentPrefs();
+    updatePersistenceControls();
+  });
+
+  updatePersistenceControls();
   applyTheme(themes[selectedIndex()].id, false);
 })();

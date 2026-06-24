@@ -38,6 +38,7 @@ async function setTheme(page, theme, lightness) {
     ({ theme, lightness }) => {
       localStorage.setItem("amyc-theme", theme);
       localStorage.setItem("amyc-lightness", String(lightness));
+      localStorage.setItem("amyc-sync-viewers", "1");
       localStorage.removeItem("amyc-custom-css");
     },
     { theme, lightness },
@@ -140,10 +141,120 @@ async function pickerAudit(page) {
       clientWidth: panel ? Math.round(panel.clientWidth) : 0,
       hasCustomCss: !!panel?.querySelector("[data-custom-css]"),
       hasLightness: !!panel?.querySelector(".lightness-input"),
+      hasReset: !!panel?.querySelector("[data-theme-reset]"),
+      hasSync: !!panel?.querySelector("[data-amyc-sync-viewers]"),
+      markers: panel ? panel.querySelectorAll(".amyc-snap").length : 0,
     };
   });
   await page.keyboard.press("Escape");
   return result;
+}
+
+async function themeControlsAudit(page) {
+  await page.evaluate(() => {
+    localStorage.clear();
+    localStorage.setItem("amyc-sync-viewers", "1");
+    localStorage.setItem("amyc-theme", "starlight");
+    localStorage.setItem("amyc-lightness", "24");
+  });
+  await page.reload({ waitUntil: "domcontentloaded" });
+  await page.locator("[data-theme-toggle]").click();
+  const panel = page.locator(".theme-panel").filter({ has: page.locator("[data-theme-reset]") });
+  await panel.locator("[data-theme-reset]").click();
+  let state = await page.evaluate(() => ({
+    theme: document.documentElement.dataset.theme,
+    lightness: localStorage.getItem("amyc-lightness"),
+    storedTheme: localStorage.getItem("amyc-theme"),
+  }));
+  if (state.theme !== "sand" || state.lightness !== "0" || state.storedTheme !== "sand") {
+    throw new Error(`Theme reset failed: ${JSON.stringify(state)}`);
+  }
+
+  await panel.locator("[data-theme-lightness]").evaluate((input) => {
+    input.value = "39";
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+  });
+  state = await page.evaluate(() => ({
+    lightness: localStorage.getItem("amyc-lightness"),
+    value: document.querySelector("[data-theme-lightness]")?.value || "",
+  }));
+  if (state.lightness !== "40" || state.value !== "40") {
+    throw new Error(`Theme lightness snap failed: ${JSON.stringify(state)}`);
+  }
+
+  await panel.locator("[data-amyc-sync-viewers]").setChecked(false);
+  await panel.locator("[data-theme-choice='cypress']").click();
+  state = await page.evaluate(() => {
+    const scopedThemeKey = Object.keys(localStorage).find((key) => key.startsWith("amyc-viewer:") && key.endsWith(":amyc-theme"));
+    return {
+      sync: localStorage.getItem("amyc-sync-viewers"),
+      globalTheme: localStorage.getItem("amyc-theme"),
+      scopedTheme: scopedThemeKey ? localStorage.getItem(scopedThemeKey) : "",
+      scopedThemeKey: scopedThemeKey || "",
+      activeTheme: document.documentElement.dataset.theme,
+    };
+  });
+  if (state.sync !== "0" || state.globalTheme !== "sand" || state.scopedTheme !== "cypress" || state.activeTheme !== "cypress") {
+    throw new Error(`Viewer-scoped theme failed: ${JSON.stringify(state)}`);
+  }
+
+  await page.reload({ waitUntil: "domcontentloaded" });
+  await page.waitForFunction(() => document.documentElement.dataset.theme === "cypress");
+  await page.locator("[data-theme-toggle]").click();
+  await page.locator(".theme-panel [data-amyc-sync-viewers]").setChecked(true);
+  state = await page.evaluate(() => ({
+    sync: localStorage.getItem("amyc-sync-viewers"),
+    globalTheme: localStorage.getItem("amyc-theme"),
+    activeTheme: document.documentElement.dataset.theme,
+  }));
+  if (state.sync !== "1" || state.globalTheme !== "cypress" || state.activeTheme !== "cypress") {
+    throw new Error(`Shared theme restore failed: ${JSON.stringify(state)}`);
+  }
+  await page.keyboard.press("Escape");
+}
+
+async function fontControlsAudit(page) {
+  await page.evaluate(() => {
+    localStorage.setItem("amyc-sync-viewers", "1");
+    localStorage.setItem("amyc-font-system", "open");
+    localStorage.setItem("amyc-font-size", "4");
+    localStorage.setItem("amyc-font-line", "4");
+    localStorage.setItem("amyc-font-space", "4");
+  });
+  await page.reload({ waitUntil: "domcontentloaded" });
+  await page.locator("[data-font-toggle]").click();
+  const panel = page.locator(".amyc-font-panel");
+  const structure = await panel.evaluate((node) => ({
+    hasReset: !!node.querySelector("[data-amyc-font-reset]"),
+    hasSync: !!node.querySelector("[data-amyc-sync-viewers]"),
+    markers: node.querySelectorAll(".amyc-snap").length,
+  }));
+  if (!structure.hasReset || !structure.hasSync || structure.markers < 12) {
+    throw new Error(`Font control structure failed: ${JSON.stringify(structure)}`);
+  }
+  await panel.locator("[data-amyc-font-size]").evaluate((input) => {
+    input.value = "3";
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+  });
+  let state = await page.evaluate(() => ({
+    size: localStorage.getItem("amyc-font-size"),
+    value: document.querySelector("[data-amyc-font-size]")?.value || "",
+  }));
+  if (state.size !== "4" || state.value !== "4") {
+    throw new Error(`Font size snap failed: ${JSON.stringify(state)}`);
+  }
+  await panel.locator("[data-amyc-font-reset]").click();
+  state = await page.evaluate(() => ({
+    font: localStorage.getItem("amyc-font-system"),
+    size: localStorage.getItem("amyc-font-size"),
+    line: localStorage.getItem("amyc-font-line"),
+    space: localStorage.getItem("amyc-font-space"),
+    activeFont: document.documentElement.dataset.fontSystem,
+  }));
+  if (state.font !== "clerk" || state.size !== "1" || state.line !== "1" || state.space !== "0" || state.activeFont !== "clerk") {
+    throw new Error(`Font reset failed: ${JSON.stringify(state)}`);
+  }
+  await page.keyboard.press("Escape");
 }
 
 async function bugReportAudit(page) {
@@ -206,13 +317,15 @@ try {
   await page.goto(fixtureUrl, { waitUntil: "domcontentloaded" });
 
   const picker = await pickerAudit(page);
-  if (!picker.open || picker.choices !== 8 || !picker.hasCustomCss || !picker.hasLightness) {
+  if (!picker.open || picker.choices !== 8 || !picker.hasCustomCss || !picker.hasLightness || !picker.hasReset || !picker.hasSync || picker.markers < 6) {
     failures.push(`Theme picker structure failed: ${JSON.stringify(picker)}`);
   }
   if (picker.scrollWidth > picker.clientWidth + 1 || picker.width > 300) {
     failures.push(`Theme picker overflow or width failed: ${JSON.stringify(picker)}`);
   }
   failures.push(...await labelAudit(page));
+  await themeControlsAudit(page);
+  await fontControlsAudit(page);
 
   const bugReport = await bugReportAudit(page);
   if (!bugReport.open || bugReport.annotations !== 1 || bugReport.markers !== 1) {
