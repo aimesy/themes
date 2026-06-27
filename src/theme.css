@@ -37,12 +37,6 @@
   --warn-ink: #725414;
   --bar-fill: #9a7a35;
   --row-hover: #f8f4ec;
-  --danger: var(--warn);
-  --danger-bg: var(--warn-bg);
-  --danger-border: var(--warn-border);
-  --selected-bg: color-mix(in srgb, var(--accent-2) 16%, var(--paper));
-  --focus-ring: color-mix(in srgb, var(--accent) 24%, transparent);
-  --panel-shadow: color-mix(in srgb, var(--ink) 18%, transparent);
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
   --font-serif: Georgia, "Times New Roman", serif;
   --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -283,77 +277,12 @@
   --row-hover: #211a26;
 }
 
-.status-strip,
-.cs-status-strip,
-.amyc-status-strip {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-  min-height: 34px;
-  padding: 0.24rem 0.85rem;
-  border-bottom: 1px solid var(--chrome-rule);
-  background: var(--chrome);
-  color: var(--chrome-ink);
-  font-family: var(--font-mono);
-  font-size: 0.66rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.status-strip strong,
-.cs-status-strip strong,
-.amyc-status-strip strong {
-  color: var(--chrome-accent);
-  font-weight: 700;
-}
-
-.status-strip .dot,
-.cs-status-strip .dot,
-.amyc-status-strip .dot {
-  color: color-mix(in srgb, var(--chrome-ink) 52%, transparent);
-}
-
-.status-strip .grow,
-.cs-status-strip .grow,
-.amyc-status-strip .grow {
-  flex: 1;
-}
-
-.status-strip .live,
-.cs-status-strip .live,
-.amyc-status-strip .live {
-  color: var(--chrome-accent);
-  letter-spacing: 0.04em;
-}
-
-.status-strip a,
-.cs-status-strip a,
-.amyc-status-strip a {
-  color: var(--chrome-ink);
-}
-
-@media (max-width: 720px) {
-  .cs-status-strip {
-    gap: 0.34rem;
-    padding: 0.32rem 0.55rem;
-    font-size: 0.6rem;
-    letter-spacing: 0.08em;
-    flex-wrap: nowrap;
-    overflow: hidden;
-  }
-
-  .cs-status-strip > span:nth-of-type(-n+4) {
-    display: none;
-  }
-}
-
 .theme-toggle {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex: 0 0 auto;
-  min-height: 23px;
+  min-height: 24px;
   padding: 0.12rem 0.42rem;
   border: 1px solid color-mix(in srgb, var(--chrome-ink) 38%, transparent);
   border-radius: 2px;
@@ -372,10 +301,6 @@
   border-color: var(--chrome-accent);
   color: var(--chrome-accent);
   outline: none;
-}
-
-.theme-toggle:focus-visible {
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--chrome-accent) 28%, transparent);
 }
 
 .theme-icon {
@@ -400,13 +325,11 @@
   border: 1px solid var(--rule);
   border-radius: 3px;
   background: var(--paper);
-  box-shadow: 0 10px 22px var(--panel-shadow);
+  box-shadow: 0 10px 22px color-mix(in srgb, var(--ink) 18%, transparent);
   color: var(--ink);
   font-family: var(--font-sans);
   font-size: 0.72rem;
   letter-spacing: 0;
-  scrollbar-color: var(--accent-2) var(--paper-2);
-  scrollbar-width: thin;
   text-transform: none;
 }
 
@@ -561,10 +484,6 @@
   cursor: grab;
 }
 
-.theme-spectrum-input:active {
-  cursor: grabbing;
-}
-
 .lightness-input::-webkit-slider-runnable-track,
 .theme-spectrum-input::-webkit-slider-runnable-track {
   height: 3px;
@@ -612,10 +531,6 @@
   outline: none;
 }
 
-.theme-choice[aria-pressed="true"] .theme-name {
-  color: var(--ink);
-}
-
 .theme-swatch {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -660,9 +575,6 @@
 
 .theme-panel .hbtn,
 .amyc-display-panel .hbtn {
-  display: inline-flex;
-  width: auto;
-  margin: 0;
   min-height: 23px;
   padding: 0.16rem 0.4rem;
   border: 1px solid var(--rule);
@@ -674,29 +586,6 @@
   letter-spacing: 0.04em;
   text-transform: uppercase;
   white-space: nowrap;
-}
-
-.theme-panel .hbtn {
-  background: var(--paper-2);
-  color: var(--ink-2);
-}
-
-.display-controls {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.34rem;
-  margin: -0.08rem auto 0.85rem;
-}
-
-.mode-picker-box > .display-controls .theme-toggle,
-.mode-picker-box > .display-controls .font-toggle,
-.mode-picker-box > .display-controls .custom-css-toggle,
-.mode-picker-box > .display-controls .bug-report-trigger {
-  border-color: var(--rule);
-  background: var(--plain-soft);
-  color: var(--ink-2);
 }
 
 .theme-panel .hbtn:hover,

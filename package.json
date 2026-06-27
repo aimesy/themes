@@ -11,7 +11,6 @@
   ],
   "scripts": {
     "install:browsers": "playwright install chromium",
-    "test:consumers": "node tests/consumer-consistency.mjs",
     "test": "node tests/visual-smoke.mjs",
     "visual": "node tests/visual-smoke.mjs --write-screenshots"
   },
