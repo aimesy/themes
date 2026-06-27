@@ -12,14 +12,14 @@
   justify-content: center;
   flex: 0 0 auto;
   gap: 0.3rem;
-  min-height: 24px;
+  min-height: 23px;
   padding: 0.12rem 0.42rem;
   border: 1px solid color-mix(in srgb, var(--chrome-ink, #fff) 38%, transparent);
   border-radius: 2px;
   background: color-mix(in srgb, var(--chrome-ink, #fff) 6%, transparent);
   color: var(--chrome-ink, #fff);
   cursor: pointer;
-  font: 700 0.58rem/1 var(--font-mono, ui-monospace, SFMono-Regular, Consolas, monospace);
+  font: 700 0.6rem/1 var(--font-mono, ui-monospace, SFMono-Regular, Consolas, monospace);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   white-space: nowrap;
