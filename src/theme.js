@@ -7,7 +7,10 @@
   const defaultThemeId = "sand";
   const defaultLightness = 0;
   const root = document.documentElement;
+  const scriptEl = document.currentScript;
   const metaTheme = document.querySelector('meta[name="theme-color"]');
+  const publicRecordsFooterContact = "db@amyc.us";
+  const publicRecordsFooterPrefix = "No claim to public records or data. Contact: ";
   const adjustableTokens = [
     "paper", "paper-2", "paper-3", "plain", "plain-soft", "page-paper", "page-line",
     "ink", "ink-2", "ink-3", "ink-4", "rule", "rule-2", "chrome", "chrome-ink",
@@ -456,6 +459,46 @@
 
   function scopedStorageKey(key) {
     return `amyc-viewer:${viewerId()}:${key}`;
+  }
+
+  function publicRecordsFooterSetting() {
+    return String(
+      root.dataset.amycPublicRecordsFooter ||
+      document.body?.dataset.amycPublicRecordsFooter ||
+      scriptEl?.dataset.amycPublicRecordsFooter ||
+      "",
+    ).trim().toLowerCase();
+  }
+
+  function publicRecordsFooterEnabled() {
+    return !["0", "false", "off", "none", "hidden"].includes(publicRecordsFooterSetting());
+  }
+
+  function mountPublicRecordsFooter() {
+    if (!document.body) {
+      document.addEventListener("DOMContentLoaded", mountPublicRecordsFooter, { once: true });
+      return;
+    }
+    if (!publicRecordsFooterEnabled()) return;
+    if (document.querySelector(".amyc-public-records-footer")) return;
+
+    const footer = document.createElement("footer");
+    footer.className = "amyc-public-records-footer";
+    footer.dataset.amycPublicRecordsFooter = "1";
+    footer.setAttribute("role", "contentinfo");
+    footer.setAttribute("aria-label", "Public records contact notice");
+    footer.title = `${publicRecordsFooterPrefix}${publicRecordsFooterContact}.`;
+
+    const text = document.createElement("span");
+    text.textContent = publicRecordsFooterPrefix;
+
+    const link = document.createElement("a");
+    link.href = `mailto:${publicRecordsFooterContact}`;
+    link.textContent = publicRecordsFooterContact;
+
+    footer.append(text, link, document.createTextNode("."));
+    document.body.appendChild(footer);
+    document.body.classList.add("amyc-has-public-records-footer");
   }
 
   function syncAcrossViewers() {
@@ -975,4 +1018,5 @@
 
   updatePersistenceControls();
   applyTheme(themes[selectedIndex()].id, false);
+  mountPublicRecordsFooter();
 })();

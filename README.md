@@ -5,13 +5,21 @@ Shared theme runtime and visual test harness for AMYC projects.
 The package exports:
 
 - `src/theme.js`: compact theme picker, lightness control, reset control, custom CSS editor, and shared or viewer-scoped localStorage keys.
-- `src/theme.css`: shared theme tokens and picker styles.
+- `src/theme.css`: shared theme tokens, picker styles, and the public-records footer.
 - `src/bug-report.js`: shared bug reporter with page element annotations, browser state capture, GitHub issue draft support, optional POST endpoint support, and copy/download fallback.
 - `src/bug-report.css`: bug reporter styles using the same AMYC theme tokens.
 - `fixtures/theme-surface.html`: deterministic fixture for high risk surfaces, including dark shells with light document panels.
 - `tests/visual-smoke.mjs`: contrast, picker, bug reporter, and screenshot smoke tests across all eight themes and several lightness stops.
 
 The picker keeps the underlying eight theme IDs stable, but the current-theme label uses brightness aware names. For example, dragging Starlight lighter reports Daystar or Moonrise, while dragging it darker reports Midnight or Black Violet.
+
+`theme.js` also mounts a bottom public-records footer on every page that loads it. The footer uses this wording:
+
+```text
+No claim to public records or data. Contact: db@amyc.us.
+```
+
+To suppress it on a non-viewer page, set `data-amyc-public-records-footer="off"` on the theme script, `html`, or `body`.
 
 ## Use
 

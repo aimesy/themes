@@ -150,6 +150,21 @@ async function pickerAudit(page) {
   return result;
 }
 
+async function publicRecordsFooterAudit(page) {
+  return page.evaluate(() => {
+    const footer = document.querySelector(".amyc-public-records-footer");
+    const rect = footer?.getBoundingClientRect();
+    return {
+      exists: !!footer,
+      bodyClass: document.body.classList.contains("amyc-has-public-records-footer"),
+      text: (footer?.textContent || "").trim().replace(/\s+/g, " "),
+      mailto: footer?.querySelector("a")?.getAttribute("href") || "",
+      bottom: rect ? Math.round(window.innerHeight - rect.bottom) : null,
+      width: rect ? Math.round(rect.width) : 0,
+    };
+  });
+}
+
 async function themeControlsAudit(page) {
   await page.evaluate(() => {
     localStorage.clear();
@@ -322,6 +337,17 @@ try {
   }
   if (picker.scrollWidth > picker.clientWidth + 1 || picker.width > 300) {
     failures.push(`Theme picker overflow or width failed: ${JSON.stringify(picker)}`);
+  }
+  const footer = await publicRecordsFooterAudit(page);
+  if (
+    !footer.exists ||
+    !footer.bodyClass ||
+    footer.text !== "No claim to public records or data. Contact: db@amyc.us." ||
+    footer.mailto !== "mailto:db@amyc.us" ||
+    footer.bottom !== 0 ||
+    footer.width !== 1024
+  ) {
+    failures.push(`Public records footer failed: ${JSON.stringify(footer)}`);
   }
   failures.push(...await labelAudit(page));
   await themeControlsAudit(page);
