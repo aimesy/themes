@@ -707,12 +707,27 @@
     return adjusted;
   }
 
-  function setReadableTextTokens(adjusted, background, prefix) {
-    const primary = readableInk(background);
+  function ensureContrastAcross(color, backgrounds, minimum) {
+    return backgrounds.reduce(
+      (current, background) => ensureContrast(current, background, minimum),
+      color,
+    );
+  }
+
+  function setReadableTextTokens(adjusted, backgrounds, prefix) {
+    const primary = readableInk(backgrounds[0]);
     adjusted[prefix] = primary;
-    adjusted[`${prefix}-2`] = mixColor(primary, background, 0.24);
-    adjusted[`${prefix}-3`] = mixColor(primary, background, 0.48);
-    adjusted[`${prefix}-4`] = mixColor(primary, background, 0.66);
+    adjusted[`${prefix}-2`] = ensureContrastAcross(
+      mixColor(primary, backgrounds[0], 0.24),
+      backgrounds,
+      4.5,
+    );
+    adjusted[`${prefix}-3`] = ensureContrastAcross(
+      mixColor(primary, backgrounds[0], 0.48),
+      backgrounds,
+      4.5,
+    );
+    adjusted[`${prefix}-4`] = mixColor(primary, backgrounds[0], 0.66);
   }
 
   function clearAdjustedTokens() {
@@ -762,9 +777,10 @@
     });
 
     const mainBackground = adjusted.paper || parseColor(baseThemeTokens.paper) || [255, 255, 255];
+    const secondaryBackground = adjusted["paper-2"] || parseColor(baseThemeTokens["paper-2"]) || mainBackground;
     const chromeBackground = adjusted.chrome || parseColor(baseThemeTokens.chrome) || [0, 0, 0];
     const warnBackground = adjusted["warn-bg"] || mainBackground;
-    setReadableTextTokens(adjusted, mainBackground, "ink");
+    setReadableTextTokens(adjusted, [mainBackground, secondaryBackground], "ink");
     adjusted["chrome-ink"] = ensureContrast(
       adjusted["chrome-ink"] || readableInk(chromeBackground),
       chromeBackground,

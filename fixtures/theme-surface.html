@@ -179,6 +179,8 @@
       border: 1px solid var(--rule);
       background: var(--plain);
     }
+    .stat.token-paper { background: var(--paper); }
+    .stat.token-paper-2 { background: var(--paper-2); }
     .stat b {
       color: var(--ink);
       font-size: 1.15rem;
@@ -273,8 +275,8 @@
     </section>
 
     <aside class="panel stats">
-      <div class="stat" data-contrast-check="stat one"><b>256,134</b><span>rulings</span></div>
-      <div class="stat" data-contrast-check="stat two"><b>48,451</b><span>documents</span></div>
+      <div class="stat token-paper" data-contrast-check="stat one"><b>256,134</b><span data-contrast-check="ink-3 on paper">rulings</span></div>
+      <div class="stat token-paper-2" data-contrast-check="stat two"><b>48,451</b><span data-contrast-check="ink-3 on paper-2">documents</span></div>
       <div class="stat" data-contrast-check="stat three"><b>55,193</b><span>MB</span></div>
     </aside>
   </main>
