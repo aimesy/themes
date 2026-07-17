@@ -301,7 +301,7 @@
       : "";
     const base = [
       "### What happened",
-      report.description || "[Describe the bug here.]",
+      report.description || "[No description provided. See the automatically captured record context below.]",
       "",
       "### Page",
       `- URL: ${report.page.url}`,
@@ -317,6 +317,23 @@
     ].join("\n");
     if (!includeJson) return base;
     return `${base}\n\n<details>\n<summary>Captured browser state</summary>\n\n\`\`\`json\n${JSON.stringify(report, null, 2)}\n\`\`\`\n</details>\n`;
+  }
+
+  function contextIssueTitle(context) {
+    if (!context || typeof context !== "object") return "";
+    const record = context.activeRecord;
+    if (record && typeof record === "object") {
+      const kind = String(record.kind || "record").replaceAll("_", " ");
+      const label = record.displayName || record.name || record.title || record.caseNumber || record.id || record.key;
+      if (label) return `${kind}: ${label}`;
+    }
+    const interaction = context.lastInteraction;
+    if (interaction && typeof interaction === "object") {
+      const data = interaction.data && typeof interaction.data === "object" ? interaction.data : {};
+      const label = data.caseNumber || data.entityKey || data.rowHash || interaction.text;
+      if (label) return `Record: ${label}`;
+    }
+    return "";
   }
 
   async function copyText(text) {
@@ -349,7 +366,7 @@
   }
 
   function openGitHubIssue(config, report, fullBody) {
-    const title = `[${config.app}] ${clip(report.description || "Bug report", 70)}`;
+    const title = `[${config.app}] ${clip(report.description || contextIssueTitle(report.context) || "Bug report", 70)}`;
     const labels = config.labels || "bug";
     const params = new URLSearchParams({ title, body: fullBody, labels });
     const url = `https://github.com/${config.repo}/issues/new?${params.toString()}`;
@@ -525,7 +542,8 @@
 
   async function sendReport(active) {
     const report = captureState(active);
-    if (!report.description) {
+    const hasContext = report.context && typeof report.context === "object" && Object.keys(report.context).length;
+    if (!report.description && !hasContext && !report.annotations.length) {
       setStatus(active, "Add a short description first.");
       active.textarea.focus();
       return;

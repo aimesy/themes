@@ -310,6 +310,23 @@ async function bugReportAudit(page) {
       contextToken: report?.context?.sessionToken || "",
     };
   });
+  await page.evaluate(() => {
+    window.__bugReportOpenedUrl = "";
+    window.open = (url) => {
+      window.__bugReportOpenedUrl = String(url || "");
+      return null;
+    };
+  });
+  await page.locator(".bug-report-textarea").fill("");
+  await page.getByRole("button", { name: "Send", exact: true }).click();
+  await page.waitForFunction(() => Boolean(window.__bugReportOpenedUrl));
+  const contextOnlySend = await page.evaluate(() => ({
+    url: window.__bugReportOpenedUrl || "",
+    status: document.querySelector(".bug-report-status")?.textContent?.trim() || "",
+  }));
+  const contextOnlyTitle = new URL(contextOnlySend.url).searchParams.get("title") || "";
+  result.contextOnlySend = contextOnlyTitle.includes("packet: packet:alpha")
+    && contextOnlySend.status === "Opened a GitHub issue draft.";
   await page.keyboard.press("Escape");
   return result;
 }
@@ -384,6 +401,7 @@ try {
     || bugReport.contextId !== "packet:alpha"
     || bugReport.contextSnapshot !== "fixture-snapshot"
     || bugReport.contextToken !== "[redacted]"
+    || !bugReport.contextOnlySend
   ) {
     failures.push(`Bug reporter payload failed: ${JSON.stringify(bugReport)}`);
   }
