@@ -122,7 +122,48 @@
       endpoint: button.dataset.bugReportEndpoint || globalConfig.endpoint || "",
       labels: button.dataset.bugReportLabels || globalConfig.labels || "bug,site-report",
       mailto: button.dataset.bugReportMailto || globalConfig.mailto || "me@amyc.us",
+      context: globalConfig.context || null,
     };
+  }
+
+  function sanitizedContextValue(value, key = "", depth = 0, seen = new WeakSet()) {
+    if (/token|secret|password|credential|authorization|cookie|session/i.test(key)) return "[redacted]";
+    if (value == null || typeof value === "boolean" || typeof value === "number") return value;
+    if (typeof value === "string") return clip(value, 1000);
+    if (typeof value === "bigint") return String(value);
+    if (typeof value === "function" || typeof value === "symbol") return undefined;
+    if (depth >= 6) return "[depth limit]";
+    if (typeof value !== "object") return clip(value, 1000);
+    if (seen.has(value)) return "[circular]";
+    seen.add(value);
+    if (value instanceof Date) return Number.isNaN(value.getTime()) ? "" : value.toISOString();
+    if (value instanceof Element) return {
+      selector: selectorFor(value),
+      label: elementLabel(value),
+    };
+    if (Array.isArray(value)) {
+      return value.slice(0, 50)
+        .map((item) => sanitizedContextValue(item, "", depth + 1, seen))
+        .filter((item) => item !== undefined);
+    }
+    const out = {};
+    Object.entries(value).slice(0, 80).forEach(([childKey, childValue]) => {
+      const sanitized = sanitizedContextValue(childValue, childKey, depth + 1, seen);
+      if (sanitized !== undefined) out[childKey] = sanitized;
+    });
+    return out;
+  }
+
+  function captureContext(active) {
+    if (!active.config.context) return null;
+    try {
+      const raw = typeof active.config.context === "function"
+        ? active.config.context({ sourceButton: active.sourceButton })
+        : active.config.context;
+      return sanitizedContextValue(raw);
+    } catch (error) {
+      return { captureError: clip(error?.message || error || "Context provider failed", 500) };
+    }
   }
 
   function safeSelectorUnique(selector) {
@@ -199,6 +240,7 @@
       app: active.config.app,
       createdAt: new Date().toISOString(),
       description: active.textarea.value.trim(),
+      context: captureContext(active),
       page: {
         title: document.title,
         url: location.href,
@@ -254,6 +296,9 @@
       }).join("\n")
       : "No page elements selected.";
     const themeBits = [report.theme.theme, report.theme.tone, report.theme.lightness ? `lightness ${report.theme.lightness}` : ""].filter(Boolean).join(", ") || "not captured";
+    const contextJson = report.context && typeof report.context === "object" && Object.keys(report.context).length
+      ? JSON.stringify(report.context, null, 2)
+      : "";
     const base = [
       "### What happened",
       report.description || "[Describe the bug here.]",
@@ -263,6 +308,9 @@
       `- Title: ${report.page.title}`,
       `- Theme: ${themeBits}`,
       `- Viewport: ${report.browser.viewport.width} x ${report.browser.viewport.height} @ ${report.browser.devicePixelRatio}`,
+      "",
+      "### Record context",
+      contextJson ? `\`\`\`json\n${contextJson}\n\`\`\`` : "No app-specific record context captured.",
       "",
       "### Annotated elements",
       annotationLines,
@@ -570,7 +618,7 @@
 
     const hint = document.createElement("div");
     hint.className = "bug-report-hint";
-    hint.innerHTML = "Use <kbd>Select element</kbd> to attach page elements. The report includes browser state, route, theme, viewport, and recent runtime errors.";
+    hint.innerHTML = "Use <kbd>Select element</kbd> to attach page elements. The report includes browser state, route, app record context when available, theme, viewport, and recent runtime errors.";
 
     const list = document.createElement("div");
     list.className = "bug-report-annotations";

@@ -273,6 +273,15 @@ async function fontControlsAudit(page) {
 }
 
 async function bugReportAudit(page) {
+  await page.evaluate(() => {
+    window.AMYC_BUG_REPORT = {
+      context: () => ({
+        activeRecord: { kind: "packet", id: "packet:alpha" },
+        sourceSnapshot: "fixture-snapshot",
+        sessionToken: "must-not-escape",
+      }),
+    };
+  });
   const button = page.locator("[data-bug-report]");
   if (await button.count() !== 1) throw new Error("Expected exactly one bug report trigger in fixture");
   await button.click();
@@ -295,6 +304,10 @@ async function bugReportAudit(page) {
       viewportWidth: report?.browser?.viewport?.width || 0,
       selector: report?.annotations?.[0]?.selector || "",
       label: report?.annotations?.[0]?.label || "",
+      contextKind: report?.context?.activeRecord?.kind || "",
+      contextId: report?.context?.activeRecord?.id || "",
+      contextSnapshot: report?.context?.sourceSnapshot || "",
+      contextToken: report?.context?.sessionToken || "",
     };
   });
   await page.keyboard.press("Escape");
@@ -324,7 +337,9 @@ async function labelAudit(page) {
   return failures;
 }
 
-const browser = await chromium.launch();
+const browser = await chromium.launch(process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH
+  ? { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH }
+  : {});
 const failures = [];
 
 try {
@@ -365,6 +380,10 @@ try {
     || bugReport.viewportWidth !== 1024
     || !bugReport.selector
     || !/packet-code|OSC 2/i.test(bugReport.label)
+    || bugReport.contextKind !== "packet"
+    || bugReport.contextId !== "packet:alpha"
+    || bugReport.contextSnapshot !== "fixture-snapshot"
+    || bugReport.contextToken !== "[redacted]"
   ) {
     failures.push(`Bug reporter payload failed: ${JSON.stringify(bugReport)}`);
   }

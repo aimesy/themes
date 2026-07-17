@@ -54,6 +54,19 @@ Vendor `src/bug-report.js` and `src/bug-report.css` with the theme assets, then 
 
 The reporter lets a user describe the bug, select page elements, add annotation notes, and send or preserve the captured report. The report includes URL, route/hash, viewport, browser metadata, theme state, public AMYC app storage keys, loaded scripts/stylesheets, selected element selectors/rectangles/text snippets, and recent runtime errors.
 
+Apps can attach public record identifiers and other app-specific state with an optional context provider. The provider is called when the report preview or submission is generated, so it should return the current state as a plain JSON-compatible object. Sensitive-looking keys are redacted and values are bounded before capture.
+
+```html
+<script>
+  window.AMYC_BUG_REPORT = {
+    context: () => ({
+      activeRecord: { kind: "attorney", id: "bar:123456" },
+      sourceSnapshot: "example-public-snapshot-id"
+    })
+  };
+</script>
+```
+
 If `data-bug-report-endpoint` is set, the reporter posts JSON there first. If no endpoint is set, `data-bug-report-repo` opens a GitHub issue draft. If neither is set, the user can copy or download JSON, with `mailto:` as a final fallback.
 
 ## Test
