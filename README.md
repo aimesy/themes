@@ -52,7 +52,9 @@ Vendor `src/bug-report.js` and `src/bug-report.css` with the theme assets, then 
 >Bug</button>
 ```
 
-The reporter lets a user describe the bug, select page elements, add annotation notes, and send or preserve the captured report. The report includes URL, route/hash, viewport, browser metadata, theme state, public AMYC app storage keys, loaded scripts/stylesheets, selected element selectors/rectangles/text snippets, and recent runtime errors.
+The reporter lets a user describe the bug, select page elements, add annotation notes, and send or preserve the captured report. The report includes URL, route/hash, viewport, browser metadata, theme state, public AMYC app storage keys, loaded scripts/stylesheets, selected element selectors/rectangles/text snippets, recent runtime errors, and automatically inferred public record context.
+
+Without app-specific JavaScript, the reporter captures context from visible, focused, clicked, and annotated elements that carry `data-bug-report-context` or common public record attributes such as `data-case-number`, `data-record-id`, `data-record-title`, `data-row-hash`, `data-entity-key`, `data-bar-number`, `data-document-key`, or `data-sha256`. `data-bug-report-context` may be a plain label or a JSON object. These inferred records are included as `lastInteraction`, `annotatedRecords`, and `visibleRecords`, and can drive context-only GitHub issue titles.
 
 Apps can attach public record identifiers and other app-specific state with an optional context provider. The provider is called when the report preview or submission is generated, so it should return the current state as a plain JSON-compatible object. Sensitive-looking keys are redacted and values are bounded before capture.
 

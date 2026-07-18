@@ -308,6 +308,14 @@ async function bugReportAudit(page) {
       contextId: report?.context?.activeRecord?.id || "",
       contextSnapshot: report?.context?.sourceSnapshot || "",
       contextToken: report?.context?.sessionToken || "",
+      autoLastRecordId: report?.context?.lastInteraction?.data?.recordId || "",
+      autoLastCaseNumber: report?.context?.lastInteraction?.data?.caseNumber || "",
+      autoAnnotatedRecordId: report?.context?.annotatedRecords?.[0]?.data?.recordId || "",
+      autoVisibleCount: report?.context?.visibleRecords?.length || 0,
+      autoVisibleSection: report?.context?.route?.visibleSection || "",
+      autoInlineRowHash: report?.context?.visibleRecords?.find((row) => row.data?.recordId === "packet:beta")?.data?.rowHash || "",
+      autoInlineSource: report?.context?.visibleRecords?.find((row) => row.data?.recordId === "packet:beta")?.data?.source || "",
+      annotationContextRecordId: report?.annotations?.[0]?.context?.data?.recordId || "",
     };
   });
   await page.evaluate(() => {
@@ -326,7 +334,7 @@ async function bugReportAudit(page) {
   }));
   const contextOnlyTitle = new URL(contextOnlySend.url).searchParams.get("title") || "";
   result.contextOnlySend = contextOnlyTitle.includes("packet: packet:alpha")
-    && contextOnlySend.status === "Opened a GitHub issue draft.";
+    && contextOnlySend.status.includes("Opened a GitHub issue draft");
   await page.keyboard.press("Escape");
   return result;
 }
@@ -401,6 +409,14 @@ try {
     || bugReport.contextId !== "packet:alpha"
     || bugReport.contextSnapshot !== "fixture-snapshot"
     || bugReport.contextToken !== "[redacted]"
+    || bugReport.autoLastRecordId !== "packet:alpha"
+    || bugReport.autoLastCaseNumber !== "CGC18567890"
+    || bugReport.autoAnnotatedRecordId !== "packet:alpha"
+    || bugReport.annotationContextRecordId !== "packet:alpha"
+    || bugReport.autoVisibleCount < 2
+    || bugReport.autoVisibleSection !== "Docket Packets"
+    || bugReport.autoInlineRowHash !== "fixture-beta-row"
+    || bugReport.autoInlineSource !== "fixture-inline"
     || !bugReport.contextOnlySend
   ) {
     failures.push(`Bug reporter payload failed: ${JSON.stringify(bugReport)}`);
