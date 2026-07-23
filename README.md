@@ -6,6 +6,7 @@ The package exports:
 
 - `src/theme.js`: compact theme picker, lightness control, reset control, custom CSS editor, and shared or viewer-scoped localStorage keys.
 - `src/theme.css`: shared theme tokens, picker styles, and the public-records footer.
+- `src/theme-bar.css`: opt-in shared layout and chrome styling for the compact theme bar.
 - `src/bug-report.js`: shared bug reporter with page element annotations, browser state capture, GitHub issue draft support, optional POST endpoint support, and copy/download fallback.
 - `src/bug-report.css`: bug reporter styles using the same AMYC theme tokens.
 - `fixtures/theme-surface.html`: deterministic fixture for high risk surfaces, including dark shells with light document panels.
@@ -23,13 +24,22 @@ To suppress it on a non-viewer page, set `data-amyc-public-records-footer="off"`
 
 ## Use
 
-Vendor `src/theme.js` and `src/theme.css` into each static project, then add a compact button with `data-theme-toggle`.
+Vendor `src/theme.js`, `src/theme.css`, and `src/theme-bar.css` into each static project, then add a compact button with `data-theme-toggle`.
 
 ```html
 <link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="theme-bar.css">
 <script src="theme.js" defer></script>
-<button class="theme-toggle" type="button" data-theme-toggle aria-label="Theme spectrum" title="Theme spectrum"></button>
+<div class="amyc-theme-bar">
+  <strong>AMYC</strong>
+  <span class="grow"></span>
+  <button class="theme-toggle" type="button" data-theme-toggle aria-label="Theme spectrum" title="Theme spectrum"></button>
+</div>
 ```
+
+Keep app-specific labels and responsive hiding in the consumer. The shared
+`amyc-theme-bar` class owns the common positioning, spacing, typography, and
+theme-panel anchor without styling unrelated headers.
 
 The runtime uses shared keys by default: `amyc-theme`, `amyc-lightness`, `amyc-font-system`, `amyc-font-size`, `amyc-font-line`, `amyc-font-space`, and `amyc-custom-css`. Those keys persist display settings across every AMYC viewer on the same origin, including different repos served from that origin. The picker also includes a `Sync viewers` toggle. Turning it off stores settings under `amyc-viewer:<viewer-id>:...` so one viewer can keep its own theme and font settings.
 

@@ -133,6 +133,9 @@ async function pickerAudit(page) {
   const result = await page.evaluate(() => {
     const panel = Array.from(document.querySelectorAll(".theme-panel")).find((el) => !el.hidden);
     const rect = panel?.getBoundingClientRect();
+    const bar = document.querySelector(".amyc-theme-bar");
+    const barRect = bar?.getBoundingClientRect();
+    const barStyle = bar ? getComputedStyle(bar) : null;
     return {
       open: !!panel,
       choices: panel ? panel.querySelectorAll(".theme-choice").length : 0,
@@ -144,6 +147,9 @@ async function pickerAudit(page) {
       hasReset: !!panel?.querySelector("[data-theme-reset]"),
       hasSync: !!panel?.querySelector("[data-amyc-sync-viewers]"),
       markers: panel ? panel.querySelectorAll(".amyc-snap").length : 0,
+      barPosition: barStyle?.position || "",
+      barDisplay: barStyle?.display || "",
+      barHeight: barRect ? Math.round(barRect.height) : 0,
     };
   });
   await page.keyboard.press("Escape");
@@ -377,6 +383,9 @@ try {
   }
   if (picker.scrollWidth > picker.clientWidth + 1 || picker.width > 300) {
     failures.push(`Theme picker overflow or width failed: ${JSON.stringify(picker)}`);
+  }
+  if (picker.barPosition !== "relative" || picker.barDisplay !== "flex" || picker.barHeight < 34) {
+    failures.push(`Theme bar structure failed: ${JSON.stringify(picker)}`);
   }
   const footer = await publicRecordsFooterAudit(page);
   if (

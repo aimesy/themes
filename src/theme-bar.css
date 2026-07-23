@@ -1,0 +1,48 @@
+.amyc-theme-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 34px;
+  padding: 0.24rem 0.85rem;
+  border-bottom: 1px solid var(--chrome-rule);
+  background: var(--chrome);
+  color: var(--chrome-ink);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.amyc-theme-bar strong {
+  color: var(--chrome-accent);
+  font-weight: 700;
+}
+
+.amyc-theme-bar .dot {
+  color: color-mix(in srgb, var(--chrome-ink) 52%, transparent);
+}
+
+.amyc-theme-bar .grow {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.amyc-theme-bar .live {
+  color: var(--chrome-accent);
+  letter-spacing: 0.04em;
+}
+
+.amyc-theme-bar a {
+  color: var(--chrome-ink);
+}
+
+@media (max-width: 720px) {
+  .amyc-theme-bar {
+    gap: 0.34rem;
+    padding-right: 0.55rem;
+    padding-left: 0.55rem;
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+  }
+}
