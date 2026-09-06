@@ -12,6 +12,7 @@ const baselineCommit = 'cd6aac6380c70291fa876f8d1d802cde65b80b0a';
 const stage = path.join(root, 'test-output', 'theme-additions');
 const oldThemes = ['mist','lilac','glacier','rose','sand','tidepool','cypress','starlight'];
 const newThemes = ['crimson','ember','ultramarine','orchid'];
+const rainbowOrder = ['crimson','sand','ember','cypress','tidepool','mist','glacier','ultramarine','lilac','starlight','orchid','rose'];
 const failures = [];
 const readCommit = (file) => execFileSync('git', ['show', `${baselineCommit}:${file}`], { cwd:root });
 await mkdir(path.join(stage,'baseline','src'),{recursive:true});
@@ -62,6 +63,7 @@ async function themeStates(page,theme,withContrast=false,lightnessValues=Array.f
     const nodes=[...document.querySelectorAll('[data-contrast-check]')];
     const diagramProbe=document.createElement('section');
     const diagramNodes=[];
+    const headerNodes=[];
     if(withContrast) {
       // These are the existing consumer's actual CSS expressions. Resolve them
       // in the browser rather than duplicating the runtime's contrast math.
@@ -80,6 +82,21 @@ async function themeStates(page,theme,withContrast=false,lightnessValues=Array.f
         }
       }
       document.body.append(diagramProbe);
+      if(theme==='ember') {
+        // Cividx's masthead tints chrome with 24% accent and fades its
+        // secondary text to 82%. Flat-header contrast misses this case.
+        for(let step=0;step<=16;step++) {
+          for(const [token,opacity] of [['chrome-ink',1],['chrome-ink',.82],['chrome-accent',1]]) {
+            const surface=document.createElement('div');
+            surface.style.background=`color-mix(in srgb, var(--chrome) ${100-step*1.5}%, var(--accent))`;
+            const label=document.createElement('span');
+            label.dataset.headerContrast=`header/${step}/${token}/${opacity}`;
+            label.style.color=`color-mix(in srgb, var(--${token}) ${opacity*100}%, transparent)`;
+            label.textContent=token;
+            surface.append(label);diagramProbe.append(surface);headerNodes.push(label);
+          }
+        }
+      }
     }
     const canvas=document.createElement('canvas');canvas.width=canvas.height=1;
     const context=canvas.getContext('2d',{willReadFrequently:true});
@@ -116,10 +133,10 @@ async function themeStates(page,theme,withContrast=false,lightnessValues=Array.f
           choices:oldThemes.map(id=>{const button=document.querySelector(`[data-theme-choice="${id}"]`);return {
             id,text:button.textContent,pressed:button.getAttribute('aria-pressed')};})},
         preferences:Object.fromEntries(Object.keys(localStorage).sort().map(key=>[key,localStorage.getItem(key)]))};
-      if(withContrast) state.contrast=[...nodes,...diagramNodes].map(node=>{
+      if(withContrast) state.contrast=[...nodes,...diagramNodes,...headerNodes].map(node=>{
         const bg=background(node);const fg=blend(rgba(getComputedStyle(node).color),bg);
-        return {label:node.dataset.contrastCheck||node.dataset.diagramContrast,
-          kind:node.dataset.diagramContrast?'consumer-diagram':'fixture',
+        return {label:node.dataset.contrastCheck||node.dataset.diagramContrast||node.dataset.headerContrast,
+          kind:node.dataset.diagramContrast?'consumer-diagram':node.dataset.headerContrast?'consumer-header':'fixture',
           foreground:fg.slice(0,3),background:bg.slice(0,3),
           ratio:ratio(fg,bg),minimum:Number(node.dataset.contrastMin||4.5)};
       });
@@ -196,15 +213,15 @@ try {
   const additions=[];
   for(const theme of newThemes) {
     const states=await themeStates(proposed,theme,true);
-    let checked=0,diagramChecked=0;
+    let checked=0,diagramChecked=0,headerChecked=0;
     for(const state of states) {
       if(state.actualLightness!==String(state.lightness))failures.push({type:'new-theme-lightness',theme,requested:state.lightness,actual:state.actualLightness});
       for(const reading of state.contrast) {
-        if(reading.kind==='consumer-diagram')diagramChecked++;else checked++;
+        if(reading.kind==='consumer-diagram')diagramChecked++;else if(reading.kind==='consumer-header')headerChecked++;else checked++;
         if(reading.ratio<reading.minimum)failures.push({type:'new-theme-contrast',theme,lightness:state.lightness,...reading});
       }
     }
-    additions.push({theme,states:81,renderedContrastPairs:checked,diagramContrastPairs:diagramChecked});
+    additions.push({theme,states:81,renderedContrastPairs:checked,diagramContrastPairs:diagramChecked,headerContrastPairs:headerChecked});
     console.log(`${theme}: added theme contrast inspected at all 81 brightness values`);
   }
 
@@ -221,12 +238,32 @@ try {
       const rect=panel.getBoundingClientRect();
       return {rows:[...rows.values()],width:panel.clientWidth,scrollWidth:panel.scrollWidth,left:rect.left,right:rect.right};
     });
-    if(picker.rows.length!==3||picker.rows[2]?.join()!==newThemes.join()||picker.rows.some(row=>row.length!==4))failures.push({type:'new-theme-third-row',viewport,...picker});
+    if(picker.rows.length!==3||picker.rows.flat().join()!==rainbowOrder.join()||picker.rows.some(row=>row.length!==4))failures.push({type:'theme-rainbow-order',viewport,...picker});
     if(picker.scrollWidth>picker.width+1||picker.left<0||picker.right>viewport.width+1)failures.push({type:'new-theme-picker-overflow',viewport,...picker});
     pickers.push({viewport,...picker});
     await proposed.keyboard.press('Escape');
   }
   await proposed.setViewportSize({width:1280,height:900});
+  const spectrumOrder=await proposed.evaluate(()=>{
+    const input=document.querySelector('[data-theme-spectrum]');
+    return Array.from({length:Number(input.max)+1},(_,index)=>{
+      input.value=String(index);input.dispatchEvent(new Event('input',{bubbles:true}));
+      return document.documentElement.dataset.theme;
+    });
+  });
+  if(spectrumOrder.join()!==rainbowOrder.join())failures.push({type:'theme-spectrum-order',actual:spectrumOrder});
+  // Existing Ember selections must display Imperial without rewriting the ID.
+  await proposed.evaluate(()=>{
+    localStorage.setItem('amyc-theme','ember');localStorage.setItem('amyc-lightness','0');
+  });
+  await proposed.reload({waitUntil:'domcontentloaded'});
+  const renamedTheme=await proposed.evaluate(()=>({
+    id:document.documentElement.dataset.theme,storedId:localStorage.getItem('amyc-theme'),
+    choice:document.querySelector('[data-theme-choice="ember"] .theme-name').textContent,
+    current:document.querySelector('[data-theme-current]').textContent,
+    spectrum:Number(document.querySelector('[data-theme-spectrum]').value),
+  }));
+  if(renamedTheme.id!=='ember'||renamedTheme.storedId!=='ember'||renamedTheme.choice!=='Imperial'||renamedTheme.current!=='Imperial'||renamedTheme.spectrum!==rainbowOrder.indexOf('ember'))failures.push({type:'imperial-saved-theme-compatibility',...renamedTheme});
   const persistence=[];
   for(const theme of newThemes) {
     await proposed.locator('[data-theme-toggle]').focus();
@@ -315,11 +352,12 @@ try {
     computedComparisons:parity.reduce((n,item)=>n+item.computedComparisons,0),
     newThemes:4,newBrightnessStates:324,newRenderedContrastPairs:additions.reduce((n,item)=>n+item.renderedContrastPairs,0),
     consumerDiagramContrastPairs:additions.reduce((n,item)=>n+item.diagramContrastPairs,0),
+    consumerHeaderContrastPairs:additions.reduce((n,item)=>n+item.headerContrastPairs,0),
     customPaperCases:customColors.filter(item=>item.type==='paper-syntax').length,
     fixedDocumentContrastPairs:customColors.filter(item=>item.type==='fixed-document-surfaces').reduce((sum,item)=>sum+item.readings.length,0),
     failures:failures.length};
   await writeFile(path.join(stage,'report.json'),JSON.stringify({visibility:'public',classification:'archive-internal',
-    baselineCommit,summary,parity,originalPreferences:{expected:expectedPreferences,actual:actualPreferences},additions,pickers,persistence,scoped,customColors,failures},null,2)+'\n');
+    baselineCommit,summary,parity,originalPreferences:{expected:expectedPreferences,actual:actualPreferences},additions,pickers,spectrumOrder,renamedTheme,persistence,scoped,customColors,failures},null,2)+'\n');
   console.log(JSON.stringify({...summary,failureCategories:Object.fromEntries([...new Set(failures.map(f=>f.type))].map(type=>[type,failures.filter(f=>f.type===type).length])),report:'test-output/theme-additions/report.json'},null,2));
   if(failures.length)process.exitCode=1;
 } finally {await browser.close();await new Promise(resolve=>server.close(resolve));}

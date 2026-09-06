@@ -770,26 +770,26 @@ body.amyc-has-public-records-footer {
 /* New family: existing theme selectors and defaults above are unchanged. */
 :root[data-theme="ember"] {
   color-scheme: var(--new-theme-color-scheme, light);
-  --paper: #faf8f0;
-  --paper-2: #f3efdf;
-  --paper-3: #ede6d2;
-  --plain: #fffefa;
-  --plain-soft: #fbf8ee;
-  --page-paper: #fffefa;
-  --page-line: #e4dcc6;
-  --ink: #252b28;
-  --ink-2: #414b46;
-  --ink-3: #5e6860;
-  --ink-4: #7b847c;
-  --rule: #c9c1ae;
-  --rule-2: #ded8c8;
-  --chrome: #252d29;
-  --chrome-rule: #161c18;
-  --chrome-ink: #f7f2e4;
-  --chrome-accent: #f3bd4d;
-  --accent: #a26700;
-  --accent-2: #926600;
-  --link: #256476;
+  --paper: #fafafa;
+  --paper-2: #f3f3f3;
+  --paper-3: #e9e9e9;
+  --plain: #ffffff;
+  --plain-soft: #fcfcfc;
+  --page-paper: #ffffff;
+  --page-line: #e2e2e2;
+  --ink: #202020;
+  --ink-2: #414141;
+  --ink-3: #606060;
+  --ink-4: #808080;
+  --rule: #c6c6c6;
+  --rule-2: #dedede;
+  --chrome: #ffffff;
+  --chrome-rule: #b08b2d;
+  --chrome-ink: #252525;
+  --chrome-accent: #846300;
+  --accent: #846300;
+  --accent-2: #765907;
+  --link: #705611;
   --warn: #8e4829;
   --ok: #2d714b;
   --good-bg: #f3f7f4;
@@ -797,8 +797,8 @@ body.amyc-has-public-records-footer {
   --warn-bg: #f7f5f3;
   --warn-border: #b49764;
   --warn-ink: #79522a;
-  --bar-fill: #a66a00;
-  --row-hover: #f0ead7;
+  --bar-fill: #92700a;
+  --row-hover: #f0f0f0;
 }
 
 /* New family: existing theme selectors and defaults above are unchanged. */

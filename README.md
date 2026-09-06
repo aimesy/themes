@@ -2,7 +2,9 @@
 
 Shared theme runtime and visual test harness for AMYC projects.
 
-Crimson, Ember, Ultramarine, and Orchid add a third picker row, each with five named brightness variants. The original eight theme definitions, font controls, and existing theme behavior are preserved. The new families use a separate contrast adjustment path.
+Crimson, Imperial, Ultramarine, and Orchid each have five named brightness variants. Imperial moves from white and gold to black and gold, including the header. The original eight palettes, font controls, and saved theme choices are preserved. The added families use a separate contrast adjustment path.
+
+The picker and spectrum slider follow a fixed rainbow order: Crimson, Sand, Imperial, Cypress, Tidepool, Mist, Glacier, Ultramarine, Lilac, Starlight, Orchid, and Rose. Imperial retains the original `ember` ID so existing saved preferences, custom CSS, and links remain compatible.
 
 The package exports:
 
@@ -15,7 +17,7 @@ The package exports:
 - `tests/visual-smoke.mjs`: contrast, picker, bug reporter, and screenshot smoke tests across all eight themes and several lightness stops.
 - `tests/theme-additions.mjs`: rendered parity for the original eight families, plus contrast, keyboard selection, and preference checks for the four additions at every integer brightness setting.
 
-The picker keeps the underlying eight theme IDs stable, but the current-theme label uses brightness aware names. For example, dragging Starlight lighter reports Daystar or Moonrise, while dragging it darker reports Midnight or Black Violet.
+The picker keeps the underlying theme IDs stable, but the current-theme label uses brightness aware names. For example, dragging Starlight lighter reports Daystar or Moonrise, while dragging it darker reports Midnight or Black Violet.
 
 `theme.js` also mounts a bottom public-records footer on every page that loads it. The footer uses this wording:
 

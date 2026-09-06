@@ -427,8 +427,8 @@
     },
   };
 
-  // New families are appended after the original eight. Their palette and
-  // contrast adjustments are isolated from the existing theme definitions.
+  // Added families keep palette and contrast adjustments isolated from the
+  // original definitions. Display order is set after all families are loaded.
   const addedThemeIds = new Set(["crimson", "ember", "ultramarine", "orchid"]);
   themes.push(...[
   {
@@ -452,22 +452,22 @@
   },
   {
     "id": "ember",
-    "name": "Ember",
-    "note": "Amber and charcoal",
+    "name": "Imperial",
+    "note": "White, black, and gold",
     "names": {
-      "darkest": "Charcoal",
-      "darker": "Cinder",
-      "base": "Ember",
-      "lighter": "Apricot",
-      "lightest": "Dawn"
+      "darkest": "Black Gold",
+      "darker": "Gilt",
+      "base": "Imperial",
+      "lighter": "Champagne",
+      "lightest": "White Gold"
     },
     "colors": [
-      "#252d29",
-      "#f3efdf",
-      "#a26700",
-      "#fffefa"
+      "#ffffff",
+      "#f3f3f3",
+      "#846300",
+      "#080808"
     ],
-    "themeColor": "#252d29"
+    "themeColor": "#ffffff"
   },
   {
     "id": "ultramarine",
@@ -508,6 +508,14 @@
     "themeColor": "#4f2451"
   }
 ]);
+  // Keep saved IDs stable, including Imperial's original "ember" ID.
+  // Use each family's overall hue, so the order stays fixed with lightness.
+  const themeOrder = [
+    "crimson", "sand", "ember", "cypress",
+    "tidepool", "mist", "glacier", "ultramarine",
+    "lilac", "starlight", "orchid", "rose",
+  ];
+  themes.sort((a, b) => themeOrder.indexOf(a.id) - themeOrder.indexOf(b.id));
   Object.assign(themeVariants, {
   "crimson": {
     "dark": {
@@ -575,26 +583,26 @@
   },
   "ember": {
     "dark": {
-      "paper": "#111713",
-      "paper-2": "#0b110d",
-      "paper-3": "#1a221c",
-      "plain": "#151d17",
-      "plain-soft": "#131a15",
-      "page-paper": "#151d17",
-      "page-line": "#2d3b30",
-      "ink": "#f4f0e4",
-      "ink-2": "#d7d5c9",
-      "ink-3": "#b9bbae",
-      "ink-4": "#8b9385",
-      "rule": "#455849",
-      "rule-2": "#2d3b30",
-      "chrome": "#070d09",
-      "chrome-rule": "#020502",
-      "chrome-ink": "#f7f2e4",
-      "chrome-accent": "#f3bd4d",
-      "accent": "#f2bd52",
-      "accent-2": "#e2b362",
-      "link": "#95cfdb",
+      "paper": "#080808",
+      "paper-2": "#000000",
+      "paper-3": "#181818",
+      "plain": "#101010",
+      "plain-soft": "#0b0b0b",
+      "page-paper": "#101010",
+      "page-line": "#303030",
+      "ink": "#f3f3f3",
+      "ink-2": "#d6d6d6",
+      "ink-3": "#b8b8b8",
+      "ink-4": "#929292",
+      "rule": "#454545",
+      "rule-2": "#292929",
+      "chrome": "#000000",
+      "chrome-rule": "#8d6c20",
+      "chrome-ink": "#f3f3f3",
+      "chrome-accent": "#e6c260",
+      "accent": "#e2bd55",
+      "accent-2": "#d1b465",
+      "link": "#e9d298",
       "warn": "#dda288",
       "ok": "#87cfa6",
       "good-bg": "#19241d",
@@ -602,30 +610,30 @@
       "warn-bg": "#28231a",
       "warn-border": "#af905a",
       "warn-ink": "#dfc2a4",
-      "bar-fill": "#eeb747",
-      "row-hover": "#1c2820"
+      "bar-fill": "#dfb94c",
+      "row-hover": "#1a1a1a"
     },
     "light": {
-      "paper": "#fefdf8",
-      "paper-2": "#f9f6e9",
-      "paper-3": "#f3eedb",
+      "paper": "#ffffff",
+      "paper-2": "#f9f9f9",
+      "paper-3": "#efefef",
       "plain": "#ffffff",
-      "plain-soft": "#fffefa",
+      "plain-soft": "#ffffff",
       "page-paper": "#ffffff",
-      "page-line": "#eee7d2",
-      "ink": "#252b28",
-      "ink-2": "#414b46",
-      "ink-3": "#5e6860",
-      "ink-4": "#7b847c",
-      "rule": "#d9d0ba",
-      "rule-2": "#e9e2d0",
-      "chrome": "#353c35",
-      "chrome-rule": "#252b24",
-      "chrome-ink": "#f7f2e4",
-      "chrome-accent": "#f3bd4d",
-      "accent": "#a26700",
-      "accent-2": "#926600",
-      "link": "#256476",
+      "page-line": "#e7e7e7",
+      "ink": "#202020",
+      "ink-2": "#414141",
+      "ink-3": "#606060",
+      "ink-4": "#808080",
+      "rule": "#d2d2d2",
+      "rule-2": "#e5e5e5",
+      "chrome": "#ffffff",
+      "chrome-rule": "#b08b2d",
+      "chrome-ink": "#252525",
+      "chrome-accent": "#846300",
+      "accent": "#846300",
+      "accent-2": "#765907",
+      "link": "#705611",
       "warn": "#8e4829",
       "ok": "#2d714b",
       "good-bg": "#f3f7f4",
@@ -633,8 +641,8 @@
       "warn-bg": "#f7f5f3",
       "warn-border": "#b49764",
       "warn-ink": "#79522a",
-      "bar-fill": "#a66a00",
-      "row-hover": "#f8f3e2"
+      "bar-fill": "#92700a",
+      "row-hover": "#f5f5f5"
     }
   },
   "ultramarine": {
@@ -833,26 +841,26 @@
   },
   "ember": {
     "dark": {
-      "paper": "#2b302c",
-      "paper-2": "#252a26",
-      "paper-3": "#323833",
-      "plain": "#2f3531",
-      "plain-soft": "#2d332e",
-      "page-paper": "#2f3531",
-      "page-line": "#475248",
-      "ink": "#f4f0e4",
-      "ink-2": "#d7d5c9",
-      "ink-3": "#b9bbae",
-      "ink-4": "#8b9385",
-      "rule": "#627062",
-      "rule-2": "#424e43",
-      "chrome": "#141d17",
-      "chrome-rule": "#080f0a",
-      "chrome-ink": "#f7f2e4",
-      "chrome-accent": "#f3bd4d",
-      "accent": "#f2bd52",
-      "accent-2": "#e2b362",
-      "link": "#95cfdb",
+      "paper": "#242424",
+      "paper-2": "#1b1b1b",
+      "paper-3": "#303030",
+      "plain": "#292929",
+      "plain-soft": "#262626",
+      "page-paper": "#292929",
+      "page-line": "#484848",
+      "ink": "#f3f3f3",
+      "ink-2": "#d6d6d6",
+      "ink-3": "#b8b8b8",
+      "ink-4": "#929292",
+      "rule": "#606060",
+      "rule-2": "#414141",
+      "chrome": "#121212",
+      "chrome-rule": "#ad892f",
+      "chrome-ink": "#f3f3f3",
+      "chrome-accent": "#e6c260",
+      "accent": "#e2bd55",
+      "accent-2": "#d1b465",
+      "link": "#e9d298",
       "warn": "#dda288",
       "ok": "#87cfa6",
       "good-bg": "#19241d",
@@ -860,30 +868,30 @@
       "warn-bg": "#28231a",
       "warn-border": "#af905a",
       "warn-ink": "#dfc2a4",
-      "bar-fill": "#eeb747",
-      "row-hover": "#3a443b"
+      "bar-fill": "#dfb94c",
+      "row-hover": "#343434"
     },
     "light": {
-      "paper": "#fcfaf3",
-      "paper-2": "#f6f3e4",
-      "paper-3": "#f0ead6",
+      "paper": "#fdfdfd",
+      "paper-2": "#f6f6f6",
+      "paper-3": "#ececec",
       "plain": "#ffffff",
-      "plain-soft": "#fdfbf5",
+      "plain-soft": "#fefefe",
       "page-paper": "#ffffff",
-      "page-line": "#e9e1cc",
-      "ink": "#252b28",
-      "ink-2": "#414b46",
-      "ink-3": "#5e6860",
-      "ink-4": "#7b847c",
-      "rule": "#d1c8b4",
-      "rule-2": "#e4ddcc",
-      "chrome": "#303731",
-      "chrome-rule": "#202720",
-      "chrome-ink": "#f7f2e4",
-      "chrome-accent": "#f3bd4d",
-      "accent": "#a26700",
-      "accent-2": "#926600",
-      "link": "#256476",
+      "page-line": "#e5e5e5",
+      "ink": "#202020",
+      "ink-2": "#414141",
+      "ink-3": "#606060",
+      "ink-4": "#808080",
+      "rule": "#cccccc",
+      "rule-2": "#e2e2e2",
+      "chrome": "#ffffff",
+      "chrome-rule": "#b08b2d",
+      "chrome-ink": "#252525",
+      "chrome-accent": "#846300",
+      "accent": "#846300",
+      "accent-2": "#765907",
+      "link": "#705611",
       "warn": "#8e4829",
       "ok": "#2d714b",
       "good-bg": "#f3f7f4",
@@ -891,8 +899,8 @@
       "warn-bg": "#f7f5f3",
       "warn-border": "#b49764",
       "warn-ink": "#79522a",
-      "bar-fill": "#a66a00",
-      "row-hover": "#f4efdc"
+      "bar-fill": "#92700a",
+      "row-hover": "#f3f3f3"
     }
   },
   "ultramarine": {
@@ -1411,7 +1419,34 @@
     ["ink", "ink-2", "ink-3"].forEach((token) => {
       adjusted[token] = ensureAddedContrast(seeds[token], diagramSurfaces, 4.6, polarity);
     });
-    ["chrome-ink", "chrome-accent"].forEach((token) => adjusted[token] = ensureContrast(adjusted[token], adjusted.chrome, 4.6));
+    if (root.dataset.theme === "ember") {
+      // Imperial's header crosses from white to black. Consumers may tint it
+      // with 24% accent and render secondary header text at 82% opacity.
+      const headerSurfaces = () => Array.from({ length: 17 }, (_, i) => mixColor(adjusted.chrome, adjusted.accent, i * 0.015));
+      const secondaryContrast = (color, backgrounds) => Math.min(...backgrounds.map(background =>
+        contrastRatio(mixColor(background, color, 0.82), background)));
+      let backgrounds = headerSurfaces();
+      const black = [0, 0, 0], white = [255, 255, 255];
+      const headerInk = secondaryContrast(black, backgrounds) >= secondaryContrast(white, backgrounds) ? black : white;
+      const headerTarget = headerInk[0] === 0 ? white : black;
+      for (let step = 0; step < 100 && secondaryContrast(headerInk, backgrounds) < 4.8; step++) {
+        adjusted.chrome = mixColor(adjusted.chrome, headerTarget, 0.04);
+        backgrounds = headerSurfaces();
+      }
+      if (secondaryContrast(adjusted["chrome-ink"], backgrounds) < 4.6) {
+        const seed = adjusted["chrome-ink"];
+        let low = 0, high = 1;
+        for (let step = 0; step < 16; step++) {
+          const amount = (low + high) / 2;
+          if (secondaryContrast(mixColor(seed, headerInk, amount), backgrounds) >= 4.6) high = amount;
+          else low = amount;
+        }
+        adjusted["chrome-ink"] = mixColor(seed, headerInk, high);
+      }
+      adjusted["chrome-accent"] = ensureAddedContrast(adjusted["chrome-accent"], backgrounds, 4.6, headerInk);
+    } else {
+      ["chrome-ink", "chrome-accent"].forEach((token) => adjusted[token] = ensureContrast(adjusted[token], adjusted.chrome, 4.6));
+    }
     ["good-border", "warn-border"].forEach((token) => {
       adjusted[token] = ensureAddedContrast(adjusted[token], surfaces, 3.1, polarity);
     });
