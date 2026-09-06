@@ -378,7 +378,7 @@ try {
   await page.goto(fixtureUrl, { waitUntil: "domcontentloaded" });
 
   const picker = await pickerAudit(page);
-  if (!picker.open || picker.choices !== 8 || !picker.hasCustomCss || !picker.hasLightness || !picker.hasReset || !picker.hasSync || picker.markers < 6) {
+  if (!picker.open || picker.choices !== 12 || !picker.hasCustomCss || !picker.hasLightness || !picker.hasReset || !picker.hasSync || picker.markers < 6) {
     failures.push(`Theme picker structure failed: ${JSON.stringify(picker)}`);
   }
   if (picker.scrollWidth > picker.clientWidth + 1 || picker.width > 300) {

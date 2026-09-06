@@ -427,6 +427,604 @@
     },
   };
 
+  // New families are appended after the original eight. Their palette and
+  // contrast adjustments are isolated from the existing theme definitions.
+  const addedThemeIds = new Set(["crimson", "ember", "ultramarine", "orchid"]);
+  themes.push(...[
+  {
+    "id": "crimson",
+    "name": "Crimson",
+    "note": "Carmine and ivory",
+    "names": {
+      "darkest": "Oxblood",
+      "darker": "Garnet",
+      "base": "Crimson",
+      "lighter": "Peony",
+      "lightest": "Petal"
+    },
+    "colors": [
+      "#4c242c",
+      "#f4f1ec",
+      "#981f37",
+      "#fdfdfc"
+    ],
+    "themeColor": "#4c242c"
+  },
+  {
+    "id": "ember",
+    "name": "Ember",
+    "note": "Burnt orange",
+    "names": {
+      "darkest": "Charcoal",
+      "darker": "Cinder",
+      "base": "Ember",
+      "lighter": "Apricot",
+      "lightest": "Dawn"
+    },
+    "colors": [
+      "#4c2e1f",
+      "#f4f0ec",
+      "#98481f",
+      "#fdfcfc"
+    ],
+    "themeColor": "#4c2e1f"
+  },
+  {
+    "id": "ultramarine",
+    "name": "Ultramarine",
+    "note": "Deep ink blue",
+    "names": {
+      "darkest": "Abyss",
+      "darker": "Lapis",
+      "base": "Ultramarine",
+      "lighter": "Periwinkle",
+      "lightest": "Porcelain"
+    },
+    "colors": [
+      "#1e1f52",
+      "#eceef4",
+      "#1f2398",
+      "#fcfcfd"
+    ],
+    "themeColor": "#1e1f52"
+  },
+  {
+    "id": "orchid",
+    "name": "Orchid",
+    "note": "Mulberry and linen",
+    "names": {
+      "darkest": "Aubergine",
+      "darker": "Mulberry",
+      "base": "Orchid",
+      "lighter": "Mallow",
+      "lightest": "Bloom"
+    },
+    "colors": [
+      "#4f2451",
+      "#f2ecf4",
+      "#921f98",
+      "#fdfcfd"
+    ],
+    "themeColor": "#4f2451"
+  }
+]);
+  Object.assign(themeVariants, {
+  "crimson": {
+    "dark": {
+      "paper": "#12100d",
+      "paper-2": "#0c0b08",
+      "paper-3": "#1b1813",
+      "plain": "#161513",
+      "plain-soft": "#141210",
+      "page-paper": "#161513",
+      "page-line": "#342e23",
+      "ink": "#eeebe8",
+      "ink-2": "#d4d0c9",
+      "ink-3": "#bab5ab",
+      "ink-4": "#8a8275",
+      "rule": "#4e4536",
+      "rule-2": "#342f28",
+      "chrome": "#0a0506",
+      "chrome-rule": "#000000",
+      "chrome-ink": "#eeeae2",
+      "chrome-accent": "#deca9c",
+      "accent": "#e47c91",
+      "accent-2": "#cd7082",
+      "link": "#92bedd",
+      "warn": "#dda288",
+      "ok": "#87cfa6",
+      "good-bg": "#19241d",
+      "good-border": "#53a275",
+      "warn-bg": "#28231a",
+      "warn-border": "#af905a",
+      "warn-ink": "#dfc2a4",
+      "bar-fill": "#da7287",
+      "row-hover": "#1c1812"
+    },
+    "light": {
+      "paper": "#fdfdfc",
+      "paper-2": "#f7f6f2",
+      "paper-3": "#f2eee9",
+      "plain": "#ffffff",
+      "plain-soft": "#ffffff",
+      "page-paper": "#ffffff",
+      "page-line": "#efece7",
+      "ink": "#2c2821",
+      "ink-2": "#504a3f",
+      "ink-3": "#6b6357",
+      "ink-4": "#8a8275",
+      "rule": "#d3ccc0",
+      "rule-2": "#e7e4df",
+      "chrome": "#532830",
+      "chrome-rule": "#371b20",
+      "chrome-ink": "#eeeae2",
+      "chrome-accent": "#deca9c",
+      "accent": "#981f37",
+      "accent-2": "#933447",
+      "link": "#2a5e84",
+      "warn": "#8e4829",
+      "ok": "#2d714b",
+      "good-bg": "#f3f7f4",
+      "good-border": "#68b187",
+      "warn-bg": "#f7f5f3",
+      "warn-border": "#b49764",
+      "warn-ink": "#79522a",
+      "bar-fill": "#a12b43",
+      "row-hover": "#f7f5f3"
+    }
+  },
+  "ember": {
+    "dark": {
+      "paper": "#120f0d",
+      "paper-2": "#0c0a08",
+      "paper-3": "#1b1713",
+      "plain": "#161513",
+      "plain-soft": "#141210",
+      "page-paper": "#161513",
+      "page-line": "#342c23",
+      "ink": "#eeebe8",
+      "ink-2": "#d4cfc9",
+      "ink-3": "#bab3ab",
+      "ink-4": "#8a8075",
+      "rule": "#4e4336",
+      "rule-2": "#342e28",
+      "chrome": "#0b0704",
+      "chrome-rule": "#000000",
+      "chrome-ink": "#eee8e2",
+      "chrome-accent": "#deb29c",
+      "accent": "#e49f7c",
+      "accent-2": "#cd8f70",
+      "link": "#92d7dd",
+      "warn": "#dda288",
+      "ok": "#87cfa6",
+      "good-bg": "#19241d",
+      "good-border": "#53a275",
+      "warn-bg": "#28231a",
+      "warn-border": "#af905a",
+      "warn-ink": "#dfc2a4",
+      "bar-fill": "#da9472",
+      "row-hover": "#1c1712"
+    },
+    "light": {
+      "paper": "#fdfcfc",
+      "paper-2": "#f7f5f2",
+      "paper-3": "#f2ede9",
+      "plain": "#ffffff",
+      "plain-soft": "#ffffff",
+      "page-paper": "#ffffff",
+      "page-line": "#efebe7",
+      "ink": "#2c2721",
+      "ink-2": "#50483f",
+      "ink-3": "#6b6257",
+      "ink-4": "#8a8075",
+      "rule": "#d3cac0",
+      "rule-2": "#e7e3df",
+      "chrome": "#533222",
+      "chrome-rule": "#362116",
+      "chrome-ink": "#eee8e2",
+      "chrome-accent": "#deb29c",
+      "accent": "#98481f",
+      "accent-2": "#935434",
+      "link": "#2a7c84",
+      "warn": "#8e4829",
+      "ok": "#2d714b",
+      "good-bg": "#f3f7f4",
+      "good-border": "#68b187",
+      "warn-bg": "#f7f5f3",
+      "warn-border": "#b49764",
+      "warn-ink": "#79522a",
+      "bar-fill": "#a1522b",
+      "row-hover": "#f7f5f3"
+    }
+  },
+  "ultramarine": {
+    "dark": {
+      "paper": "#0d0e12",
+      "paper-2": "#08090c",
+      "paper-3": "#13151b",
+      "plain": "#131416",
+      "plain-soft": "#101114",
+      "page-paper": "#131416",
+      "page-line": "#232834",
+      "ink": "#e8e9ee",
+      "ink-2": "#c9ccd4",
+      "ink-3": "#abafba",
+      "ink-4": "#757b8a",
+      "rule": "#363e4e",
+      "rule-2": "#282c34",
+      "chrome": "#04040b",
+      "chrome-rule": "#000000",
+      "chrome-ink": "#e2e5ee",
+      "chrome-accent": "#9c9ede",
+      "accent": "#7c7fe4",
+      "accent-2": "#7073cd",
+      "link": "#c492dd",
+      "warn": "#dda288",
+      "ok": "#87cfa6",
+      "good-bg": "#19241d",
+      "good-border": "#53a275",
+      "warn-bg": "#28231a",
+      "warn-border": "#af905a",
+      "warn-ink": "#dfc2a4",
+      "bar-fill": "#7275da",
+      "row-hover": "#12151c"
+    },
+    "light": {
+      "paper": "#fcfcfd",
+      "paper-2": "#f2f4f7",
+      "paper-3": "#e9ebf2",
+      "plain": "#ffffff",
+      "plain-soft": "#ffffff",
+      "page-paper": "#ffffff",
+      "page-line": "#e7e9ef",
+      "ink": "#21242c",
+      "ink-2": "#3f4450",
+      "ink-3": "#575d6b",
+      "ink-4": "#757b8a",
+      "rule": "#c0c6d3",
+      "rule-2": "#dfe1e7",
+      "chrome": "#20225a",
+      "chrome-rule": "#16173c",
+      "chrome-ink": "#e2e5ee",
+      "chrome-accent": "#9c9ede",
+      "accent": "#1f2398",
+      "accent-2": "#343793",
+      "link": "#662a84",
+      "warn": "#8e4829",
+      "ok": "#2d714b",
+      "good-bg": "#f3f7f4",
+      "good-border": "#68b187",
+      "warn-bg": "#f7f5f3",
+      "warn-border": "#b49764",
+      "warn-ink": "#79522a",
+      "bar-fill": "#2b2fa1",
+      "row-hover": "#f3f4f7"
+    }
+  },
+  "orchid": {
+    "dark": {
+      "paper": "#110d12",
+      "paper-2": "#0b080c",
+      "paper-3": "#1a131b",
+      "plain": "#161316",
+      "plain-soft": "#131014",
+      "page-paper": "#161316",
+      "page-line": "#312334",
+      "ink": "#ede8ee",
+      "ink-2": "#d2c9d4",
+      "ink-3": "#b8abba",
+      "ink-4": "#86758a",
+      "rule": "#4a364e",
+      "rule-2": "#322834",
+      "chrome": "#0a050b",
+      "chrome-rule": "#000000",
+      "chrome-ink": "#ece2ee",
+      "chrome-accent": "#deca9c",
+      "accent": "#df7ce4",
+      "accent-2": "#c870cd",
+      "link": "#92bfdd",
+      "warn": "#dda288",
+      "ok": "#87cfa6",
+      "good-bg": "#19241d",
+      "good-border": "#53a275",
+      "warn-bg": "#28231a",
+      "warn-border": "#af905a",
+      "warn-ink": "#dfc2a4",
+      "bar-fill": "#d472da",
+      "row-hover": "#1a121c"
+    },
+    "light": {
+      "paper": "#fdfcfd",
+      "paper-2": "#f7f2f7",
+      "paper-3": "#f0e9f2",
+      "plain": "#ffffff",
+      "plain-soft": "#ffffff",
+      "page-paper": "#ffffff",
+      "page-line": "#ede7ef",
+      "ink": "#2a212c",
+      "ink-2": "#4d3f50",
+      "ink-3": "#67576b",
+      "ink-4": "#86758a",
+      "rule": "#d0c0d3",
+      "rule-2": "#e5dfe7",
+      "chrome": "#562858",
+      "chrome-rule": "#3a1b3c",
+      "chrome-ink": "#ece2ee",
+      "chrome-accent": "#deca9c",
+      "accent": "#921f98",
+      "accent-2": "#8e3493",
+      "link": "#2a6084",
+      "warn": "#8e4829",
+      "ok": "#2d714b",
+      "good-bg": "#f3f7f4",
+      "good-border": "#68b187",
+      "warn-bg": "#f7f5f3",
+      "warn-border": "#b49764",
+      "warn-ink": "#79522a",
+      "bar-fill": "#9b2ba1",
+      "row-hover": "#f6f3f7"
+    }
+  }
+});
+  Object.assign(themeMidpoints, {
+  "crimson": {
+    "dark": {
+      "paper": "#363026",
+      "paper-2": "#302b21",
+      "paper-3": "#3f382c",
+      "plain": "#38342e",
+      "plain-soft": "#36322b",
+      "page-paper": "#37342f",
+      "page-line": "#594e3b",
+      "ink": "#eeebe8",
+      "ink-2": "#d4d0c9",
+      "ink-3": "#bab5ab",
+      "ink-4": "#8a8275",
+      "rule": "#72664f",
+      "rule-2": "#564f43",
+      "chrome": "#1f0f12",
+      "chrome-rule": "#030202",
+      "chrome-ink": "#eeeae2",
+      "chrome-accent": "#deca9c",
+      "accent": "#e47c91",
+      "accent-2": "#cd7082",
+      "link": "#92bedd",
+      "warn": "#dda288",
+      "ok": "#87cfa6",
+      "good-bg": "#19241d",
+      "good-border": "#53a275",
+      "warn-bg": "#28231a",
+      "warn-border": "#af905a",
+      "warn-ink": "#dfc2a4",
+      "bar-fill": "#da7287",
+      "row-hover": "#41392a"
+    },
+    "light": {
+      "paper": "#fbfaf9",
+      "paper-2": "#f6f3ef",
+      "paper-3": "#f0ece5",
+      "plain": "#ffffff",
+      "plain-soft": "#fdfdfc",
+      "page-paper": "#ffffff",
+      "page-line": "#ede9e3",
+      "ink": "#2c2821",
+      "ink-2": "#504a3f",
+      "ink-3": "#6b6357",
+      "ink-4": "#8a8275",
+      "rule": "#d1cabd",
+      "rule-2": "#e4e1dc",
+      "chrome": "#4f262e",
+      "chrome-rule": "#34191e",
+      "chrome-ink": "#eeeae2",
+      "chrome-accent": "#deca9c",
+      "accent": "#981f37",
+      "accent-2": "#933447",
+      "link": "#2a5e84",
+      "warn": "#8e4829",
+      "ok": "#2d714b",
+      "good-bg": "#f3f7f4",
+      "good-border": "#68b187",
+      "warn-bg": "#f7f5f3",
+      "warn-border": "#b49764",
+      "warn-ink": "#79522a",
+      "bar-fill": "#a12b43",
+      "row-hover": "#f5f3ef"
+    }
+  },
+  "ember": {
+    "dark": {
+      "paper": "#362e26",
+      "paper-2": "#302921",
+      "paper-3": "#3f362c",
+      "plain": "#38332e",
+      "plain-soft": "#36312b",
+      "page-paper": "#37332f",
+      "page-line": "#594b3b",
+      "ink": "#eeebe8",
+      "ink-2": "#d4cfc9",
+      "ink-3": "#bab3ab",
+      "ink-4": "#8a8075",
+      "rule": "#72624f",
+      "rule-2": "#564d43",
+      "chrome": "#21140d",
+      "chrome-rule": "#040201",
+      "chrome-ink": "#eee8e2",
+      "chrome-accent": "#deb29c",
+      "accent": "#e49f7c",
+      "accent-2": "#cd8f70",
+      "link": "#92d7dd",
+      "warn": "#dda288",
+      "ok": "#87cfa6",
+      "good-bg": "#19241d",
+      "good-border": "#53a275",
+      "warn-bg": "#28231a",
+      "warn-border": "#af905a",
+      "warn-ink": "#dfc2a4",
+      "bar-fill": "#da9472",
+      "row-hover": "#41362a"
+    },
+    "light": {
+      "paper": "#fbfaf9",
+      "paper-2": "#f6f2ef",
+      "paper-3": "#f0ebe5",
+      "plain": "#ffffff",
+      "plain-soft": "#fdfcfc",
+      "page-paper": "#ffffff",
+      "page-line": "#ede8e3",
+      "ink": "#2c2721",
+      "ink-2": "#50483f",
+      "ink-3": "#6b6257",
+      "ink-4": "#8a8075",
+      "rule": "#d1c8bd",
+      "rule-2": "#e4e1dc",
+      "chrome": "#503021",
+      "chrome-rule": "#331f15",
+      "chrome-ink": "#eee8e2",
+      "chrome-accent": "#deb29c",
+      "accent": "#98481f",
+      "accent-2": "#935434",
+      "link": "#2a7c84",
+      "warn": "#8e4829",
+      "ok": "#2d714b",
+      "good-bg": "#f3f7f4",
+      "good-border": "#68b187",
+      "warn-bg": "#f7f5f3",
+      "warn-border": "#b49764",
+      "warn-ink": "#79522a",
+      "bar-fill": "#a1522b",
+      "row-hover": "#f5f2ef"
+    }
+  },
+  "ultramarine": {
+    "dark": {
+      "paper": "#262b36",
+      "paper-2": "#212630",
+      "paper-3": "#2c323f",
+      "plain": "#2e3138",
+      "plain-soft": "#2b2e36",
+      "page-paper": "#2f3137",
+      "page-line": "#3b4459",
+      "ink": "#e8e9ee",
+      "ink-2": "#c9ccd4",
+      "ink-3": "#abafba",
+      "ink-4": "#757b8a",
+      "rule": "#4f5a72",
+      "rule-2": "#434956",
+      "chrome": "#0c0d22",
+      "chrome-rule": "#010104",
+      "chrome-ink": "#e2e5ee",
+      "chrome-accent": "#9c9ede",
+      "accent": "#7c7fe4",
+      "accent-2": "#7073cd",
+      "link": "#c492dd",
+      "warn": "#dda288",
+      "ok": "#87cfa6",
+      "good-bg": "#19241d",
+      "good-border": "#53a275",
+      "warn-bg": "#28231a",
+      "warn-border": "#af905a",
+      "warn-ink": "#dfc2a4",
+      "bar-fill": "#7275da",
+      "row-hover": "#2a3141"
+    },
+    "light": {
+      "paper": "#f9f9fb",
+      "paper-2": "#eff1f6",
+      "paper-3": "#e5e8f0",
+      "plain": "#ffffff",
+      "plain-soft": "#fcfcfd",
+      "page-paper": "#ffffff",
+      "page-line": "#e3e6ed",
+      "ink": "#21242c",
+      "ink-2": "#3f4450",
+      "ink-3": "#575d6b",
+      "ink-4": "#757b8a",
+      "rule": "#bdc3d1",
+      "rule-2": "#dcdfe4",
+      "chrome": "#1f2156",
+      "chrome-rule": "#141538",
+      "chrome-ink": "#e2e5ee",
+      "chrome-accent": "#9c9ede",
+      "accent": "#1f2398",
+      "accent-2": "#343793",
+      "link": "#662a84",
+      "warn": "#8e4829",
+      "ok": "#2d714b",
+      "good-bg": "#f3f7f4",
+      "good-border": "#68b187",
+      "warn-bg": "#f7f5f3",
+      "warn-border": "#b49764",
+      "warn-ink": "#79522a",
+      "bar-fill": "#2b2fa1",
+      "row-hover": "#eff1f5"
+    }
+  },
+  "orchid": {
+    "dark": {
+      "paper": "#332636",
+      "paper-2": "#2e2130",
+      "paper-3": "#3c2c3f",
+      "plain": "#362e38",
+      "plain-soft": "#342b36",
+      "page-paper": "#362f37",
+      "page-line": "#543b59",
+      "ink": "#ede8ee",
+      "ink-2": "#d2c9d4",
+      "ink-3": "#b8abba",
+      "ink-4": "#86758a",
+      "rule": "#6d4f72",
+      "rule-2": "#534356",
+      "chrome": "#1f0e20",
+      "chrome-rule": "#030204",
+      "chrome-ink": "#ece2ee",
+      "chrome-accent": "#deca9c",
+      "accent": "#df7ce4",
+      "accent-2": "#c870cd",
+      "link": "#92bfdd",
+      "warn": "#dda288",
+      "ok": "#87cfa6",
+      "good-bg": "#19241d",
+      "good-border": "#53a275",
+      "warn-bg": "#28231a",
+      "warn-border": "#af905a",
+      "warn-ink": "#dfc2a4",
+      "bar-fill": "#d472da",
+      "row-hover": "#3d2a41"
+    },
+    "light": {
+      "paper": "#fbf9fb",
+      "paper-2": "#f4eff6",
+      "paper-3": "#eee5f0",
+      "plain": "#ffffff",
+      "plain-soft": "#fdfcfd",
+      "page-paper": "#ffffff",
+      "page-line": "#ebe3ed",
+      "ink": "#2a212c",
+      "ink-2": "#4d3f50",
+      "ink-3": "#67576b",
+      "ink-4": "#86758a",
+      "rule": "#cebdd1",
+      "rule-2": "#e3dce4",
+      "chrome": "#522654",
+      "chrome-rule": "#371938",
+      "chrome-ink": "#ece2ee",
+      "chrome-accent": "#deca9c",
+      "accent": "#921f98",
+      "accent-2": "#8e3493",
+      "link": "#2a6084",
+      "warn": "#8e4829",
+      "ok": "#2d714b",
+      "good-bg": "#f3f7f4",
+      "good-border": "#68b187",
+      "warn-bg": "#f7f5f3",
+      "warn-border": "#b49764",
+      "warn-ink": "#79522a",
+      "bar-fill": "#9b2ba1",
+      "row-hover": "#f4eff5"
+    }
+  }
+});
+
   function readStorage(key) {
     try {
       return window.localStorage.getItem(key);
@@ -730,8 +1328,108 @@
     adjusted[`${prefix}-4`] = mixColor(primary, backgrounds[0], 0.66);
   }
 
+  let addedThemeOverridesActive = false;
   function clearAdjustedTokens() {
     adjustableTokens.forEach((token) => root.style.removeProperty(`--${token}`));
+    if (addedThemeOverridesActive) {
+      ["document-ink", "document-ink-2", "document-ink-3", "document-accent", "new-theme-color-scheme"]
+        .forEach((token) => root.style.removeProperty(`--${token}`));
+      addedThemeOverridesActive = false;
+    }
+  }
+
+  // This path is used only by the four added families. The original families
+  // keep the original brightness interpolation and contrast behavior below.
+  let addedColorContext;
+  function parseAddedThemeColor(value) {
+    const basic = parseColor(value);
+    if (basic) return basic;
+    if (!value.trim() || !CSS.supports("color", value)) return null;
+    addedColorContext ||= document.createElement("canvas").getContext("2d", { willReadFrequently: true });
+    addedColorContext.fillStyle = "#ffffff";
+    addedColorContext.fillRect(0, 0, 1, 1);
+    addedColorContext.fillStyle = value;
+    addedColorContext.fillRect(0, 0, 1, 1);
+    return Array.from(addedColorContext.getImageData(0, 0, 1, 1).data).slice(0, 3);
+  }
+
+  function ensureAddedContrast(color, backgrounds, minimum, target) {
+    const readable = (candidate) => backgrounds.every((background) => contrastRatio(candidate, background) >= minimum);
+    if (readable(color)) return color;
+    let low = 0;
+    let high = 1;
+    for (let step = 0; step < 16; step++) {
+      const amount = (low + high) / 2;
+      if (readable(mixColor(color, target, amount))) high = amount;
+      else low = amount;
+    }
+    return mixColor(color, target, high);
+  }
+
+  function applyAddedThemeLightness() {
+    const direction = currentLightness > 0 ? "light" : "dark";
+    const midpoint = themeMidpoints[root.dataset.theme][direction];
+    const endpoint = themeVariants[root.dataset.theme][direction];
+    const firstLeg = Math.abs(currentLightness) <= 20;
+    const amount = firstLeg ? Math.abs(currentLightness) / 20 : (Math.abs(currentLightness) - 20) / 20;
+    const adjusted = {};
+    adjustableTokens.forEach((token) => {
+      const base = parseAddedThemeColor(baseThemeTokens[token] || "") || parseColor(midpoint[token] || "");
+      const mid = parseColor(midpoint[token] || "") || base;
+      const end = parseColor(endpoint[token] || "") || mid;
+      if (base && mid && end) adjusted[token] = mixColor(firstLeg ? base : mid, firstLeg ? mid : end, amount);
+    });
+    const paper = adjusted.paper;
+    const polarity = contrastRatio([0, 0, 0], paper) >= contrastRatio([255, 255, 255], paper) ? [0, 0, 0] : [255, 255, 255];
+    const surfaceTarget = polarity[0] === 0 ? [255, 255, 255] : [0, 0, 0];
+    const surfaceNames = ["paper", "paper-2", "paper-3", "plain", "plain-soft", "page-paper", "row-hover", "good-bg", "warn-bg"];
+    surfaceNames.forEach((token) => {
+      let color = adjusted[token];
+      for (let i = 0; i < 100 && contrastRatio(polarity, color) < 5.3; i++) color = mixColor(color, surfaceTarget, 0.03);
+      adjusted[token] = color.map(Math.round);
+    });
+    const seeds = { ...adjusted };
+    const foregroundNames = ["ink", "ink-2", "ink-3", "accent", "accent-2", "link", "warn", "ok", "bar-fill", "warn-ink"];
+    let surfaces;
+    let diagramSurfaces;
+    // A diagram can tint its surface with a chart color. Reserve enough
+    // contrast for the same text polarity on both the page and those fills.
+    for (let step = 0; step < 100; step++) {
+      surfaces = surfaceNames.map((token) => adjusted[token]);
+      foregroundNames.forEach((token) => {
+        adjusted[token] = ensureAddedContrast(seeds[token], surfaces, 4.6, polarity);
+      });
+      diagramSurfaces = [
+        ...surfaces,
+        mixColor(adjusted.plain, adjusted.link, 0.36),
+        mixColor(adjusted.plain, adjusted["bar-fill"], 0.52),
+        mixColor(adjusted.plain, polarity, 0.26),
+      ];
+      if (diagramSurfaces.every((surface) => contrastRatio(polarity, surface) >= 4.8)) break;
+      surfaceNames.forEach((token) => adjusted[token] = mixColor(adjusted[token], surfaceTarget, 0.04));
+    }
+    ["ink", "ink-2", "ink-3"].forEach((token) => {
+      adjusted[token] = ensureAddedContrast(seeds[token], diagramSurfaces, 4.6, polarity);
+    });
+    ["chrome-ink", "chrome-accent"].forEach((token) => adjusted[token] = ensureContrast(adjusted[token], adjusted.chrome, 4.6));
+    ["good-border", "warn-border"].forEach((token) => {
+      adjusted[token] = ensureAddedContrast(adjusted[token], surfaces, 3.1, polarity);
+    });
+    Object.entries(adjusted).forEach(([token, color]) => root.style.setProperty(`--${token}`, toRgb(color)));
+    const styles = getComputedStyle(root);
+    const documentPaper = parseAddedThemeColor(styles.getPropertyValue("--document-paper")) || adjusted["page-paper"];
+    // Consumers can keep a document white inside a dark shell. Use the actual
+    // surface as the document's text reference without changing that surface.
+    const documentSoft = parseAddedThemeColor(styles.getPropertyValue("--document-paper-soft")) || documentPaper;
+    const documentSurfaces = [documentPaper, documentSoft];
+    ["ink", "ink-2", "ink-3", "accent"].forEach((token) => {
+      root.style.setProperty(`--document-${token}`, toRgb(ensureContrastAcross(adjusted[token], documentSurfaces, 4.6)));
+    });
+    root.style.setProperty("--new-theme-color-scheme", polarity[0] === 0 ? "light" : "dark");
+    addedThemeOverridesActive = true;
+    document.querySelectorAll("[data-theme-lightness]").forEach((input) => input.value = String(currentLightness));
+    document.querySelectorAll("[data-lightness-value]").forEach((node) => node.textContent = signedLightness());
+    updateThemeLabels();
   }
 
   function collectBaseTokens() {
@@ -749,6 +1447,10 @@
     }
 
     clearAdjustedTokens();
+    if (addedThemeIds.has(root.dataset.theme)) {
+      applyAddedThemeLightness();
+      return;
+    }
     if (!currentLightness) {
       document.querySelectorAll("[data-theme-lightness]").forEach((input) => {
         input.value = "0";

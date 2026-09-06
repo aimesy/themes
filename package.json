@@ -11,7 +11,7 @@
   ],
   "scripts": {
     "install:browsers": "playwright install chromium",
-    "test": "node tests/visual-smoke.mjs",
+    "test": "node tests/visual-smoke.mjs && node tests/theme-additions.mjs",
     "visual": "node tests/visual-smoke.mjs --write-screenshots"
   },
   "devDependencies": {

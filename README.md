@@ -2,6 +2,8 @@
 
 Shared theme runtime and visual test harness for AMYC projects.
 
+Crimson, Ember, Ultramarine, and Orchid add a third picker row, each with five named brightness variants. The original eight theme definitions, font controls, and existing theme behavior are preserved. The new families use a separate contrast adjustment path.
+
 The package exports:
 
 - `src/theme.js`: compact theme picker, lightness control, reset control, custom CSS editor, and shared or viewer-scoped localStorage keys.
@@ -11,6 +13,7 @@ The package exports:
 - `src/bug-report.css`: bug reporter styles using the same AMYC theme tokens.
 - `fixtures/theme-surface.html`: deterministic fixture for high risk surfaces, including dark shells with light document panels.
 - `tests/visual-smoke.mjs`: contrast, picker, bug reporter, and screenshot smoke tests across all eight themes and several lightness stops.
+- `tests/theme-additions.mjs`: rendered parity for the original eight families, plus contrast, keyboard selection, and preference checks for the four additions at every integer brightness setting.
 
 The picker keeps the underlying eight theme IDs stable, but the current-theme label uses brightness aware names. For example, dragging Starlight lighter reports Daystar or Moonrise, while dragging it darker reports Midnight or Black Violet.
 

@@ -732,3 +732,139 @@ body.amyc-has-public-records-footer {
   color: var(--ink-3);
   font-size: 0.58rem;
 }
+
+/* New family: existing theme selectors and defaults above are unchanged. */
+:root[data-theme="crimson"] {
+  color-scheme: var(--new-theme-color-scheme, light);
+  --paper: #f9f8f5;
+  --paper-2: #f4f1ec;
+  --paper-3: #eeeae2;
+  --plain: #fdfdfc;
+  --plain-soft: #fbfaf9;
+  --page-paper: #fdfdfc;
+  --page-line: #ebe7e0;
+  --ink: #2c2821;
+  --ink-2: #504a3f;
+  --ink-3: #6b6357;
+  --ink-4: #8a8275;
+  --rule: #cfc7ba;
+  --rule-2: #e2dfda;
+  --chrome: #4c242c;
+  --chrome-rule: #30171c;
+  --chrome-ink: #eeeae2;
+  --chrome-accent: #deca9c;
+  --accent: #981f37;
+  --accent-2: #933447;
+  --link: #2a5e84;
+  --warn: #8e4829;
+  --ok: #2d714b;
+  --good-bg: #f3f7f4;
+  --good-border: #68b187;
+  --warn-bg: #f7f5f3;
+  --warn-border: #b49764;
+  --warn-ink: #79522a;
+  --bar-fill: #a12b43;
+  --row-hover: #f3f1ec;
+}
+
+/* New family: existing theme selectors and defaults above are unchanged. */
+:root[data-theme="ember"] {
+  color-scheme: var(--new-theme-color-scheme, light);
+  --paper: #f9f7f5;
+  --paper-2: #f4f0ec;
+  --paper-3: #eee8e2;
+  --plain: #fdfcfc;
+  --plain-soft: #fbfaf9;
+  --page-paper: #fdfcfc;
+  --page-line: #ebe6e0;
+  --ink: #2c2721;
+  --ink-2: #50483f;
+  --ink-3: #6b6257;
+  --ink-4: #8a8075;
+  --rule: #cfc5ba;
+  --rule-2: #e2deda;
+  --chrome: #4c2e1f;
+  --chrome-rule: #2f1d13;
+  --chrome-ink: #eee8e2;
+  --chrome-accent: #deb29c;
+  --accent: #98481f;
+  --accent-2: #935434;
+  --link: #2a7c84;
+  --warn: #8e4829;
+  --ok: #2d714b;
+  --good-bg: #f3f7f4;
+  --good-border: #68b187;
+  --warn-bg: #f7f5f3;
+  --warn-border: #b49764;
+  --warn-ink: #79522a;
+  --bar-fill: #a1522b;
+  --row-hover: #f3f0ec;
+}
+
+/* New family: existing theme selectors and defaults above are unchanged. */
+:root[data-theme="ultramarine"] {
+  color-scheme: var(--new-theme-color-scheme, light);
+  --paper: #f5f7f9;
+  --paper-2: #eceef4;
+  --paper-3: #e2e6ee;
+  --plain: #fcfcfd;
+  --plain-soft: #f9fafb;
+  --page-paper: #fcfcfd;
+  --page-line: #e0e3eb;
+  --ink: #21242c;
+  --ink-2: #3f4450;
+  --ink-3: #575d6b;
+  --ink-4: #757b8a;
+  --rule: #bac0cf;
+  --rule-2: #dadce2;
+  --chrome: #1e1f52;
+  --chrome-rule: #131434;
+  --chrome-ink: #e2e5ee;
+  --chrome-accent: #9c9ede;
+  --accent: #1f2398;
+  --accent-2: #343793;
+  --link: #662a84;
+  --warn: #8e4829;
+  --ok: #2d714b;
+  --good-bg: #f3f7f4;
+  --good-border: #68b187;
+  --warn-bg: #f7f5f3;
+  --warn-border: #b49764;
+  --warn-ink: #79522a;
+  --bar-fill: #2b2fa1;
+  --row-hover: #eceef3;
+}
+
+/* New family: existing theme selectors and defaults above are unchanged. */
+:root[data-theme="orchid"] {
+  color-scheme: var(--new-theme-color-scheme, light);
+  --paper: #f9f5f9;
+  --paper-2: #f2ecf4;
+  --paper-3: #ece2ee;
+  --plain: #fdfcfd;
+  --plain-soft: #faf9fb;
+  --page-paper: #fdfcfd;
+  --page-line: #e9e0eb;
+  --ink: #2a212c;
+  --ink-2: #4d3f50;
+  --ink-3: #67576b;
+  --ink-4: #86758a;
+  --rule: #cbbacf;
+  --rule-2: #e1dae2;
+  --chrome: #4f2451;
+  --chrome-rule: #331835;
+  --chrome-ink: #ece2ee;
+  --chrome-accent: #deca9c;
+  --accent: #921f98;
+  --accent-2: #8e3493;
+  --link: #2a6084;
+  --warn: #8e4829;
+  --ok: #2d714b;
+  --good-bg: #f3f7f4;
+  --good-border: #68b187;
+  --warn-bg: #f7f5f3;
+  --warn-border: #b49764;
+  --warn-ink: #79522a;
+  --bar-fill: #9b2ba1;
+  --row-hover: #f2ecf3;
+}
