@@ -140,6 +140,13 @@ async function themeStates(page,theme,withContrast=false,lightnessValues=Array.f
           foreground:fg.slice(0,3),background:bg.slice(0,3),
           ratio:ratio(fg,bg),minimum:Number(node.dataset.contrastMin||4.5)};
       });
+      if(withContrast&&(theme==='crimson'||theme==='ember')) {
+        const identityTokens=theme==='crimson'
+          ?['paper','paper-2','paper-3','plain','plain-soft','page-paper','chrome','row-hover']
+          :['rule','rule-2','page-line'];
+        state.paletteIdentity=Object.fromEntries(identityTokens.map(token=>
+          [token,rgba(css.getPropertyValue(`--${token}`).trim()).slice(0,3)]));
+      }
       states.push(state);
     }
     diagramProbe.remove();
@@ -211,6 +218,7 @@ try {
   const preferenceDifferences=differences(expectedPreferences,actualPreferences);
   if(preferenceDifferences.length)failures.push({type:'existing-theme-preference-parity',differences:preferenceDifferences});
   const additions=[];
+  const paletteIdentity=[];
   for(const theme of newThemes) {
     const states=await themeStates(proposed,theme,true);
     let checked=0,diagramChecked=0,headerChecked=0;
@@ -220,12 +228,34 @@ try {
         if(reading.kind==='consumer-diagram')diagramChecked++;else if(reading.kind==='consumer-header')headerChecked++;else checked++;
         if(reading.ratio<reading.minimum)failures.push({type:'new-theme-contrast',theme,lightness:state.lightness,...reading});
       }
+      if(theme==='crimson'&&state.lightness<=-20) {
+        for(const [token,rgb] of Object.entries(state.paletteIdentity)) {
+          const [red,green,blue]=rgb;
+          // A dark surface must retain visible burgundy color rather than
+          // drifting back into neutral black or the previous brown palette.
+          const chroma=(Math.max(...rgb)-Math.min(...rgb))/Math.max(1,...rgb);
+          const observation={theme,lightness:state.lightness,token,rgb,chroma};
+          paletteIdentity.push(observation);
+          if(!(red>blue&&blue>green&&red-blue>=10&&chroma>=.35)) {
+            failures.push({type:'crimson-dark-color-identity',...observation});
+          }
+        }
+      }
+      if(theme==='ember') {
+        for(const [token,rgb] of Object.entries(state.paletteIdentity)) {
+          const [red,green,blue]=rgb;
+          const observation={theme,lightness:state.lightness,token,rgb};
+          paletteIdentity.push(observation);
+          if(!(red>green&&green>blue))failures.push({type:'imperial-gold-divider-identity',...observation});
+        }
+      }
     }
     additions.push({theme,states:81,renderedContrastPairs:checked,diagramContrastPairs:diagramChecked,headerContrastPairs:headerChecked});
     console.log(`${theme}: added theme contrast inspected at all 81 brightness values`);
   }
 
   const pickers=[];
+  const lightnessEndpoints=[];
   for(const viewport of [{width:1280,height:900},{width:390,height:844}]) {
     await proposed.setViewportSize(viewport);
     await proposed.locator('[data-theme-toggle]').click();
@@ -241,6 +271,60 @@ try {
     if(picker.rows.length!==3||picker.rows.flat().join()!==rainbowOrder.join()||picker.rows.some(row=>row.length!==4))failures.push({type:'theme-rainbow-order',viewport,...picker});
     if(picker.scrollWidth>picker.width+1||picker.left<0||picker.right>viewport.width+1)failures.push({type:'new-theme-picker-overflow',viewport,...picker});
     pickers.push({viewport,...picker});
+    for(const withoutGlobalReset of [false,true]) {
+      const observation=await proposed.locator('.theme-panel').evaluate((panel,withoutGlobalReset)=>{
+        // Remove only the fixture's universal sizing reset to model a
+        // consumer that loads the shared controls without its own reset.
+        const resets=[];
+        if(withoutGlobalReset) {
+          for(const sheet of document.styleSheets) {
+            for(const rule of sheet.cssRules) {
+              if(rule.selectorText?.includes('*')&&rule.style?.getPropertyValue('box-sizing')) {
+                resets.push({style:rule.style,value:rule.style.getPropertyValue('box-sizing'),
+                  priority:rule.style.getPropertyPriority('box-sizing')});
+                rule.style.removeProperty('box-sizing');
+              }
+            }
+          }
+        }
+        try {
+          const control=panel.querySelector('.lightness-control');
+          const track=control.querySelector('.lightness-slider-wrap');
+          const trackRect=track.getBoundingClientRect();
+          const dots=[...control.querySelectorAll('.lightness-endpoint')].map(dot=>{
+            const rect=dot.getBoundingClientRect(),style=getComputedStyle(dot);
+            return {title:dot.title,filled:style.backgroundColor!=='rgba(0, 0, 0, 0)',
+              background:style.backgroundColor,color:style.color,boxSizing:style.boxSizing,
+              borderWidth:parseFloat(style.borderTopWidth),borderStyle:style.borderTopStyle,
+              width:rect.width,height:rect.height,top:rect.top,bottom:rect.bottom,
+              centerOffset:(rect.left+rect.width/2)-(trackRect.left+trackRect.width/2)};
+          });
+          const input=control.querySelector('[data-theme-lightness]');
+          return {withoutGlobalReset,removedResets:resets.length,dots,
+            topGap:dots[0]?trackRect.top-dots[0].bottom:null,
+            bottomGap:dots[1]?dots[1].top-trackRect.bottom:null,
+            hasTextEndpoints:!!control.querySelector('.lightness-label'),
+            accessibleSlider:input?.type==='range'&&!!input.getAttribute('aria-label')};
+        } finally {
+          for(const reset of resets)reset.style.setProperty('box-sizing',reset.value,reset.priority);
+        }
+      },withoutGlobalReset);
+      lightnessEndpoints.push({viewport,...observation});
+      const [light,dark]=observation.dots;
+      if(observation.dots.length!==2||light?.filled||!dark?.filled||dark?.background!==dark?.color||
+        observation.hasTextEndpoints||!observation.accessibleSlider) {
+        failures.push({type:'lightness-endpoint-symbols',viewport,...observation});
+      }
+      if(observation.topGap<1||observation.topGap>3||observation.bottomGap<1||observation.bottomGap>3||
+        observation.dots.some(dot=>Math.abs(dot.centerOffset)>.5)) {
+        failures.push({type:'lightness-endpoint-placement',viewport,...observation});
+      }
+      if(observation.dots.some(dot=>Math.abs(dot.width-8)>.1||Math.abs(dot.height-8)>.1||
+        dot.boxSizing!=='border-box'||dot.borderWidth!==1||dot.borderStyle!=='solid')||
+        withoutGlobalReset&&observation.removedResets===0) {
+        failures.push({type:'lightness-endpoint-size-without-reset',viewport,...observation});
+      }
+    }
     await proposed.keyboard.press('Escape');
   }
   await proposed.setViewportSize({width:1280,height:900});
@@ -353,11 +437,12 @@ try {
     newThemes:4,newBrightnessStates:324,newRenderedContrastPairs:additions.reduce((n,item)=>n+item.renderedContrastPairs,0),
     consumerDiagramContrastPairs:additions.reduce((n,item)=>n+item.diagramContrastPairs,0),
     consumerHeaderContrastPairs:additions.reduce((n,item)=>n+item.headerContrastPairs,0),
+    paletteIdentityReadings:paletteIdentity.length,lightnessEndpointLayouts:lightnessEndpoints.length,
     customPaperCases:customColors.filter(item=>item.type==='paper-syntax').length,
     fixedDocumentContrastPairs:customColors.filter(item=>item.type==='fixed-document-surfaces').reduce((sum,item)=>sum+item.readings.length,0),
     failures:failures.length};
   await writeFile(path.join(stage,'report.json'),JSON.stringify({visibility:'public',classification:'archive-internal',
-    baselineCommit,summary,parity,originalPreferences:{expected:expectedPreferences,actual:actualPreferences},additions,pickers,spectrumOrder,renamedTheme,persistence,scoped,customColors,failures},null,2)+'\n');
+    baselineCommit,summary,parity,originalPreferences:{expected:expectedPreferences,actual:actualPreferences},additions,paletteIdentity,pickers,lightnessEndpoints,spectrumOrder,renamedTheme,persistence,scoped,customColors,failures},null,2)+'\n');
   console.log(JSON.stringify({...summary,failureCategories:Object.fromEntries([...new Set(failures.map(f=>f.type))].map(type=>[type,failures.filter(f=>f.type===type).length])),report:'test-output/theme-additions/report.json'},null,2));
   if(failures.length)process.exitCode=1;
 } finally {await browser.close();await new Promise(resolve=>server.close(resolve));}

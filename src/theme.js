@@ -443,12 +443,12 @@
       "lightest": "Petal"
     },
     "colors": [
-      "#4c242c",
-      "#f4f1ec",
+      "#781b36",
+      "#f8e5e8",
       "#981f37",
       "#fdfdfc"
     ],
-    "themeColor": "#4c242c"
+    "themeColor": "#781b36"
   },
   {
     "id": "ember",
@@ -519,23 +519,23 @@
   Object.assign(themeVariants, {
   "crimson": {
     "dark": {
-      "paper": "#12100d",
-      "paper-2": "#0c0b08",
-      "paper-3": "#1b1813",
-      "plain": "#161513",
-      "plain-soft": "#141210",
-      "page-paper": "#161513",
-      "page-line": "#342e23",
+      "paper": "#310b17",
+      "paper-2": "#210710",
+      "paper-3": "#4a1426",
+      "plain": "#3b101f",
+      "plain-soft": "#2c0b16",
+      "page-paper": "#3b101f",
+      "page-line": "#7c2e46",
       "ink": "#eeebe8",
       "ink-2": "#d4d0c9",
       "ink-3": "#bab5ab",
       "ink-4": "#8a8275",
-      "rule": "#4e4536",
-      "rule-2": "#342f28",
-      "chrome": "#0a0506",
-      "chrome-rule": "#000000",
-      "chrome-ink": "#eeeae2",
-      "chrome-accent": "#deca9c",
+      "rule": "#b74766",
+      "rule-2": "#72233d",
+      "chrome": "#280710",
+      "chrome-rule": "#721a34",
+      "chrome-ink": "#fff0f3",
+      "chrome-accent": "#ffb3c7",
       "accent": "#e47c91",
       "accent-2": "#cd7082",
       "link": "#92bedd",
@@ -547,26 +547,26 @@
       "warn-border": "#af905a",
       "warn-ink": "#dfc2a4",
       "bar-fill": "#da7287",
-      "row-hover": "#1c1812"
+      "row-hover": "#51162b"
     },
     "light": {
-      "paper": "#fdfdfc",
-      "paper-2": "#f7f6f2",
-      "paper-3": "#f2eee9",
+      "paper": "#fffafa",
+      "paper-2": "#fceff1",
+      "paper-3": "#f6dfe4",
       "plain": "#ffffff",
-      "plain-soft": "#ffffff",
+      "plain-soft": "#fffdfd",
       "page-paper": "#ffffff",
-      "page-line": "#efece7",
+      "page-line": "#edbcc7",
       "ink": "#2c2821",
       "ink-2": "#504a3f",
       "ink-3": "#6b6357",
       "ink-4": "#8a8275",
-      "rule": "#d3ccc0",
-      "rule-2": "#e7e4df",
-      "chrome": "#532830",
-      "chrome-rule": "#371b20",
-      "chrome-ink": "#eeeae2",
-      "chrome-accent": "#deca9c",
+      "rule": "#cc7a8e",
+      "rule-2": "#e8b8c3",
+      "chrome": "#922444",
+      "chrome-rule": "#68172f",
+      "chrome-ink": "#fff0f3",
+      "chrome-accent": "#ffd0d9",
       "accent": "#981f37",
       "accent-2": "#933447",
       "link": "#2a5e84",
@@ -578,7 +578,7 @@
       "warn-border": "#b49764",
       "warn-ink": "#79522a",
       "bar-fill": "#a12b43",
-      "row-hover": "#f7f5f3"
+      "row-hover": "#fae5eb"
     }
   },
   "ember": {
@@ -589,13 +589,13 @@
       "plain": "#101010",
       "plain-soft": "#0b0b0b",
       "page-paper": "#101010",
-      "page-line": "#303030",
+      "page-line": "#6b531d",
       "ink": "#f3f3f3",
       "ink-2": "#d6d6d6",
       "ink-3": "#b8b8b8",
       "ink-4": "#929292",
-      "rule": "#454545",
-      "rule-2": "#292929",
+      "rule": "#b08b2d",
+      "rule-2": "#876820",
       "chrome": "#000000",
       "chrome-rule": "#8d6c20",
       "chrome-ink": "#f3f3f3",
@@ -611,7 +611,7 @@
       "warn-border": "#af905a",
       "warn-ink": "#dfc2a4",
       "bar-fill": "#dfb94c",
-      "row-hover": "#1a1a1a"
+      "row-hover": "#282113"
     },
     "light": {
       "paper": "#ffffff",
@@ -620,13 +620,13 @@
       "plain": "#ffffff",
       "plain-soft": "#ffffff",
       "page-paper": "#ffffff",
-      "page-line": "#e7e7e7",
+      "page-line": "#e6d39b",
       "ink": "#202020",
       "ink-2": "#414141",
       "ink-3": "#606060",
       "ink-4": "#808080",
-      "rule": "#d2d2d2",
-      "rule-2": "#e5e5e5",
+      "rule": "#b08b2d",
+      "rule-2": "#d9be72",
       "chrome": "#ffffff",
       "chrome-rule": "#b08b2d",
       "chrome-ink": "#252525",
@@ -642,7 +642,7 @@
       "warn-border": "#b49764",
       "warn-ink": "#79522a",
       "bar-fill": "#92700a",
-      "row-hover": "#f5f5f5"
+      "row-hover": "#faf5e8"
     }
   },
   "ultramarine": {
@@ -777,23 +777,23 @@
   Object.assign(themeMidpoints, {
   "crimson": {
     "dark": {
-      "paper": "#363026",
-      "paper-2": "#302b21",
-      "paper-3": "#3f382c",
-      "plain": "#38342e",
-      "plain-soft": "#36322b",
-      "page-paper": "#37342f",
-      "page-line": "#594e3b",
+      "paper": "#5c1b31",
+      "paper-2": "#431225",
+      "paper-3": "#74273f",
+      "plain": "#65203a",
+      "plain-soft": "#54182e",
+      "page-paper": "#65203a",
+      "page-line": "#a84d68",
       "ink": "#eeebe8",
       "ink-2": "#d4d0c9",
       "ink-3": "#bab5ab",
       "ink-4": "#8a8275",
-      "rule": "#72664f",
-      "rule-2": "#564f43",
-      "chrome": "#1f0f12",
-      "chrome-rule": "#030202",
-      "chrome-ink": "#eeeae2",
-      "chrome-accent": "#deca9c",
+      "rule": "#cc6c88",
+      "rule-2": "#a04461",
+      "chrome": "#4b1025",
+      "chrome-rule": "#8f2949",
+      "chrome-ink": "#fff0f3",
+      "chrome-accent": "#ffb3c7",
       "accent": "#e47c91",
       "accent-2": "#cd7082",
       "link": "#92bedd",
@@ -805,26 +805,26 @@
       "warn-border": "#af905a",
       "warn-ink": "#dfc2a4",
       "bar-fill": "#da7287",
-      "row-hover": "#41392a"
+      "row-hover": "#7c2846"
     },
     "light": {
-      "paper": "#fbfaf9",
-      "paper-2": "#f6f3ef",
-      "paper-3": "#f0ece5",
+      "paper": "#fff7f8",
+      "paper-2": "#faebee",
+      "paper-3": "#f4d6de",
       "plain": "#ffffff",
-      "plain-soft": "#fdfdfc",
+      "plain-soft": "#fffafa",
       "page-paper": "#ffffff",
-      "page-line": "#ede9e3",
+      "page-line": "#eab2c0",
       "ink": "#2c2821",
       "ink-2": "#504a3f",
       "ink-3": "#6b6357",
       "ink-4": "#8a8275",
-      "rule": "#d1cabd",
-      "rule-2": "#e4e1dc",
-      "chrome": "#4f262e",
-      "chrome-rule": "#34191e",
-      "chrome-ink": "#eeeae2",
-      "chrome-accent": "#deca9c",
+      "rule": "#c77389",
+      "rule-2": "#e7b2bf",
+      "chrome": "#852040",
+      "chrome-rule": "#5d152b",
+      "chrome-ink": "#fff0f3",
+      "chrome-accent": "#ffd0d9",
       "accent": "#981f37",
       "accent-2": "#933447",
       "link": "#2a5e84",
@@ -836,7 +836,7 @@
       "warn-border": "#b49764",
       "warn-ink": "#79522a",
       "bar-fill": "#a12b43",
-      "row-hover": "#f5f3ef"
+      "row-hover": "#f7dfe6"
     }
   },
   "ember": {
@@ -847,13 +847,13 @@
       "plain": "#292929",
       "plain-soft": "#262626",
       "page-paper": "#292929",
-      "page-line": "#484848",
+      "page-line": "#97752b",
       "ink": "#f3f3f3",
       "ink-2": "#d6d6d6",
       "ink-3": "#b8b8b8",
       "ink-4": "#929292",
-      "rule": "#606060",
-      "rule-2": "#414141",
+      "rule": "#c8a343",
+      "rule-2": "#a17e2b",
       "chrome": "#121212",
       "chrome-rule": "#ad892f",
       "chrome-ink": "#f3f3f3",
@@ -869,7 +869,7 @@
       "warn-border": "#af905a",
       "warn-ink": "#dfc2a4",
       "bar-fill": "#dfb94c",
-      "row-hover": "#343434"
+      "row-hover": "#3c3320"
     },
     "light": {
       "paper": "#fdfdfd",
@@ -878,13 +878,13 @@
       "plain": "#ffffff",
       "plain-soft": "#fefefe",
       "page-paper": "#ffffff",
-      "page-line": "#e5e5e5",
+      "page-line": "#e3ce8d",
       "ink": "#202020",
       "ink-2": "#414141",
       "ink-3": "#606060",
       "ink-4": "#808080",
-      "rule": "#cccccc",
-      "rule-2": "#e2e2e2",
+      "rule": "#b08b2d",
+      "rule-2": "#d7ba68",
       "chrome": "#ffffff",
       "chrome-rule": "#b08b2d",
       "chrome-ink": "#252525",
@@ -900,7 +900,7 @@
       "warn-border": "#b49764",
       "warn-ink": "#79522a",
       "bar-fill": "#92700a",
-      "row-hover": "#f3f3f3"
+      "row-hover": "#f9f2e2"
     }
   },
   "ultramarine": {
@@ -1600,15 +1600,15 @@
       </div>
       <div class="theme-control-grid">
         <div class="lightness-control">
-          <span class="lightness-label">Light</span>
+          <span class="lightness-endpoint is-light" title="Light" aria-hidden="true"></span>
           <span class="lightness-slider-wrap amyc-snap-track is-vertical" style="--snap-default: 50%;">
             <span class="amyc-snap amyc-snap-min" aria-hidden="true"></span>
             <span class="amyc-snap amyc-snap-default" aria-hidden="true"></span>
             <span class="amyc-snap amyc-snap-max" aria-hidden="true"></span>
             <input class="lightness-input" type="range" min="-40" max="40" step="1" data-theme-lightness data-snap-points="-40,0,40" data-snap-threshold="1" aria-label="Theme lightness">
           </span>
+          <span class="lightness-endpoint is-dark" title="Dark" aria-hidden="true"></span>
           <span class="lightness-value" data-lightness-value>0</span>
-          <span class="lightness-label">Dark</span>
         </div>
         <div class="theme-spectrum">
           <div class="theme-spectrum-row amyc-snap-track" style="--snap-default: ${(defaultThemeIndex() / (themes.length - 1)) * 100}%;">

@@ -486,15 +486,28 @@ body.amyc-has-public-records-footer {
 
 .lightness-control {
   display: grid;
+  grid-template-rows: 8px 58px 8px auto;
   justify-items: center;
-  align-content: space-between;
-  gap: 0.1rem;
-  min-height: 88px;
+  align-content: start;
+  gap: 2px;
   width: 20px;
   color: var(--ink-3);
 }
 
-.lightness-label,
+.lightness-endpoint {
+  box-sizing: border-box;
+  display: block;
+  width: 8px;
+  height: 8px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  color: var(--ink-2);
+}
+
+.lightness-endpoint.is-dark {
+  background: currentColor;
+}
+
 .lightness-value {
   font-family: var(--font-mono);
   font-size: 0.42rem;
@@ -736,23 +749,23 @@ body.amyc-has-public-records-footer {
 /* New family: existing theme selectors and defaults above are unchanged. */
 :root[data-theme="crimson"] {
   color-scheme: var(--new-theme-color-scheme, light);
-  --paper: #f9f8f5;
-  --paper-2: #f4f1ec;
-  --paper-3: #eeeae2;
-  --plain: #fdfdfc;
-  --plain-soft: #fbfaf9;
-  --page-paper: #fdfdfc;
-  --page-line: #ebe7e0;
+  --paper: #fff5f6;
+  --paper-2: #f8e5e8;
+  --paper-3: #f1cdd4;
+  --plain: #fffafa;
+  --plain-soft: #fff7f8;
+  --page-paper: #fffafa;
+  --page-line: #e7a8b5;
   --ink: #2c2821;
   --ink-2: #504a3f;
   --ink-3: #6b6357;
   --ink-4: #8a8275;
-  --rule: #cfc7ba;
-  --rule-2: #e2dfda;
-  --chrome: #4c242c;
-  --chrome-rule: #30171c;
-  --chrome-ink: #eeeae2;
-  --chrome-accent: #deca9c;
+  --rule: #c96b82;
+  --rule-2: #e6acb9;
+  --chrome: #781b36;
+  --chrome-rule: #521126;
+  --chrome-ink: #fff0f3;
+  --chrome-accent: #ffd0d9;
   --accent: #981f37;
   --accent-2: #933447;
   --link: #2a5e84;
@@ -764,7 +777,7 @@ body.amyc-has-public-records-footer {
   --warn-border: #b49764;
   --warn-ink: #79522a;
   --bar-fill: #a12b43;
-  --row-hover: #f3f1ec;
+  --row-hover: #f4d6de;
 }
 
 /* New family: existing theme selectors and defaults above are unchanged. */
@@ -776,13 +789,13 @@ body.amyc-has-public-records-footer {
   --plain: #ffffff;
   --plain-soft: #fcfcfc;
   --page-paper: #ffffff;
-  --page-line: #e2e2e2;
+  --page-line: #dfc880;
   --ink: #202020;
   --ink-2: #414141;
   --ink-3: #606060;
   --ink-4: #808080;
-  --rule: #c6c6c6;
-  --rule-2: #dedede;
+  --rule: #b08b2d;
+  --rule-2: #d4b65f;
   --chrome: #ffffff;
   --chrome-rule: #b08b2d;
   --chrome-ink: #252525;
@@ -798,7 +811,7 @@ body.amyc-has-public-records-footer {
   --warn-border: #b49764;
   --warn-ink: #79522a;
   --bar-fill: #92700a;
-  --row-hover: #f0f0f0;
+  --row-hover: #f7f0de;
 }
 
 /* New family: existing theme selectors and defaults above are unchanged. */
