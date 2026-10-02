@@ -2,20 +2,21 @@
 
 Shared theme runtime and visual test harness for AMYC projects.
 
-Crimson, Imperial, Ultramarine, and Orchid each have five named brightness variants. Imperial moves from white and gold to black and gold, including the header. The original eight palettes, font controls, and saved theme choices are preserved. The added families use a separate contrast adjustment path.
+There are twelve theme families, each with five named brightness variants. Every family has its own signature hue and keeps it at both ends of the brightness slider: headers stay saturated, pages carry a visible tint, and the dark ends are deep jewel tones rather than neutral black. Imperial is the exception by design and moves from white and gold to black and gold, including the header. Saved theme choices and font controls are unchanged.
 
-The picker and spectrum slider follow a fixed rainbow order: Crimson, Sand, Imperial, Cypress, Tidepool, Mist, Glacier, Ultramarine, Lilac, Starlight, Orchid, and Rose. Imperial retains the original `ember` ID so existing saved preferences, custom CSS, and links remain compatible.
+The picker and spectrum slider follow a fixed rainbow order: Crimson, Sand, Imperial, Cypress, Tidepool, Mist, Glacier, Ultramarine, Lilac, Starlight, Orchid, and Rose. The spectrum track is painted with each family's signature color, and the brightness track runs from the family's darkest page to its lightest. Imperial retains the original `ember` ID so existing saved preferences, custom CSS, and links remain compatible.
 
 The package exports:
 
-- `src/theme.js`: compact theme picker, lightness control, reset control, custom CSS editor, and shared or viewer-scoped localStorage keys.
+- `src/theme.js`: compact theme picker, lightness control, reset control, custom CSS editor, and shared or viewer-scoped localStorage keys. One contrast engine adjusts every family as brightness changes, including consumer chart fills and accent-tinted mastheads.
 - `src/theme.css`: shared theme tokens, picker styles, and the public-records footer.
 - `src/theme-bar.css`: opt-in shared layout and chrome styling for the compact theme bar.
 - `src/bug-report.js`: shared bug reporter with page element annotations, browser state capture, GitHub issue draft support, optional POST endpoint support, and copy/download fallback.
 - `src/bug-report.css`: bug reporter styles using the same AMYC theme tokens.
 - `fixtures/theme-surface.html`: deterministic fixture for high risk surfaces, including dark shells with light document panels.
-- `tests/visual-smoke.mjs`: contrast, picker, bug reporter, and screenshot smoke tests across all eight themes and several lightness stops.
-- `tests/theme-additions.mjs`: rendered parity for the original eight families, plus contrast, keyboard selection, and preference checks for the four additions at every integer brightness setting.
+- `scripts/palettes.mjs`: the palette source. Each family is a few OKLCH hues; the script writes the base tokens into `src/theme.css` and the brightness stops into `src/theme.js`.
+- `tests/visual-smoke.mjs`: contrast, picker, bug reporter, and screenshot smoke tests across all twelve themes and several lightness stops.
+- `tests/theme-palettes.mjs`: contrast, color identity, header and page vibrancy, distinctness between families, keyboard selection, and preference checks for every family at every integer brightness setting, plus name, label, and preference parity with the original eight families.
 
 The picker keeps the underlying theme IDs stable, but the current-theme label uses brightness aware names. For example, dragging Starlight lighter reports Daystar or Moonrise, while dragging it darker reports Midnight or Black Violet.
 
@@ -46,7 +47,20 @@ Keep app-specific labels and responsive hiding in the consumer. The shared
 `amyc-theme-bar` class owns the common positioning, spacing, typography, and
 theme-panel anchor without styling unrelated headers.
 
-The runtime uses shared keys by default: `amyc-theme`, `amyc-lightness`, `amyc-font-system`, `amyc-font-size`, `amyc-font-line`, `amyc-font-space`, and `amyc-custom-css`. Those keys persist display settings across every AMYC viewer on the same origin, including different repos served from that origin. The picker also includes a `Sync viewers` toggle. Turning it off stores settings under `amyc-viewer:<viewer-id>:...` so one viewer can keep its own theme and font settings.
+## Palettes
+
+Edit a family's hues in `scripts/palettes.mjs`, then regenerate and test:
+
+```bash
+npm run palettes
+npm test
+```
+
+Do not hand-edit the blocks between the `palettes:begin` and `palettes:end` markers in `src/theme.css` and `src/theme.js`; the script rewrites them.
+
+## Persistence
+
+The runtime uses shared keys by default: `amyc-theme`, `amyc-lightness`, `amyc-font-system`, `amyc-font-size`, `amyc-font-line`, `amyc-font-space`, and `amyc-custom-css`. Those keys persist display settings across every AMYC viewer on the same origin, including different repos served from that origin. The theme and font panels include a `Sync viewers` switch that fills with the theme's accent color while on. Turning it off stores settings under `amyc-viewer:<viewer-id>:...` so one viewer can keep its own theme and font settings.
 
 Viewer ids come from `data-amyc-viewer`, `data-viewer`, or `data-viewer-id` when present, then fall back to the page path.
 

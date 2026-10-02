@@ -251,10 +251,10 @@
         </div>
         <div class="amyc-font-actions">
           <button class="hbtn" type="button" data-amyc-font-reset>Reset font</button>
-          <label class="theme-persistence-toggle">
-            <input type="checkbox" data-amyc-sync-viewers>
+          <button class="theme-persistence-toggle" type="button" role="switch" aria-checked="true" data-amyc-sync-viewers title="Share theme and font settings across AMYC viewers">
+            <span class="theme-sync-knob" aria-hidden="true"></span>
             <span>Sync viewers</span>
-          </label>
+          </button>
         </div>
       </div>
     `;
@@ -363,16 +363,17 @@
     document.addEventListener("change", (event) => {
       const target = event.target;
       if (!(target instanceof HTMLInputElement)) return;
-      if (target.matches("[data-amyc-sync-viewers]")) {
-        setSyncAcrossViewers(target.checked, "font");
-        return;
-      }
       if (snapRangeToMarkers(target)) {
         storeFontInput(target);
       }
     });
 
     document.addEventListener("click", (event) => {
+      const sync = event.target.closest(".amyc-display-panel [data-amyc-sync-viewers]");
+      if (sync) {
+        setSyncAcrossViewers(sync.getAttribute("aria-checked") !== "true", "font");
+        return;
+      }
       const choice = event.target.closest("[data-font-choice]");
       if (choice) {
         writePref(fontKey, choice.dataset.fontChoice || defaultPrefs.font);

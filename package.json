@@ -7,12 +7,14 @@
   "files": [
     "src",
     "fixtures",
-    "tests"
+    "tests",
+    "scripts"
   ],
   "scripts": {
     "install:browsers": "playwright install chromium",
-    "test": "node tests/visual-smoke.mjs && node tests/theme-additions.mjs",
-    "visual": "node tests/visual-smoke.mjs --write-screenshots"
+    "test": "node tests/visual-smoke.mjs && node tests/theme-palettes.mjs",
+    "visual": "node tests/visual-smoke.mjs --write-screenshots",
+    "palettes": "node scripts/palettes.mjs"
   },
   "devDependencies": {
     "playwright": "^1.60.0"

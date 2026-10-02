@@ -10,14 +10,18 @@ const writeScreenshots = process.argv.includes("--write-screenshots");
 const outDir = path.join(rootDir, "test-output", "screenshots");
 
 const themes = [
-  "mist",
-  "lilac",
-  "glacier",
-  "rose",
+  "crimson",
   "sand",
-  "tidepool",
+  "ember",
   "cypress",
+  "tidepool",
+  "mist",
+  "glacier",
+  "ultramarine",
+  "lilac",
   "starlight",
+  "orchid",
+  "rose",
 ];
 
 const lightnessStops = [-24, 0, 24];

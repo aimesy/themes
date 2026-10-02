@@ -1,18 +1,21 @@
 // visibility: public
-// Preserve the original eight themes exactly; audit only the four additions for contrast.
+// Audits every theme family at all 81 brightness values: contrast, color
+// identity, distinctness between families, and the picker. Theme IDs, names,
+// and saved preferences must keep behaving as they did at the baseline commit.
 import { chromium } from 'playwright';
 import { execFileSync } from 'node:child_process';
 import { createServer } from 'node:http';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { families } from '../scripts/palettes.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const baselineCommit = 'cd6aac6380c70291fa876f8d1d802cde65b80b0a';
-const stage = path.join(root, 'test-output', 'theme-additions');
+const stage = path.join(root, 'test-output', 'theme-palettes');
 const oldThemes = ['mist','lilac','glacier','rose','sand','tidepool','cypress','starlight'];
-const newThemes = ['crimson','ember','ultramarine','orchid'];
 const rainbowOrder = ['crimson','sand','ember','cypress','tidepool','mist','glacier','ultramarine','lilac','starlight','orchid','rose'];
+const allThemes = rainbowOrder;
 const failures = [];
 const readCommit = (file) => execFileSync('git', ['show', `${baselineCommit}:${file}`], { cwd:root });
 await mkdir(path.join(stage,'baseline','src'),{recursive:true});
@@ -54,8 +57,8 @@ async function pageFor(kind) {
   return page;
 }
 
-// Captures every computed custom property, rendered fixture color, original label,
-// and saved preference at each of the 81 actual integer slider positions.
+// Captures every computed custom property, rendered fixture color, label, and
+// saved preference at each requested integer slider position.
 async function themeStates(page,theme,withContrast=false,lightnessValues=Array.from({length:81},(_,i)=>i-40)) {
   return page.evaluate(({theme,withContrast,oldThemes,lightnessValues})=>{
     document.querySelector(`[data-theme-choice="${theme}"]`).click();
@@ -81,22 +84,20 @@ async function themeStates(page,theme,withContrast=false,lightnessValues=Array.f
           diagramProbe.append(label);diagramNodes.push(label);
         }
       }
-      document.body.append(diagramProbe);
-      if(theme==='ember') {
-        // Cividx's masthead tints chrome with 24% accent and fades its
-        // secondary text to 82%. Flat-header contrast misses this case.
-        for(let step=0;step<=16;step++) {
-          for(const [token,opacity] of [['chrome-ink',1],['chrome-ink',.82],['chrome-accent',1]]) {
-            const surface=document.createElement('div');
-            surface.style.background=`color-mix(in srgb, var(--chrome) ${100-step*1.5}%, var(--accent))`;
-            const label=document.createElement('span');
-            label.dataset.headerContrast=`header/${step}/${token}/${opacity}`;
-            label.style.color=`color-mix(in srgb, var(--${token}) ${opacity*100}%, transparent)`;
-            label.textContent=token;
-            surface.append(label);diagramProbe.append(surface);headerNodes.push(label);
-          }
+      // Cividx's masthead tints chrome with up to 24% accent and fades its
+      // secondary text to 82%. Flat-header contrast misses this case.
+      for(let step=0;step<=16;step++) {
+        for(const [token,opacity] of [['chrome-ink',1],['chrome-ink',.82],['chrome-accent',1]]) {
+          const surface=document.createElement('div');
+          surface.style.background=`color-mix(in srgb, var(--chrome) ${100-step*1.5}%, var(--accent))`;
+          const label=document.createElement('span');
+          label.dataset.headerContrast=`header/${step}/${token}/${opacity}`;
+          label.style.color=`color-mix(in srgb, var(--${token}) ${opacity*100}%, transparent)`;
+          label.textContent=token;
+          surface.append(label);diagramProbe.append(surface);headerNodes.push(label);
         }
       }
+      document.body.append(diagramProbe);
     }
     const canvas=document.createElement('canvas');canvas.width=canvas.height=1;
     const context=canvas.getContext('2d',{willReadFrequently:true});
@@ -131,21 +132,18 @@ async function themeStates(page,theme,withContrast=false,lightnessValues=Array.f
           title:document.querySelector('[data-theme-toggle]').getAttribute('title'),
           current:document.querySelector('[data-theme-current]').textContent,
           choices:oldThemes.map(id=>{const button=document.querySelector(`[data-theme-choice="${id}"]`);return {
-            id,text:button.textContent,pressed:button.getAttribute('aria-pressed')};})},
+            id,name:button.querySelector('.theme-name').textContent,pressed:button.getAttribute('aria-pressed')};})},
         preferences:Object.fromEntries(Object.keys(localStorage).sort().map(key=>[key,localStorage.getItem(key)]))};
-      if(withContrast) state.contrast=[...nodes,...diagramNodes,...headerNodes].map(node=>{
-        const bg=background(node);const fg=blend(rgba(getComputedStyle(node).color),bg);
-        return {label:node.dataset.contrastCheck||node.dataset.diagramContrast||node.dataset.headerContrast,
-          kind:node.dataset.diagramContrast?'consumer-diagram':node.dataset.headerContrast?'consumer-header':'fixture',
-          foreground:fg.slice(0,3),background:bg.slice(0,3),
-          ratio:ratio(fg,bg),minimum:Number(node.dataset.contrastMin||4.5)};
-      });
-      if(withContrast&&(theme==='crimson'||theme==='ember')) {
-        const identityTokens=theme==='crimson'
-          ?['paper','paper-2','paper-3','plain','plain-soft','page-paper','chrome','row-hover']
-          :['rule','rule-2','page-line'];
-        state.paletteIdentity=Object.fromEntries(identityTokens.map(token=>
-          [token,rgba(css.getPropertyValue(`--${token}`).trim()).slice(0,3)]));
+      if(withContrast) {
+        state.contrast=[...nodes,...diagramNodes,...headerNodes].map(node=>{
+          const bg=background(node);const fg=blend(rgba(getComputedStyle(node).color),bg);
+          return {label:node.dataset.contrastCheck||node.dataset.diagramContrast||node.dataset.headerContrast,
+            kind:node.dataset.diagramContrast?'consumer-diagram':node.dataset.headerContrast?'consumer-header':'fixture',
+            foreground:fg.slice(0,3),background:bg.slice(0,3),
+            ratio:ratio(fg,bg),minimum:Number(node.dataset.contrastMin||4.5)};
+        });
+        state.palette=Object.fromEntries(['paper','paper-2','paper-3','plain','plain-soft','page-paper','chrome',
+          'row-hover','rule','rule-2','page-line','accent'].map(token=>[token,rgba(css.getPropertyValue(`--${token}`).trim()).slice(0,3)]));
       }
       states.push(state);
     }
@@ -165,6 +163,23 @@ function differences(expected,actual,prefix='') {
   }
   return items;
 }
+
+// Colors may change between releases; names, IDs, and stored preferences may not.
+const behavior=(state)=>({lightness:state.lightness,actualLightness:state.actualLightness,labels:state.labels,
+  preferences:state.preferences,fonts:state.rendered.map(({label,fontFamily,fontSize})=>({label,fontFamily,fontSize}))});
+
+function oklch([r,g,b]) {
+  const lin=[r,g,b].map(c=>c/255).map(c=>c<=0.04045?c/12.92:((c+0.055)/1.055)**2.4);
+  const l=Math.cbrt(.4122214708*lin[0]+.5363325363*lin[1]+.0514459929*lin[2]);
+  const m=Math.cbrt(.2119034982*lin[0]+.6806995451*lin[1]+.1073969566*lin[2]);
+  const s=Math.cbrt(.0883024619*lin[0]+.2817188376*lin[1]+.6299787005*lin[2]);
+  const L=.2104542553*l+.793617785*m-.0040720468*s;
+  const a=1.9779984951*l-2.428592205*m+.4505937099*s;
+  const bb=.0259040371*l+.7827717662*m-.808675766*s;
+  return {L,a,b:bb,C:Math.hypot(a,bb),h:(Math.atan2(bb,a)*180/Math.PI+360)%360};
+}
+const hueGap=(a,b)=>Math.abs(((a-b+540)%360)-180);
+const deltaE=(x,y)=>{const p=oklch(x),q=oklch(y);return Math.hypot(p.L-q.L,p.a-q.a,p.b-q.b);};
 
 async function originalPreferences(page) {
   const snapshot=()=>page.evaluate(()=>({theme:document.documentElement.dataset.theme,
@@ -188,70 +203,92 @@ try {
   const baseline=await pageFor('baseline');
   const proposed=await pageFor('proposed');
   const parity=[];
-  const baselineStates=new Map();
   for(const theme of oldThemes) {
     const [expected,actual]=await Promise.all([themeStates(baseline,theme),themeStates(proposed,theme)]);
-    baselineStates.set(theme,expected);
-    let comparisons=0;
     for(let i=0;i<expected.length;i++) {
-      const found=differences(expected[i],actual[i]);
-      comparisons+=Object.keys(expected[i].tokens).length+expected[i].rendered.length*5;
-      if(found.length)failures.push({type:'existing-theme-parity',theme,lightness:expected[i].lightness,differences:found});
+      const found=differences(behavior(expected[i]),behavior(actual[i]));
+      if(found.length)failures.push({type:'existing-theme-behavior-parity',theme,lightness:expected[i].lightness,differences:found});
     }
-    parity.push({theme,states:81,computedComparisons:comparisons,unchanged:!failures.some(f=>f.type==='existing-theme-parity'&&f.theme===theme)});
-    console.log(`${theme}: original behavior compared at all 81 brightness values`);
-  }
-  let switchStates=0;
-  for(const added of newThemes) {
-    for(const theme of oldThemes) {
-      await proposed.evaluate(added=>document.querySelector(`[data-theme-choice="${added}"]`).click(),added);
-      const states=await themeStates(proposed,theme,false,[-40,0,40]);
-      for(const state of states) {
-        const expected=baselineStates.get(theme).find(item=>item.lightness===state.lightness);
-        const found=differences(expected,state);
-        if(found.length)failures.push({type:'new-to-existing-theme-parity',from:added,theme,lightness:state.lightness,differences:found});
-        switchStates++;
-      }
-    }
+    parity.push({theme,states:81,unchanged:!failures.some(f=>f.type==='existing-theme-behavior-parity'&&f.theme===theme)});
+    console.log(`${theme}: names, labels, and preferences match the baseline at all 81 brightness values`);
   }
   const [expectedPreferences,actualPreferences]=await Promise.all([originalPreferences(baseline),originalPreferences(proposed)]);
   const preferenceDifferences=differences(expectedPreferences,actualPreferences);
   if(preferenceDifferences.length)failures.push({type:'existing-theme-preference-parity',differences:preferenceDifferences});
-  const additions=[];
-  const paletteIdentity=[];
-  for(const theme of newThemes) {
+
+  const audits=[];
+  const fullStates=new Map();
+  const vibrancy=[];
+  for(const theme of allThemes) {
+    const family=families.find(item=>item.id===theme);
     const states=await themeStates(proposed,theme,true);
+    fullStates.set(theme,states);
     let checked=0,diagramChecked=0,headerChecked=0;
     for(const state of states) {
-      if(state.actualLightness!==String(state.lightness))failures.push({type:'new-theme-lightness',theme,requested:state.lightness,actual:state.actualLightness});
+      if(state.actualLightness!==String(state.lightness))failures.push({type:'theme-lightness',theme,requested:state.lightness,actual:state.actualLightness});
       for(const reading of state.contrast) {
         if(reading.kind==='consumer-diagram')diagramChecked++;else if(reading.kind==='consumer-header')headerChecked++;else checked++;
-        if(reading.ratio<reading.minimum)failures.push({type:'new-theme-contrast',theme,lightness:state.lightness,...reading});
+        if(reading.ratio<reading.minimum)failures.push({type:'theme-contrast',theme,lightness:state.lightness,...reading});
       }
       if(theme==='crimson'&&state.lightness<=-20) {
-        for(const [token,rgb] of Object.entries(state.paletteIdentity)) {
+        for(const token of ['paper','paper-2','paper-3','plain','plain-soft','page-paper','chrome','row-hover']) {
+          const rgb=state.palette[token];
           const [red,green,blue]=rgb;
           // A dark surface must retain visible burgundy color rather than
-          // drifting back into neutral black or the previous brown palette.
+          // drifting back into neutral black or a brown palette.
           const chroma=(Math.max(...rgb)-Math.min(...rgb))/Math.max(1,...rgb);
-          const observation={theme,lightness:state.lightness,token,rgb,chroma};
-          paletteIdentity.push(observation);
           if(!(red>blue&&blue>green&&red-blue>=10&&chroma>=.35)) {
-            failures.push({type:'crimson-dark-color-identity',...observation});
+            failures.push({type:'crimson-dark-color-identity',theme,lightness:state.lightness,token,rgb,chroma});
           }
         }
       }
       if(theme==='ember') {
-        for(const [token,rgb] of Object.entries(state.paletteIdentity)) {
+        for(const token of ['rule','rule-2','page-line']) {
+          const rgb=state.palette[token];
           const [red,green,blue]=rgb;
-          const observation={theme,lightness:state.lightness,token,rgb};
-          paletteIdentity.push(observation);
-          if(!(red>green&&green>blue))failures.push({type:'imperial-gold-divider-identity',...observation});
+          if(!(red>green&&green>blue))failures.push({type:'imperial-gold-divider-identity',theme,lightness:state.lightness,token,rgb});
         }
+        const chrome=oklch(state.palette.chrome);
+        if(chrome.C>.02)failures.push({type:'imperial-neutral-header',theme,lightness:state.lightness,rgb:state.palette.chrome,chroma:chrome.C});
+      } else {
+        // Every other family keeps a saturated header and a visibly tinted page
+        // in its own hue at every brightness value, including the dark end.
+        const header=oklch(state.palette.chrome),page=oklch(state.palette['paper-2']);
+        const reading={theme,lightness:state.lightness,headerChroma:header.C,headerHue:header.h,pageChroma:page.C,pageHue:page.h};
+        vibrancy.push(reading);
+        const headerHue=family.hue.c??family.hue.h;
+        if(header.C<.045||hueGap(header.h,headerHue)>30)failures.push({type:'theme-header-vibrancy',expectedHue:headerHue,...reading});
+        if(page.C<.016||hueGap(page.h,family.hue.h)>30)failures.push({type:'theme-page-vibrancy',expectedHue:family.hue.h,...reading});
       }
     }
-    additions.push({theme,states:81,renderedContrastPairs:checked,diagramContrastPairs:diagramChecked,headerContrastPairs:headerChecked});
-    console.log(`${theme}: added theme contrast inspected at all 81 brightness values`);
+    audits.push({theme,states:81,renderedContrastPairs:checked,diagramContrastPairs:diagramChecked,headerContrastPairs:headerChecked});
+    console.log(`${theme}: contrast and color identity inspected at all 81 brightness values`);
+  }
+
+  // Neighboring families must stay recognizable at each named brightness.
+  const distinctness=[];
+  for(const lightness of [-40,-20,0,20,40]) {
+    const signatures=allThemes.map(theme=>({theme,palette:fullStates.get(theme).find(state=>state.lightness===lightness).palette}));
+    for(let i=0;i<signatures.length;i++) for(let j=i+1;j<signatures.length;j++) {
+      const a=signatures[i],b=signatures[j];
+      const distance=Math.max(...['chrome','paper-2','accent'].map(token=>deltaE(a.palette[token],b.palette[token])));
+      distinctness.push({lightness,themes:[a.theme,b.theme],distance});
+      if(distance<.06)failures.push({type:'theme-distinctness',lightness,themes:[a.theme,b.theme],distance});
+    }
+  }
+
+  // Leaving one theme must not leak adjusted tokens into the next.
+  let switchStates=0;
+  for(const theme of allThemes) {
+    for(const from of allThemes.filter(item=>item!==theme)) {
+      await proposed.evaluate(from=>document.querySelector(`[data-theme-choice="${from}"]`).click(),from);
+      for(const state of await themeStates(proposed,theme,false,[-40,0,40])) {
+        const expected=fullStates.get(theme).find(item=>item.lightness===state.lightness);
+        const found=differences({tokens:expected.tokens,rendered:expected.rendered},{tokens:state.tokens,rendered:state.rendered});
+        if(found.length)failures.push({type:'theme-switch-independence',from,theme,lightness:state.lightness,differences:found});
+        switchStates++;
+      }
+    }
   }
 
   const pickers=[];
@@ -269,7 +306,7 @@ try {
       return {rows:[...rows.values()],width:panel.clientWidth,scrollWidth:panel.scrollWidth,left:rect.left,right:rect.right};
     });
     if(picker.rows.length!==3||picker.rows.flat().join()!==rainbowOrder.join()||picker.rows.some(row=>row.length!==4))failures.push({type:'theme-rainbow-order',viewport,...picker});
-    if(picker.scrollWidth>picker.width+1||picker.left<0||picker.right>viewport.width+1)failures.push({type:'new-theme-picker-overflow',viewport,...picker});
+    if(picker.scrollWidth>picker.width+1||picker.left<0||picker.right>viewport.width+1)failures.push({type:'theme-picker-overflow',viewport,...picker});
     pickers.push({viewport,...picker});
     for(const withoutGlobalReset of [false,true]) {
       const observation=await proposed.locator('.theme-panel').evaluate((panel,withoutGlobalReset)=>{
@@ -336,6 +373,13 @@ try {
     });
   });
   if(spectrumOrder.join()!==rainbowOrder.join())failures.push({type:'theme-spectrum-order',actual:spectrumOrder});
+  // The spectrum and lightness tracks are painted with theme colors.
+  const tracks=await proposed.evaluate(()=>({
+    spectrum:document.querySelector('[data-theme-spectrum]').style.getPropertyValue('--theme-spectrum-track'),
+    lightness:document.querySelector('[data-theme-lightness]').style.getPropertyValue('--theme-lightness-track'),
+  }));
+  if(!tracks.spectrum.startsWith('linear-gradient(')||(tracks.spectrum.match(/#[0-9a-f]{6}/gi)||[]).length!==rainbowOrder.length||
+    !tracks.lightness.startsWith('linear-gradient('))failures.push({type:'theme-picker-tracks',...tracks});
   // Existing Ember selections must display Imperial without rewriting the ID.
   await proposed.evaluate(()=>{
     localStorage.setItem('amyc-theme','ember');localStorage.setItem('amyc-lightness','0');
@@ -349,7 +393,7 @@ try {
   }));
   if(renamedTheme.id!=='ember'||renamedTheme.storedId!=='ember'||renamedTheme.choice!=='Imperial'||renamedTheme.current!=='Imperial'||renamedTheme.spectrum!==rainbowOrder.indexOf('ember'))failures.push({type:'imperial-saved-theme-compatibility',...renamedTheme});
   const persistence=[];
-  for(const theme of newThemes) {
+  for(const theme of allThemes) {
     await proposed.locator('[data-theme-toggle]').focus();
     await proposed.keyboard.press('Enter');
     await proposed.locator(`[data-theme-choice="${theme}"]`).focus();
@@ -360,9 +404,31 @@ try {
     await proposed.reload({waitUntil:'domcontentloaded'});
     const observation=await proposed.evaluate(()=>({theme:document.documentElement.dataset.theme,
       storedTheme:localStorage.getItem('amyc-theme'),lightness:localStorage.getItem('amyc-lightness')}));
-    if(observation.theme!==theme||observation.storedTheme!==theme||observation.lightness!=='24')failures.push({type:'new-theme-keyboard-persistence',expected:theme,...observation});
+    if(observation.theme!==theme||observation.storedTheme!==theme||observation.lightness!=='24')failures.push({type:'theme-keyboard-persistence',expected:theme,...observation});
     persistence.push(observation);
   }
+  // The sync control is a switch whose color follows its state, and the
+  // theme and font panels stay in agreement.
+  await proposed.locator('[data-theme-toggle]').click();
+  const syncSwitch=proposed.locator('.theme-panel [data-amyc-sync-viewers]');
+  const switchState=()=>proposed.evaluate(()=>{
+    const [theme,font]=['.theme-panel','.amyc-font-panel'].map(scope=>document.querySelector(`${scope} [data-amyc-sync-viewers]`));
+    const style=getComputedStyle(theme);
+    return {role:theme.getAttribute('role'),tag:theme.tagName,checked:theme.getAttribute('aria-checked'),
+      fontChecked:font?.getAttribute('aria-checked')??null,background:style.backgroundColor,color:style.color,
+      stored:localStorage.getItem('amyc-sync-viewers')};
+  });
+  await proposed.evaluate(()=>document.querySelectorAll('.theme-persistence-toggle').forEach(node=>node.style.transition='none'));
+  const syncOn=await switchState();
+  await syncSwitch.click();
+  const syncOff=await switchState();
+  await syncSwitch.click();
+  const syncBack=await switchState();
+  const syncControl={on:syncOn,off:syncOff,back:syncBack};
+  if(syncOn.role!=='switch'||syncOn.tag!=='BUTTON'||syncOn.checked!=='true'||syncOff.checked!=='false'||syncBack.checked!=='true'||
+    syncOn.fontChecked!=='true'||syncOff.fontChecked!=='false'||syncOff.stored!=='0'||syncBack.stored!=='1'||
+    syncOn.background===syncOff.background||syncOn.color===syncOff.color)failures.push({type:'sync-switch',...syncControl});
+  await proposed.keyboard.press('Escape');
   await proposed.locator('[data-theme-toggle]').click();
   await proposed.locator('.theme-panel [data-amyc-sync-viewers]').uncheck();
   await proposed.locator('[data-theme-choice="crimson"]').click();
@@ -370,8 +436,8 @@ try {
   const scoped=await proposed.evaluate(()=>({theme:document.documentElement.dataset.theme,
     global:localStorage.getItem('amyc-theme'),scoped:localStorage.getItem('amyc-viewer:theme-additions-parity:amyc-theme'),
     sync:localStorage.getItem('amyc-sync-viewers')}));
-  if(scoped.theme!=='crimson'||scoped.global!=='orchid'||scoped.scoped!=='crimson'||scoped.sync!=='0')failures.push({type:'new-theme-scoped-persistence',...scoped});
-  const customColors=await proposed.evaluate(newThemes=>{
+  if(scoped.theme!=='crimson'||scoped.global!==allThemes.at(-1)||scoped.scoped!=='crimson'||scoped.sync!=='0')failures.push({type:'theme-scoped-persistence',...scoped});
+  const customColors=await proposed.evaluate(allThemes=>{
     const input=document.querySelector('[data-custom-css]');
     const apply=document.querySelector('[data-custom-css-apply]');
     const slider=document.querySelector('[data-theme-lightness]');
@@ -393,7 +459,7 @@ try {
     const setLightness=value=>{slider.value=String(value);slider.dispatchEvent(new Event('input',{bubbles:true}));};
     const setCss=value=>{input.value=value;apply.click();};
     const cases=[];
-    for(const theme of newThemes) {
+    for(const theme of allThemes) {
       setCss('');document.querySelector(`[data-theme-choice="${theme}"]`).click();setLightness(0);
       for(const source of ['hsl(40 15% 97%)','oklch(97% 0.015 145)','notacolor']) {
         setCss(`:root[data-theme="${theme}"] { --paper: ${source}; }`);
@@ -422,27 +488,32 @@ try {
       }
     }
     setCss('');probe.remove();return cases;
-  },newThemes);
+  },allThemes);
   for(const item of customColors) {
     if(item.type==='paper-syntax') {
-      if(item.expected&&item.actual.some((channel,i)=>Math.abs(channel-item.expected[i])>1))failures.push({type:'new-theme-custom-paper-preservation',...item});
-      if(item.steps.some(step=>step.actual!==String(step.requested)||step.theme!==item.theme||step.paper.some(channel=>!Number.isFinite(channel))))failures.push({type:'new-theme-custom-paper-recovery',...item});
+      if(item.expected&&item.actual.some((channel,i)=>Math.abs(channel-item.expected[i])>1))failures.push({...item,type:'theme-custom-paper-preservation'});
+      if(item.steps.some(step=>step.actual!==String(step.requested)||step.theme!==item.theme||step.paper.some(channel=>!Number.isFinite(channel))))failures.push({...item,type:'theme-custom-paper-recovery'});
     } else {
-      if(item.paper.some((channel,i)=>channel!==item.expectedPaper[i])||item.soft.some((channel,i)=>channel!==item.expectedSoft[i]))failures.push({type:'new-theme-custom-document-preservation',...item});
-      for(const reading of item.readings)if(reading.ratio<4.5)failures.push({type:'new-theme-custom-document-contrast',theme:item.theme,lightness:item.lightness,...reading});
+      if(item.paper.some((channel,i)=>channel!==item.expectedPaper[i])||item.soft.some((channel,i)=>channel!==item.expectedSoft[i]))failures.push({...item,type:'theme-custom-document-preservation'});
+      for(const reading of item.readings)if(reading.ratio<4.5)failures.push({type:'theme-custom-document-contrast',theme:item.theme,lightness:item.lightness,...reading});
     }
   }
-  const summary={originalThemes:8,originalBrightnessStates:648,newToOriginalSwitchStates:switchStates,
-    computedComparisons:parity.reduce((n,item)=>n+item.computedComparisons,0),
-    newThemes:4,newBrightnessStates:324,newRenderedContrastPairs:additions.reduce((n,item)=>n+item.renderedContrastPairs,0),
-    consumerDiagramContrastPairs:additions.reduce((n,item)=>n+item.diagramContrastPairs,0),
-    consumerHeaderContrastPairs:additions.reduce((n,item)=>n+item.headerContrastPairs,0),
-    paletteIdentityReadings:paletteIdentity.length,lightnessEndpointLayouts:lightnessEndpoints.length,
+  const closest=[...distinctness].sort((a,b)=>a.distance-b.distance).slice(0,5);
+  const summary={themes:allThemes.length,brightnessStates:allThemes.length*81,originalBehaviorStates:oldThemes.length*81,
+    switchStates,renderedContrastPairs:audits.reduce((n,item)=>n+item.renderedContrastPairs,0),
+    consumerDiagramContrastPairs:audits.reduce((n,item)=>n+item.diagramContrastPairs,0),
+    consumerHeaderContrastPairs:audits.reduce((n,item)=>n+item.headerContrastPairs,0),
+    vibrancyReadings:vibrancy.length,distinctPairs:distinctness.length,
+    closestPairs:closest.map(item=>`${item.themes.join('/')}@${item.lightness}=${item.distance.toFixed(3)}`),
+    minHeaderChroma:Math.min(...vibrancy.map(item=>item.headerChroma)).toFixed(3),
+    minPageChroma:Math.min(...vibrancy.map(item=>item.pageChroma)).toFixed(3),
+    lightnessEndpointLayouts:lightnessEndpoints.length,
     customPaperCases:customColors.filter(item=>item.type==='paper-syntax').length,
     fixedDocumentContrastPairs:customColors.filter(item=>item.type==='fixed-document-surfaces').reduce((sum,item)=>sum+item.readings.length,0),
     failures:failures.length};
   await writeFile(path.join(stage,'report.json'),JSON.stringify({visibility:'public',classification:'archive-internal',
-    baselineCommit,summary,parity,originalPreferences:{expected:expectedPreferences,actual:actualPreferences},additions,paletteIdentity,pickers,lightnessEndpoints,spectrumOrder,renamedTheme,persistence,scoped,customColors,failures},null,2)+'\n');
-  console.log(JSON.stringify({...summary,failureCategories:Object.fromEntries([...new Set(failures.map(f=>f.type))].map(type=>[type,failures.filter(f=>f.type===type).length])),report:'test-output/theme-additions/report.json'},null,2));
+    baselineCommit,summary,parity,originalPreferences:{expected:expectedPreferences,actual:actualPreferences},audits,vibrancy,distinctness,
+    pickers,lightnessEndpoints,spectrumOrder,tracks,renamedTheme,persistence,syncControl,scoped,customColors,failures},null,2)+'\n');
+  console.log(JSON.stringify({...summary,failureCategories:Object.fromEntries([...new Set(failures.map(f=>f.type))].map(type=>[type,failures.filter(f=>f.type===type).length])),report:'test-output/theme-palettes/report.json'},null,2));
   if(failures.length)process.exitCode=1;
 } finally {await browser.close();await new Promise(resolve=>server.close(resolve));}
