@@ -30,7 +30,7 @@ To suppress it on a non-viewer page, set `data-amyc-public-records-footer="off"`
 
 ## Use
 
-Every AMYC app loads the shared files from this repo's GitHub Pages site instead of keeping its own copy, so a merge to `master` updates every app at once. `.github/workflows/pages.yml` runs `npm test` on every push and pull request, and publishes `src/` and `fixtures/` only when the tests pass. The fixture is live at `https://aimesy.github.io/themes/fixtures/theme-surface.html`.
+Every AMYC app loads the shared files live from this repo's GitHub Pages site, so a merge to `master` reaches every app within about ten minutes (Pages caches files for 600 seconds). Apps previously pinned individual commits on jsDelivr, which let them drift apart; do not reintroduce pins. `.github/workflows/pages.yml` runs `npm test` on every push and pull request, and publishes `src/` and `fixtures/` only when the tests pass. The fixture is live at `https://aimesy.github.io/themes/fixtures/theme-surface.html`.
 
 Link the hosted files, then add a compact button with `data-theme-toggle`.
 
