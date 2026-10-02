@@ -30,12 +30,14 @@ To suppress it on a non-viewer page, set `data-amyc-public-records-footer="off"`
 
 ## Use
 
-Vendor `src/theme.js`, `src/theme.css`, and `src/theme-bar.css` into each static project, then add a compact button with `data-theme-toggle`.
+Every AMYC app loads the shared files from this repo's GitHub Pages site instead of keeping its own copy, so a merge to `master` updates every app at once. `.github/workflows/pages.yml` runs `npm test` on every push and pull request, and publishes `src/` and `fixtures/` only when the tests pass. The fixture is live at `https://aimesy.github.io/themes/fixtures/theme-surface.html`.
+
+Link the hosted files, then add a compact button with `data-theme-toggle`.
 
 ```html
-<link rel="stylesheet" href="theme.css">
-<link rel="stylesheet" href="theme-bar.css">
-<script src="theme.js" defer></script>
+<link rel="stylesheet" href="https://aimesy.github.io/themes/src/theme.css">
+<link rel="stylesheet" href="https://aimesy.github.io/themes/src/theme-bar.css">
+<script src="https://aimesy.github.io/themes/src/theme.js" defer></script>
 <div class="amyc-theme-bar">
   <strong>AMYC</strong>
   <span class="grow"></span>
@@ -66,11 +68,11 @@ Viewer ids come from `data-amyc-viewer`, `data-viewer`, or `data-viewer-id` when
 
 ## Bug Reports
 
-Vendor `src/bug-report.js` and `src/bug-report.css` with the theme assets, then add a compact button with `data-bug-report`.
+Link the hosted bug reporter files, then add a compact button with `data-bug-report`.
 
 ```html
-<link rel="stylesheet" href="bug-report.css">
-<script src="bug-report.js" defer></script>
+<link rel="stylesheet" href="https://aimesy.github.io/themes/src/bug-report.css">
+<script src="https://aimesy.github.io/themes/src/bug-report.js" defer></script>
 <button
   class="hbtn"
   type="button"
