@@ -34,7 +34,6 @@
         darkest: "Oxblood",
       },
       colors: ["#9b0d23", "#ffdcd9", "#a7001c", "#fffbfa"],
-      signature: "#9b0d23",
     },
     {
       id: "sand",
@@ -48,7 +47,6 @@
         darkest: "Burnt Umber",
       },
       colors: ["#833b00", "#fce0c2", "#824700", "#fffbf7"],
-      signature: "#833b00",
     },
     {
       id: "ember",
@@ -62,7 +60,6 @@
         darkest: "Black Gold",
       },
       colors: ["#ffffff", "#e5e5e5", "#805c00", "#0a0a0a"],
-      signature: "#966c00",
     },
     {
       id: "cypress",
@@ -76,7 +73,6 @@
         darkest: "Blackwood",
       },
       colors: ["#00451b", "#002f10", "#a3cf68", "#043e19"],
-      signature: "#00451b",
     },
     {
       id: "tidepool",
@@ -90,7 +86,6 @@
         darkest: "Deep Kelp",
       },
       colors: ["#006151", "#c3f1e4", "#00675a", "#f4fffb"],
-      signature: "#006151",
     },
     {
       id: "mist",
@@ -104,7 +99,6 @@
         darkest: "Deep Fog",
       },
       colors: ["#5bd0e9", "#c0effa", "#00646d", "#f6fdff"],
-      signature: "#5bd0e9",
     },
     {
       id: "glacier",
@@ -118,7 +112,6 @@
         darkest: "Polar Night",
       },
       colors: ["#005494", "#d2e8ff", "#005e8c", "#f9fcff"],
-      signature: "#005494",
     },
     {
       id: "ultramarine",
@@ -132,7 +125,6 @@
         darkest: "Abyss",
       },
       colors: ["#2522a6", "#dce4ff", "#4242bf", "#fbfcff"],
-      signature: "#2522a6",
     },
     {
       id: "lilac",
@@ -146,7 +138,6 @@
         darkest: "Night Plum",
       },
       colors: ["#b9a3e9", "#e8e0ff", "#5c37b8", "#fcfbff"],
-      signature: "#b9a3e9",
     },
     {
       id: "starlight",
@@ -160,7 +151,6 @@
         darkest: "Black Violet",
       },
       colors: ["#46206e", "#2c1a43", "#e6b642", "#3b2656"],
-      signature: "#46206e",
     },
     {
       id: "orchid",
@@ -173,13 +163,12 @@
         darker: "Mulberry",
         darkest: "Aubergine",
       },
-      colors: ["#802180", "#f8daf6", "#8d1a89", "#fffaff"],
-      signature: "#802180",
+      colors: ["#7d2386", "#f7dbf9", "#832298", "#fffaff"],
     },
     {
       id: "rose",
       name: "Rose",
-      note: "Rose and peach gold",
+      note: "Rose and leaf green",
       names: {
         lightest: "Blush",
         lighter: "Rosewater",
@@ -187,8 +176,7 @@
         darker: "Mauve Rose",
         darkest: "Dark Rose",
       },
-      colors: ["#eca6c2", "#ffd9e7", "#9d0367", "#fffafc"],
-      signature: "#eca6c2",
+      colors: ["#f0a6b7", "#ffdae2", "#a20050", "#fffafb"],
     },
   ];
   const themeMidpoints = {
@@ -287,17 +275,17 @@
         paper: "#e7faff", "paper-2": "#d1f3fb", "paper-3": "#b8e9f5", plain: "#fbfeff", "plain-soft": "#f0fcff",
         "page-paper": "#fdffff", "page-line": "#a1e1f0", ink: "#032128", "ink-2": "#1c3f47", "ink-3": "#335b64",
         "ink-4": "#6c9099", rule: "#6bcbe0", "rule-2": "#b7e5f0", chrome: "#62d6f0", "chrome-rule": "#2aa9c2",
-        "chrome-ink": "#00242b", "chrome-accent": "#005860", accent: "#00666e", "accent-2": "#00767f", link: "#005696",
+        "chrome-ink": "#00242b", "chrome-accent": "#005860", accent: "#00666e", "accent-2": "#00767f", link: "#4744a4",
         warn: "#aa3300", ok: "#107537", "good-border": "#82c791", "good-bg": "#e3fae7", "warn-border": "#e3b160",
         "warn-bg": "#fff2de", "warn-ink": "#7e470d", "bar-fill": "#007e88", "row-hover": "#d0f3fc",
       },
       dark: {
-        paper: "#00343e", "paper-2": "#002b33", "paper-3": "#00414c", plain: "#003a44", "plain-soft": "#003039",
-        "page-paper": "#003d48", "page-line": "#006373", ink: "#eef7f9", "ink-2": "#cde3e8", "ink-3": "#aeced6",
-        "ink-4": "#7799a1", rule: "#007082", "rule-2": "#00515f", chrome: "#00404b", "chrome-rule": "#006373",
-        "chrome-ink": "#e8f7fa", "chrome-accent": "#72eed0", accent: "#00d6e7", "accent-2": "#00c5d4", link: "#9cccff",
+        paper: "#004551", "paper-2": "#003b46", "paper-3": "#005360", plain: "#004b58", "plain-soft": "#00414c",
+        "page-paper": "#014e5b", "page-line": "#0f7688", ink: "#eef7f9", "ink-2": "#cde3e8", "ink-3": "#aeced6",
+        "ink-4": "#7799a1", rule: "#007082", "rule-2": "#036373", chrome: "#00515f", "chrome-rule": "#007689",
+        "chrome-ink": "#e8f7fa", "chrome-accent": "#72eed0", accent: "#00d6e7", "accent-2": "#00c5d4", link: "#bcc2ff",
         warn: "#ff9d7f", ok: "#7fd994", "good-border": "#448c56", "good-bg": "#17351f", "warn-border": "#aa7d2d",
-        "warn-bg": "#3c2a0d", "warn-ink": "#f9cc87", "bar-fill": "#00c5d4", "row-hover": "#004855",
+        "warn-bg": "#3c2a0d", "warn-ink": "#f9cc87", "bar-fill": "#00c5d4", "row-hover": "#005a69",
       },
     },
     glacier: {
@@ -346,12 +334,12 @@
         "warn-bg": "#fff2de", "warn-ink": "#7e470d", "bar-fill": "#7151d3", "row-hover": "#eee8ff",
       },
       dark: {
-        paper: "#33244d", "paper-2": "#291d40", "paper-3": "#3f2f5d", plain: "#382a53", "plain-soft": "#2f2147",
-        "page-paper": "#3a2c55", "page-line": "#5f4b85", ink: "#f6f4fb", "ink-2": "#e0dbed", "ink-3": "#cac2de",
-        "ink-4": "#958da9", rule: "#6b5595", "rule-2": "#4e3c6f", chrome: "#402768", "chrome-rule": "#60488d",
+        paper: "#3f315b", "paper-2": "#362a4e", "paper-3": "#4c3c6c", plain: "#453761", "plain-soft": "#3b2e55",
+        "page-paper": "#473964", "page-line": "#6d5a95", ink: "#f6f4fb", "ink-2": "#e0dbed", "ink-3": "#cac2de",
+        "ink-4": "#958da9", rule: "#6b5595", "rule-2": "#5b4a7e", chrome: "#4d3577", "chrome-rule": "#6e569d",
         "chrome-ink": "#f5f1fe", "chrome-accent": "#85edbc", accent: "#bcb2ff", "accent-2": "#ad9eff", link: "#b0c6ff",
         warn: "#ff9d7f", ok: "#7fd994", "good-border": "#448c56", "good-bg": "#17351f", "warn-border": "#aa7d2d",
-        "warn-bg": "#3c2a0d", "warn-ink": "#f9cc87", "bar-fill": "#ad9eff", "row-hover": "#463466",
+        "warn-bg": "#3c2a0d", "warn-ink": "#f9cc87", "bar-fill": "#ad9eff", "row-hover": "#534275",
       },
     },
     starlight: {
@@ -374,38 +362,38 @@
     },
     orchid: {
       light: {
-        paper: "#fef1fd", "paper-2": "#fae4f9", "paper-3": "#f4d4f2", plain: "#fffcff", "plain-soft": "#fff6fe",
-        "page-paper": "#fffeff", "page-line": "#eec6ec", ink: "#261626", "ink-2": "#453144", "ink-3": "#634b61",
-        "ink-4": "#988096", rule: "#dca5da", "rule-2": "#efd0ed", chrome: "#8b298b", "chrome-rule": "#641964",
-        "chrome-ink": "#fff6fe", "chrome-accent": "#dbeaa2", accent: "#8f1c8a", "accent-2": "#9a3995", link: "#0052a2",
+        paper: "#fef2fe", "paper-2": "#f9e4fa", "paper-3": "#f2d4f4", plain: "#fffcff", "plain-soft": "#fff6ff",
+        "page-paper": "#fffeff", "page-line": "#ecc7ef", ink: "#261727", "ink-2": "#443246", "ink-3": "#614b63",
+        "ink-4": "#968198", rule: "#d9a6dd", "rule-2": "#edd1ef", chrome: "#872b91", "chrome-rule": "#611b68",
+        "chrome-ink": "#fef6ff", "chrome-accent": "#dbeaa2", accent: "#852499", "accent-2": "#903ea3", link: "#2a4ca6",
         warn: "#aa3300", ok: "#107537", "good-border": "#82c791", "good-bg": "#e3fae7", "warn-border": "#e3b160",
-        "warn-bg": "#fff2de", "warn-ink": "#7e470d", "bar-fill": "#a738a2", "row-hover": "#fbe3f9",
+        "warn-bg": "#fff2de", "warn-ink": "#7e470d", "bar-fill": "#9d3eb1", "row-hover": "#fae4fb",
       },
       dark: {
-        paper: "#491249", "paper-2": "#3d0d3c", "paper-3": "#591a59", plain: "#4f184f", "plain-soft": "#431043",
-        "page-paper": "#521b51", "page-line": "#80347f", ink: "#fbf2fb", "ink-2": "#edd5eb", "ink-3": "#ddbadb",
-        "ink-4": "#a984a7", rule: "#903b8f", "rule-2": "#6b276a", chrome: "#5f005f", "chrome-rule": "#872986",
-        "chrome-ink": "#feeefd", "chrome-accent": "#cddf82", accent: "#f09be8", "accent-2": "#e289db", link: "#a2caff",
+        paper: "#47134c", "paper-2": "#3b0e3f", "paper-3": "#561b5c", plain: "#4d1952", "plain-soft": "#421146",
+        "page-paper": "#4f1c55", "page-line": "#7d3684", ink: "#fbf2fb", "ink-2": "#ecd6ed", "ink-3": "#dbbbdd",
+        "ink-4": "#a685a9", rule: "#8c3d94", "rule-2": "#68296e", chrome: "#5c0065", "chrome-rule": "#832b8c",
+        "chrome-ink": "#fdeefe", "chrome-accent": "#cddf82", accent: "#e59ff6", "accent-2": "#d78de8", link: "#adc7ff",
         warn: "#ff9d7f", ok: "#7fd994", "good-border": "#448c56", "good-bg": "#17351f", "warn-border": "#aa7d2d",
-        "warn-bg": "#3c2a0d", "warn-ink": "#f9cc87", "bar-fill": "#e586de", "row-hover": "#621e61",
+        "warn-bg": "#3c2a0d", "warn-ink": "#f9cc87", "bar-fill": "#da8aec", "row-hover": "#5f2065",
       },
     },
     rose: {
       light: {
-        paper: "#fff2f7", "paper-2": "#ffe3ed", "paper-3": "#fdd2e2", plain: "#fffdfd", "plain-soft": "#fff7fa",
-        "page-paper": "#fffefe", "page-line": "#fac3d8", ink: "#2b151e", "ink-2": "#4b303b", "ink-3": "#694956",
-        "ink-4": "#9f7f8b", rule: "#eba1bf", "rule-2": "#f8cfde", chrome: "#f3acc8", "chrome-rule": "#c4819c",
-        "chrome-ink": "#341121", "chrome-accent": "#871459", accent: "#9f0768", "accent-2": "#aa3175", link: "#005c79",
+        paper: "#fff2f5", "paper-2": "#ffe4e9", "paper-3": "#ffd2dc", plain: "#fffdfd", "plain-soft": "#fff7f9",
+        "page-paper": "#fffefe", "page-line": "#fdc3d0", ink: "#2c151b", "ink-2": "#4c3037", "ink-3": "#6b4951",
+        "ink-4": "#a07f86", rule: "#efa1b3", "rule-2": "#faced8", chrome: "#f7acbd", "chrome-rule": "#c88192",
+        "chrome-ink": "#36111c", "chrome-accent": "#8c0e46", accent: "#a40051", "accent-2": "#b02e60", link: "#006537",
         warn: "#aa3300", ok: "#107537", "good-border": "#82c791", "good-bg": "#e3fae7", "warn-border": "#e3b160",
-        "warn-bg": "#fff2de", "warn-ink": "#7e470d", "bar-fill": "#b92d7e", "row-hover": "#ffe3ed",
+        "warn-bg": "#fff2de", "warn-ink": "#7e470d", "bar-fill": "#bf2966", "row-hover": "#ffe4e9",
       },
       dark: {
-        paper: "#481c30", "paper-2": "#3c1627", "paper-3": "#58253c", plain: "#4e2135", "plain-soft": "#431a2c",
-        "page-paper": "#512438", "page-line": "#7f405c", ink: "#fbf2f5", "ink-2": "#edd7df", "ink-3": "#ddbec9",
-        "ink-4": "#a88894", rule: "#8f4867", "rule-2": "#6a324b", chrome: "#60173c", "chrome-rule": "#853a5c",
-        "chrome-ink": "#feeff4", "chrome-accent": "#ffc898", accent: "#ff98ca", "accent-2": "#f383bb", link: "#74d5ff",
+        paper: "#5a2d39", "paper-2": "#4d2630", "paper-3": "#6b3644", plain: "#60323e", "plain-soft": "#542a35",
+        "page-paper": "#633541", "page-line": "#935263", ink: "#fbf3f4", "ink-2": "#edd8dc", "ink-3": "#ddbec4",
+        "ink-4": "#a8888f", rule: "#904a5d", "rule-2": "#7d4453", chrome: "#732b41", "chrome-rule": "#994d62",
+        "chrome-ink": "#feeff2", "chrome-accent": "#ffc898", accent: "#ff9bb7", "accent-2": "#fa82a6", link: "#8bdda8",
         warn: "#ff9d7f", ok: "#7fd994", "good-border": "#448c56", "good-bg": "#17351f", "warn-border": "#aa7d2d",
-        "warn-bg": "#3c2a0d", "warn-ink": "#f9cc87", "bar-fill": "#f780bc", "row-hover": "#612a43",
+        "warn-bg": "#3c2a0d", "warn-ink": "#f9cc87", "bar-fill": "#fe7ea6", "row-hover": "#743c4b",
       },
     },
   };
@@ -505,17 +493,17 @@
         paper: "#f1fcff", "paper-2": "#e1f7fc", "paper-3": "#cceff8", plain: "#ffffff", "plain-soft": "#f6fdff",
         "page-paper": "#ffffff", "page-line": "#b2e5f1", ink: "#031f24", "ink-2": "#1d3d45", "ink-3": "#345962",
         "ink-4": "#71939b", rule: "#85d2e4", "rule-2": "#c6eaf3", chrome: "#69ddf6", "chrome-rule": "#33b0c8",
-        "chrome-ink": "#00242b", "chrome-accent": "#005860", accent: "#006770", "accent-2": "#007781", link: "#005798",
+        "chrome-ink": "#00242b", "chrome-accent": "#005860", accent: "#006770", "accent-2": "#007781", link: "#4845a5",
         warn: "#ac3400", ok: "#137738", "good-border": "#88ca95", "good-bg": "#e8fbeb", "warn-border": "#e5b568",
         "warn-bg": "#fff4e4", "warn-ink": "#804810", "bar-fill": "#00818c", "row-hover": "#d7f5fc",
       },
       dark: {
-        paper: "#00232a", "paper-2": "#001a20", "paper-3": "#002f38", plain: "#002830", "plain-soft": "#001f26",
-        "page-paper": "#002b33", "page-line": "#00515f", ink: "#eff7f8", "ink-2": "#cee2e7", "ink-3": "#accad1",
-        "ink-4": "#71939b", rule: "#005d6c", "rule-2": "#00404b", chrome: "#002f38", "chrome-rule": "#00515f",
-        "chrome-ink": "#e6f5f8", "chrome-accent": "#6febcc", accent: "#00d6e7", "accent-2": "#00c5d4", link: "#9cccff",
+        paper: "#00333c", "paper-2": "#002932", "paper-3": "#00404b", plain: "#003943", "plain-soft": "#002f38",
+        "page-paper": "#003b46", "page-line": "#036373", ink: "#eff7f8", "ink-2": "#cee2e7", "ink-3": "#accad1",
+        "ink-4": "#71939b", rule: "#007082", "rule-2": "#00515f", chrome: "#00404b", "chrome-rule": "#006373",
+        "chrome-ink": "#e6f5f8", "chrome-accent": "#6febcc", accent: "#00d6e7", "accent-2": "#00c5d4", link: "#bcc2ff",
         warn: "#ff9d7f", ok: "#7fd994", "good-border": "#458554", "good-bg": "#102816", "warn-border": "#a17833",
-        "warn-bg": "#2d1f05", "warn-ink": "#f9cc87", "bar-fill": "#00c5d4", "row-hover": "#00343e",
+        "warn-bg": "#2d1f05", "warn-ink": "#f9cc87", "bar-fill": "#00c5d4", "row-hover": "#004551",
       },
     },
     glacier: {
@@ -564,12 +552,12 @@
         "warn-bg": "#fff4e4", "warn-ink": "#804810", "bar-fill": "#7454d6", "row-hover": "#f0ebff",
       },
       dark: {
-        paper: "#221736", "paper-2": "#19102a", "paper-3": "#2d2046", plain: "#271b3c", "plain-soft": "#1e1431",
-        "page-paper": "#291e3f", "page-line": "#4e3c6f", ink: "#f6f4fa", "ink-2": "#e0dbec", "ink-3": "#c6c0d9",
-        "ink-4": "#8f87a3", rule: "#59467f", "rule-2": "#3d2e5a", chrome: "#2f1b50", "chrome-rule": "#4f3977",
+        paper: "#2e2344", "paper-2": "#251c37", "paper-3": "#3a2d54", plain: "#33284a", "plain-soft": "#2a203e",
+        "page-paper": "#352a4c", "page-line": "#5b4a7e", ink: "#f6f4fa", "ink-2": "#e0dbec", "ink-3": "#c6c0d9",
+        "ink-4": "#8f87a3", rule: "#67548e", "rule-2": "#4a3b68", chrome: "#3c285e", "chrome-rule": "#5d4786",
         "chrome-ink": "#f3f0fc", "chrome-accent": "#82eab9", accent: "#bcb2ff", "accent-2": "#ad9eff", link: "#b0c6ff",
         warn: "#ff9d7f", ok: "#7fd994", "good-border": "#458554", "good-bg": "#102816", "warn-border": "#a17833",
-        "warn-bg": "#2d1f05", "warn-ink": "#f9cc87", "bar-fill": "#ad9eff", "row-hover": "#33244d",
+        "warn-bg": "#2d1f05", "warn-ink": "#f9cc87", "bar-fill": "#ad9eff", "row-hover": "#3f315b",
       },
     },
     starlight: {
@@ -592,38 +580,38 @@
     },
     orchid: {
       light: {
-        paper: "#fff7fe", "paper-2": "#fcedfb", "paper-3": "#f7dff5", plain: "#ffffff", "plain-soft": "#fffaff",
-        "page-paper": "#ffffff", "page-line": "#f0cfed", ink: "#231523", "ink-2": "#433143", "ink-3": "#604a5f",
-        "ink-4": "#9a8499", rule: "#e1b2df", "rule-2": "#f2daf1", chrome: "#963096", "chrome-rule": "#6f1e6f",
-        "chrome-ink": "#fffaff", "chrome-accent": "#e3f0b3", accent: "#911e8c", "accent-2": "#9c3b96", link: "#0053a5",
+        paper: "#fef7fe", "paper-2": "#fbedfc", "paper-3": "#f5e0f7", plain: "#ffffff", "plain-soft": "#fffaff",
+        "page-paper": "#ffffff", "page-line": "#eecff0", ink: "#231524", "ink-2": "#423144", "ink-3": "#5f4a61",
+        "ink-4": "#99849a", rule: "#deb3e2", "rule-2": "#f1daf2", chrome: "#92339b", "chrome-rule": "#6c2074",
+        "chrome-ink": "#fffaff", "chrome-accent": "#e3f0b3", accent: "#86269b", "accent-2": "#9240a4", link: "#2b4ea7",
         warn: "#ac3400", ok: "#137738", "good-border": "#88ca95", "good-bg": "#e8fbeb", "warn-border": "#e5b568",
-        "warn-bg": "#fff4e4", "warn-ink": "#804810", "bar-fill": "#ab3ba5", "row-hover": "#fbe7fa",
+        "warn-bg": "#fff4e4", "warn-ink": "#804810", "bar-fill": "#a041b5", "row-hover": "#fae8fb",
       },
       dark: {
-        paper: "#330833", "paper-2": "#270427", "paper-3": "#420f42", plain: "#390c39", "plain-soft": "#2e062e",
-        "page-paper": "#3c0f3c", "page-line": "#6b276a", ink: "#faf2fa", "ink-2": "#ecd6ea", "ink-3": "#d8b8d6",
-        "ink-4": "#a27ea0", rule: "#7a2e79", "rule-2": "#561b56", chrome: "#470048", "chrome-rule": "#711b71",
-        "chrome-ink": "#fcecfb", "chrome-accent": "#cadc7f", accent: "#f398eb", "accent-2": "#e289db", link: "#a2caff",
+        paper: "#310936", "paper-2": "#260529", "paper-3": "#401045", plain: "#370d3b", "plain-soft": "#2c0730",
+        "page-paper": "#3a103e", "page-line": "#68296e", ink: "#faf2fa", "ink-2": "#ebd6ec", "ink-3": "#d6b9d8",
+        "ink-4": "#a07fa3", rule: "#77307e", "rule-2": "#541c59", chrome: "#45004c", "chrome-rule": "#6e1d76",
+        "chrome-ink": "#fbecfc", "chrome-accent": "#cadc7f", accent: "#e89cf9", "accent-2": "#d78de8", link: "#adc7ff",
         warn: "#ff9d7f", ok: "#7fd994", "good-border": "#458554", "good-bg": "#102816", "warn-border": "#a17833",
-        "warn-bg": "#2d1f05", "warn-ink": "#f9cc87", "bar-fill": "#e586de", "row-hover": "#491249",
+        "warn-bg": "#2d1f05", "warn-ink": "#f9cc87", "bar-fill": "#da8aec", "row-hover": "#47134c",
       },
     },
     rose: {
       light: {
-        paper: "#fff7fa", "paper-2": "#ffedf3", "paper-3": "#fedee9", plain: "#ffffff", "plain-soft": "#fffafc",
-        "page-paper": "#ffffff", "page-line": "#f9ccdd", ink: "#27131c", "ink-2": "#492f39", "ink-3": "#674854",
-        "ink-4": "#a1838e", rule: "#eeafc8", "rule-2": "#fad9e5", chrome: "#fab2ce", "chrome-rule": "#cb87a2",
-        "chrome-ink": "#341121", "chrome-accent": "#871459", accent: "#a00b69", "accent-2": "#ab3276", link: "#005e7b",
+        paper: "#fff8f9", "paper-2": "#ffedf1", "paper-3": "#ffdee5", plain: "#ffffff", "plain-soft": "#fffafb",
+        "page-paper": "#ffffff", "page-line": "#fcccd6", ink: "#281319", "ink-2": "#4a2f35", "ink-3": "#684850",
+        "ink-4": "#a28289", rule: "#f1afbe", "rule-2": "#fcd9e0", chrome: "#fdb2c4", "chrome-rule": "#ce8798",
+        "chrome-ink": "#36111c", "chrome-accent": "#8c0e46", accent: "#a70052", "accent-2": "#b12f61", link: "#006738",
         warn: "#ac3400", ok: "#137738", "good-border": "#88ca95", "good-bg": "#e8fbeb", "warn-border": "#e5b568",
-        "warn-bg": "#fff4e4", "warn-ink": "#804810", "bar-fill": "#bc3181", "row-hover": "#ffe7f0",
+        "warn-bg": "#fff4e4", "warn-ink": "#804810", "bar-fill": "#c32d69", "row-hover": "#ffe8ec",
       },
       dark: {
-        paper: "#331020", "paper-2": "#270b18", "paper-3": "#42192b", plain: "#391525", "plain-soft": "#2d0e1c",
-        "page-paper": "#3b1727", "page-line": "#6a324b", ink: "#faf3f5", "ink-2": "#ecd8df", "ink-3": "#d8bbc6",
-        "ink-4": "#a2828e", rule: "#793a56", "rule-2": "#55253b", chrome: "#490e2c", "chrome-rule": "#702c4b",
-        "chrome-ink": "#fcedf2", "chrome-accent": "#ffc38f", accent: "#ff98ca", "accent-2": "#f383bb", link: "#74d5ff",
+        paper: "#432029", "paper-2": "#371921", "paper-3": "#532934", plain: "#4a242e", "plain-soft": "#3e1d26",
+        "page-paper": "#4c2731", "page-line": "#7d4453", ink: "#faf3f4", "ink-2": "#ecd8dc", "ink-3": "#d8bcc1",
+        "ink-4": "#a28289", rule: "#8d4d5d", "rule-2": "#683643", chrome: "#5b2133", "chrome-rule": "#833f52",
+        "chrome-ink": "#fceef0", "chrome-accent": "#ffc38f", accent: "#ff9bb7", "accent-2": "#fa82a6", link: "#8bdda8",
         warn: "#ff9d7f", ok: "#7fd994", "good-border": "#458554", "good-bg": "#102816", "warn-border": "#a17833",
-        "warn-bg": "#2d1f05", "warn-ink": "#f9cc87", "bar-fill": "#f780bc", "row-hover": "#481c30",
+        "warn-bg": "#2d1f05", "warn-ink": "#f9cc87", "bar-fill": "#fe7ea6", "row-hover": "#5a2d39",
       },
     },
   };
@@ -1076,21 +1064,7 @@
     document.querySelectorAll("[data-theme-choice]").forEach((button) => {
       button.setAttribute("aria-pressed", button.dataset.themeChoice === theme.id ? "true" : "false");
     });
-    updateLightnessTrack();
     applyLightness(currentLightness, false);
-  }
-
-  // The vertical slider runs from the darkest paper (bottom) to the lightest.
-  function updateLightnessTrack() {
-    const theme = root.dataset.theme;
-    const basePaper = parseThemeColor(baseThemeTokens.paper || "");
-    const stops = [
-      themeVariants[theme].dark.paper, themeMidpoints[theme].dark.paper, basePaper && toRgb(basePaper),
-      themeMidpoints[theme].light.paper, themeVariants[theme].light.paper,
-    ].filter(Boolean);
-    document.querySelectorAll("[data-theme-lightness]").forEach((input) => {
-      input.style.setProperty("--theme-lightness-track", `linear-gradient(90deg, ${stops.join(", ")})`);
-    });
   }
 
   function makeSwatch(theme) {
@@ -1186,9 +1160,6 @@
 
     const spectrum = panel.querySelector("[data-theme-spectrum]");
     const lightness = panel.querySelector("[data-theme-lightness]");
-    spectrum.style.setProperty("--theme-spectrum-track", `linear-gradient(90deg, ${themes
-      .map((theme, index) => `${theme.signature} ${((index / (themes.length - 1)) * 100).toFixed(2)}%`).join(", ")})`);
-    updateLightnessTrack();
     spectrum.addEventListener("input", () => {
       snapRangeToMarkers(spectrum);
       const theme = themes[Number(spectrum.value)] || themes[0];

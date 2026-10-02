@@ -2,9 +2,9 @@
 
 Shared theme runtime and visual test harness for AMYC projects.
 
-There are twelve theme families, each with five named brightness variants. Every family has its own signature hue and keeps it at both ends of the brightness slider: headers stay saturated, pages carry a visible tint, and the dark ends are deep jewel tones rather than neutral black. Imperial is the exception by design and moves from white and gold to black and gold, including the header. Saved theme choices and font controls are unchanged.
+There are twelve theme families, each with five named brightness variants. Every family has its own signature hue and keeps it at both ends of the brightness slider: headers stay saturated, pages carry a visible tint, and the dark ends are deep jewel tones rather than neutral black. The pastel families (Mist, Lilac, and Rose) have light headers and darken to a softer dusk. Imperial is the exception by design and moves from white and gold to black and gold, including the header. Saved theme choices and font controls are unchanged.
 
-The picker and spectrum slider follow a fixed rainbow order: Crimson, Sand, Imperial, Cypress, Tidepool, Mist, Glacier, Ultramarine, Lilac, Starlight, Orchid, and Rose. The spectrum track is painted with each family's signature color, and the brightness track runs from the family's darkest page to its lightest. Imperial retains the original `ember` ID so existing saved preferences, custom CSS, and links remain compatible.
+The picker and spectrum slider follow a fixed rainbow order: Crimson, Sand, Imperial, Cypress, Tidepool, Mist, Glacier, Ultramarine, Lilac, Starlight, Orchid, and Rose. Imperial retains the original `ember` ID so existing saved preferences, custom CSS, and links remain compatible.
 
 The package exports:
 

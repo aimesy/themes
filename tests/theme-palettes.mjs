@@ -143,7 +143,7 @@ async function themeStates(page,theme,withContrast=false,lightnessValues=Array.f
             ratio:ratio(fg,bg),minimum:Number(node.dataset.contrastMin||4.5)};
         });
         state.palette=Object.fromEntries(['paper','paper-2','paper-3','plain','plain-soft','page-paper','chrome',
-          'row-hover','rule','rule-2','page-line','accent'].map(token=>[token,rgba(css.getPropertyValue(`--${token}`).trim()).slice(0,3)]));
+          'row-hover','rule','rule-2','page-line','accent','link'].map(token=>[token,rgba(css.getPropertyValue(`--${token}`).trim()).slice(0,3)]));
       }
       states.push(state);
     }
@@ -266,14 +266,16 @@ try {
   }
 
   // Neighboring families must stay recognizable at each named brightness.
+  // Combine the header, page, accent, and link differences: one distinct
+  // header is not enough when the page, buttons, and links all match.
   const distinctness=[];
   for(const lightness of [-40,-20,0,20,40]) {
     const signatures=allThemes.map(theme=>({theme,palette:fullStates.get(theme).find(state=>state.lightness===lightness).palette}));
     for(let i=0;i<signatures.length;i++) for(let j=i+1;j<signatures.length;j++) {
       const a=signatures[i],b=signatures[j];
-      const distance=Math.max(...['chrome','paper-2','accent'].map(token=>deltaE(a.palette[token],b.palette[token])));
+      const distance=Math.hypot(...['chrome','paper-2','accent','link'].map(token=>deltaE(a.palette[token],b.palette[token])));
       distinctness.push({lightness,themes:[a.theme,b.theme],distance});
-      if(distance<.06)failures.push({type:'theme-distinctness',lightness,themes:[a.theme,b.theme],distance});
+      if(distance<.11)failures.push({type:'theme-distinctness',lightness,themes:[a.theme,b.theme],distance});
     }
   }
 
@@ -373,13 +375,6 @@ try {
     });
   });
   if(spectrumOrder.join()!==rainbowOrder.join())failures.push({type:'theme-spectrum-order',actual:spectrumOrder});
-  // The spectrum and lightness tracks are painted with theme colors.
-  const tracks=await proposed.evaluate(()=>({
-    spectrum:document.querySelector('[data-theme-spectrum]').style.getPropertyValue('--theme-spectrum-track'),
-    lightness:document.querySelector('[data-theme-lightness]').style.getPropertyValue('--theme-lightness-track'),
-  }));
-  if(!tracks.spectrum.startsWith('linear-gradient(')||(tracks.spectrum.match(/#[0-9a-f]{6}/gi)||[]).length!==rainbowOrder.length||
-    !tracks.lightness.startsWith('linear-gradient('))failures.push({type:'theme-picker-tracks',...tracks});
   // Existing Ember selections must display Imperial without rewriting the ID.
   await proposed.evaluate(()=>{
     localStorage.setItem('amyc-theme','ember');localStorage.setItem('amyc-lightness','0');
@@ -513,7 +508,7 @@ try {
     failures:failures.length};
   await writeFile(path.join(stage,'report.json'),JSON.stringify({visibility:'public',classification:'archive-internal',
     baselineCommit,summary,parity,originalPreferences:{expected:expectedPreferences,actual:actualPreferences},audits,vibrancy,distinctness,
-    pickers,lightnessEndpoints,spectrumOrder,tracks,renamedTheme,persistence,syncControl,scoped,customColors,failures},null,2)+'\n');
+    pickers,lightnessEndpoints,spectrumOrder,renamedTheme,persistence,syncControl,scoped,customColors,failures},null,2)+'\n');
   console.log(JSON.stringify({...summary,failureCategories:Object.fromEntries([...new Set(failures.map(f=>f.type))].map(type=>[type,failures.filter(f=>f.type===type).length])),report:'test-output/theme-palettes/report.json'},null,2));
   if(failures.length)process.exitCode=1;
 } finally {await browser.close();await new Promise(resolve=>server.close(resolve));}

@@ -200,7 +200,7 @@
   --chrome-accent: #005860;
   --accent: #00646d;
   --accent-2: #00747e;
-  --link: #005494;
+  --link: #4642a2;
   --warn: #a73200;
   --ok: #0d7435;
   --good-border: #7cc58c;
@@ -346,26 +346,26 @@
 
 :root[data-theme="orchid"] {
   color-scheme: var(--theme-color-scheme, light);
-  --paper: #feecfd;
-  --paper-2: #f8daf6;
-  --paper-3: #f1c8ef;
+  --paper: #fdecfe;
+  --paper-2: #f7dbf9;
+  --paper-3: #efc9f1;
   --plain: #fffaff;
-  --plain-soft: #fff3fe;
+  --plain-soft: #fef3ff;
   --page-paper: #fffcff;
-  --page-line: #edbdea;
-  --ink: #291829;
-  --ink-2: #473246;
-  --ink-3: #654b63;
-  --ink-4: #967d94;
-  --rule: #d798d5;
-  --rule-2: #ebc7e9;
-  --chrome: #802180;
-  --chrome-rule: #591559;
-  --chrome-ink: #fdf3fc;
+  --page-line: #eabeed;
+  --ink: #29182a;
+  --ink-2: #463248;
+  --ink-3: #634c65;
+  --ink-4: #947d96;
+  --rule: #d499d9;
+  --rule-2: #e9c7eb;
+  --chrome: #7d2386;
+  --chrome-rule: #56165d;
+  --chrome-ink: #fcf4fd;
   --chrome-accent: #d4e590;
-  --accent: #8d1a89;
-  --accent-2: #993793;
-  --link: #0051a0;
+  --accent: #832298;
+  --accent-2: #8f3ca1;
+  --link: #284ba4;
   --warn: #a73200;
   --ok: #0d7435;
   --good-border: #7cc58c;
@@ -373,32 +373,32 @@
   --warn-border: #e1ad57;
   --warn-bg: #fff0d8;
   --warn-ink: #7d460b;
-  --bar-fill: #a4349f;
-  --row-hover: #fbdff9;
+  --bar-fill: #993aae;
+  --row-hover: #f9e0fb;
 }
 
 :root[data-theme="rose"] {
   color-scheme: var(--theme-color-scheme, light);
-  --paper: #ffedf3;
-  --paper-2: #ffd9e7;
-  --paper-3: #fdc6da;
-  --plain: #fffafc;
-  --plain-soft: #fff4f8;
+  --paper: #ffedf1;
+  --paper-2: #ffdae2;
+  --paper-3: #ffc6d2;
+  --plain: #fffafb;
+  --plain-soft: #fff4f6;
   --page-paper: #fffdfd;
-  --page-line: #fabad3;
-  --ink: #2e1721;
-  --ink-2: #4d313c;
-  --ink-3: #6c4a57;
-  --ink-4: #9d7b88;
-  --rule: #e893b6;
-  --rule-2: #f5c5d7;
-  --chrome: #eca6c2;
-  --chrome-rule: #be7b96;
-  --chrome-ink: #341121;
-  --chrome-accent: #871459;
-  --accent: #9d0367;
-  --accent-2: #a82f74;
-  --link: #005b78;
+  --page-line: #fdbac9;
+  --ink: #2f171d;
+  --ink-2: #4f3038;
+  --ink-3: #6d4a52;
+  --ink-4: #9f7b83;
+  --rule: #ec93a9;
+  --rule-2: #f8c4d0;
+  --chrome: #f0a6b7;
+  --chrome-rule: #c17b8c;
+  --chrome-ink: #36111c;
+  --chrome-accent: #8c0e46;
+  --accent: #a20050;
+  --accent-2: #ae2c5e;
+  --link: #006336;
   --warn: #a73200;
   --ok: #0d7435;
   --good-border: #7cc58c;
@@ -406,8 +406,8 @@
   --warn-border: #e1ad57;
   --warn-bg: #fff0d8;
   --warn-ink: #7d460b;
-  --bar-fill: #b5297b;
-  --row-hover: #ffe0eb;
+  --bar-fill: #bc2563;
+  --row-hover: #ffe1e7;
 }
 /* palettes:end */
 
@@ -690,44 +690,18 @@ body.amyc-has-public-records-footer {
 
 .lightness-input::-webkit-slider-runnable-track,
 .theme-spectrum-input::-webkit-slider-runnable-track {
-  height: 4px;
+  height: 3px;
   border: 0;
   border-radius: 999px;
   background: var(--rule);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 16%, transparent);
 }
-
-.lightness-input::-moz-range-track,
-.theme-spectrum-input::-moz-range-track {
-  height: 4px;
-  border: 0;
-  border-radius: 999px;
-  background: var(--rule);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 16%, transparent);
-}
-
-/* theme.js paints the tracks with each family's signature and paper colors. */
-.lightness-input::-webkit-slider-runnable-track { background: var(--theme-lightness-track, var(--rule)); }
-.lightness-input::-moz-range-track { background: var(--theme-lightness-track, var(--rule)); }
-.theme-spectrum-input::-webkit-slider-runnable-track { background: var(--theme-spectrum-track, var(--rule)); }
-.theme-spectrum-input::-moz-range-track { background: var(--theme-spectrum-track, var(--rule)); }
 
 .lightness-input::-webkit-slider-thumb,
 .theme-spectrum-input::-webkit-slider-thumb {
   -webkit-appearance: none;
   width: 11px;
   height: 11px;
-  margin-top: -3.5px;
-  border: 2px solid var(--paper);
-  border-radius: 50%;
-  background: var(--accent-2);
-  box-shadow: 0 0 0 1px var(--rule);
-}
-
-.lightness-input::-moz-range-thumb,
-.theme-spectrum-input::-moz-range-thumb {
-  width: 7px;
-  height: 7px;
+  margin-top: -4px;
   border: 2px solid var(--paper);
   border-radius: 50%;
   background: var(--accent-2);

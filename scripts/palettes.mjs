@@ -10,7 +10,8 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 // Hues are OKLCH degrees. h: surfaces and header, c: header when it differs,
 // a: accent and bars, a2: second accent, l: links, x: header highlight.
 // header sets the light-stop header tone; light headers get dark header text.
-// depth scales surface chroma at the dark stops.
+// depth scales surface chroma at the dark stops; lift raises their surfaces
+// and header so the pastel families darken to a softer dusk.
 // Families appear in picker (rainbow) order.
 export const families = [
   {
@@ -43,8 +44,9 @@ export const families = [
   {
     id: "mist", name: "Mist", note: "Bright aqua", polarity: "light",
     names: { lightest: "Whiteout", lighter: "Sea Mist", base: "Mist", darker: "Harbor Fog", darkest: "Deep Fog" },
-    hue: { h: 214, a: 205, l: 250, x: 175 },
+    hue: { h: 214, a: 205, l: 280, x: 175 },
     depth: 0.8,
+    lift: 0.06,
     header: { L: 0.8, C: 0.11 },
   },
   {
@@ -65,6 +67,7 @@ export const families = [
     names: { lightest: "Pale Lilac", lighter: "Wisteria", base: "Lilac", darker: "Mauve", darkest: "Night Plum" },
     hue: { h: 298, a: 290, l: 268, x: 162 },
     depth: 0.85,
+    lift: 0.05,
     header: { L: 0.76, C: 0.1 },
   },
   {
@@ -75,14 +78,15 @@ export const families = [
   {
     id: "orchid", name: "Orchid", note: "Magenta and lime", polarity: "light",
     names: { lightest: "Bloom", lighter: "Mallow", base: "Orchid", darker: "Mulberry", darkest: "Aubergine" },
-    hue: { h: 328, a: 330, l: 255, x: 118 },
+    hue: { h: 324, a: 320, l: 265, x: 118 },
     depth: 1.3,
   },
   {
-    id: "rose", name: "Rose", note: "Rose and peach gold", polarity: "light",
+    id: "rose", name: "Rose", note: "Rose and leaf green", polarity: "light",
     names: { lightest: "Blush", lighter: "Rosewater", base: "Rose", darker: "Mauve Rose", darkest: "Dark Rose" },
-    hue: { h: 354, a: 350, l: 228, x: 62 },
-    depth: 0.85,
+    hue: { h: 4, a: 2, l: 155, x: 62 },
+    depth: 0.8,
+    lift: 0.06,
     header: { L: 0.8, C: 0.09 },
   },
 ];
@@ -194,10 +198,13 @@ function header(family, profileName, token, spec) {
 
 export function palette(family, stop) {
   const profileName = stopProfiles[family.polarity][stop];
-  const depth = lightProfiles.has(profileName) ? 1 : family.depth ?? 1;
+  const dark = !lightProfiles.has(profileName);
+  const depth = dark ? family.depth ?? 1 : 1;
+  const lift = dark ? family.lift ?? 0 : 0;
   return Object.fromEntries(Object.entries(profiles[profileName]).map(([token, spec]) => {
     const [L, C, role] = family.neutral ? imperial(stop, token, spec) : header(family, profileName, token, spec);
-    return [token, oklchToHex(L, role === "h" || role === "c" ? C * depth : C, hueFor(family, role))];
+    const surface = role === "h" || role === "c";
+    return [token, oklchToHex(surface && L < 0.5 ? L + lift : L, surface ? C * depth : C, hueFor(family, role))];
   }));
 }
 
@@ -258,8 +265,7 @@ function jsThemes() {
       .map((stop) => `        ${stop}: ${JSON.stringify(family.names[stop])},`).join("\n");
     return `    {\n      id: "${family.id}",\n      name: "${family.name}",\n      note: "${family.note}",\n      names: {\n${names}\n      },\n` +
       // Imperial's swatch shows both ends: white, gold, and black.
-      `      colors: ["${base.chrome}", "${base["paper-2"]}", "${base.accent}", "${family.neutral ? palette(family, "darkest").paper : base.plain}"],\n` +
-      `      signature: "${family.neutral ? base["bar-fill"] : base.chrome}",\n    },`;
+      `      colors: ["${base.chrome}", "${base["paper-2"]}", "${base.accent}", "${family.neutral ? palette(family, "darkest").paper : base.plain}"],\n    },`;
   }).join("\n")}\n  ];`;
 }
 
