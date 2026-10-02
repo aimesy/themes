@@ -344,7 +344,7 @@ async function bugReportAudit(page) {
   }));
   const contextOnlyTitle = new URL(contextOnlySend.url).searchParams.get("title") || "";
   result.contextOnlySend = contextOnlyTitle.includes("packet: packet:alpha")
-    && contextOnlySend.status.includes("Opened a GitHub issue draft");
+    && /opened a github issue draft/i.test(contextOnlySend.status);
   await page.keyboard.press("Escape");
   return result;
 }
